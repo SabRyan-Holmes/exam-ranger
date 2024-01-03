@@ -14,3 +14,7 @@
     transform-origin: 0%;
     @apply fixed top-0 left-0 right-0 h-[10px] bg-gradient-to-br from-primary to-secondary z-[99999];
 }
+
+.gradient-base {
+    @apply bg-gradient-to-br from-orange-50  to-secondary opacity-100;
+}
