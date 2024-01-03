@@ -22,6 +22,18 @@ class ExamController extends Controller
         ]);
     }
 
+    public function all()
+    {
+        $exams = Exam::all()->groupBy('subject');
+        return Inertia::render('StudentHome', [
+            'title' => "Exam",
+            'exams' => $exams,
+            // 'status' => session('status'),
+        ]);
+    }
+
+
+
     /**
      * Show the form for creating a new resource.
      */

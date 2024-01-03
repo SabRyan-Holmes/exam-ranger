@@ -26,11 +26,12 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('StudentHome');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/home', function () {
+//     return Inertia::render('StudentHome');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/home', [ExamController::class, 'all'])->name('home');
     Route::get('/exam', [ExamController::class, 'index'])->name('exam');
 });
 
