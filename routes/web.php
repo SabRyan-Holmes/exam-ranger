@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ExamController;
+use App\Http\Controllers\AdminController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -38,13 +39,9 @@ Route::get('/dashboard-admin', function () {
     return Inertia::render('AdminPage');
 })->middleware(['auth', 'verified', 'isAdmin'])->name('AdminPage');
 
-Route::get('/dashboard-admin/soal', function () {
-    return Inertia::render('AdminPageSoal');
-})->middleware(['auth', 'verified', 'isAdmin'])->name('AdminPageSoal');
+Route::get('/dashboard-admin/soal', [AdminController::class, 'soal'])->middleware(['auth', 'verified', 'isAdmin'])->name('AdminPageSoal');
 
-Route::get('/dashboard-admin/peserta', function () {
-    return Inertia::render('AdminPagePeserta');
-})->middleware(['auth', 'verified', 'isAdmin'])->name('AdminPagePeserta');
+Route::get('/dashboard-admin/peserta', [AdminController::class, 'peserta'])->middleware(['auth', 'verified', 'isAdmin'])->name('AdminPagePeserta');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

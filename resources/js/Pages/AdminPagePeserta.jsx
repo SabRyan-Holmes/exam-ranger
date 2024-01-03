@@ -8,6 +8,7 @@ import { IconContext } from "react-icons";
 import { FaUserEdit } from "react-icons/fa";
 
 export default function AdminPagePeserta(props) {
+  console.log(props.user)
     const { data, setData, post, processing, errors } = useForm({
         question: '',
         choice: [],
@@ -76,43 +77,52 @@ export default function AdminPagePeserta(props) {
       </tr>
     </thead>
     <tbody>
-      {/* row 1 */}
-      <tr>
-        <td>
-          <div className="flex items-center gap-3">
-            <div className="avatar">
-              <div className="mask mask-squircle w-12 h-12">
-                <img src="/img/personexample.jpeg" alt="Avatar Tailwind CSS Component" />
-              </div>
-            </div>
-            <div>
-              <div className="font-bold">Hart Hagerty</div>
-              <div className="text-sm opacity-50">United States</div>
+
+    {props.user.map((data, i) => 
+      <tr key={i}>
+      <td>
+        <div className="flex items-center gap-3">
+          <div className="avatar">
+            <div className="mask mask-squircle w-12 h-12">
+              <img src="/img/personexample.jpeg" alt="Avatar Tailwind CSS Component" />
             </div>
           </div>
+          <div>
+            <div className="font-bold">{data.name}</div>
+            <div className="text-sm opacity-50">Universitas Jambi</div>
+          </div>
+        </div>
+      </td>
+      <td>
+        {data.nim}
+        <br/>
+        <span className="badge badge-ghost badge-sm">{data.email}</span>
+      </td>
+      <td>
+      {data.answer == null ? 
+      <>Belum selesai</>
+      :
+      <>Sudah selesai</>
+      }
+
+      </td>
+      <td><PrimaryButton>
+                <IconContext.Provider
+    value={{ color: 'white', size: '50px' }}
+  >
+    <FaUserEdit className='max-h-7'/>
+  </IconContext.Provider>
+        </PrimaryButton>
+        <PrimaryButton>
+                <IconContext.Provider
+    value={{ color: 'white', size: '50px' }}
+  >
+    <IoTrashSharp className='max-h-7'/>
+  </IconContext.Provider>
+        </PrimaryButton>
         </td>
-        <td>
-          09021282126114
-          <br/>
-          <span className="badge badge-ghost badge-sm">fiqrijambi@gmail.com</span>
-        </td>
-        <td>Sudah selesai</td>
-        <td><PrimaryButton>
-                  <IconContext.Provider
-      value={{ color: 'white', size: '50px' }}
-    >
-      <FaUserEdit className='max-h-7'/>
-    </IconContext.Provider>
-          </PrimaryButton>
-          <PrimaryButton>
-                  <IconContext.Provider
-      value={{ color: 'white', size: '50px' }}
-    >
-      <IoTrashSharp className='max-h-7'/>
-    </IconContext.Provider>
-          </PrimaryButton>
-          </td>
-      </tr>
+  </tr>
+    )}
 
       <tr>
         <td>
@@ -149,81 +159,8 @@ export default function AdminPagePeserta(props) {
     </IconContext.Provider>
           </PrimaryButton>
           </td>
-      </tr>
+    </tr>
 
-      <tr>
-        <td>
-          <div className="flex items-center gap-3">
-            <div className="avatar">
-              <div className="mask mask-squircle w-12 h-12">
-                <img src="/img/personexample.jpeg" alt="Avatar Tailwind CSS Component" />
-              </div>
-            </div>
-            <div>
-              <div className="font-bold">Hart Hagerty</div>
-              <div className="text-sm opacity-50">United States</div>
-            </div>
-          </div>
-        </td>
-        <td>
-          09021282126114
-          <br/>
-          <span className="badge badge-ghost badge-sm">fiqrijambi@gmail.com</span>
-        </td>
-        <td>Sudah selesai</td>
-        <td><PrimaryButton>
-                  <IconContext.Provider
-      value={{ color: 'white', size: '50px' }}
-    >
-      <FaUserEdit className='max-h-7'/>
-    </IconContext.Provider>
-          </PrimaryButton>
-          <PrimaryButton>
-                  <IconContext.Provider
-      value={{ color: 'white', size: '50px' }}
-    >
-      <IoTrashSharp className='max-h-7'/>
-    </IconContext.Provider>
-          </PrimaryButton>
-          </td>
-      </tr>
-
-      <tr>
-        <td>
-          <div className="flex items-center gap-3">
-            <div className="avatar">
-              <div className="mask mask-squircle w-12 h-12">
-                <img src="/img/personexample.jpeg" alt="Avatar Tailwind CSS Component" />
-              </div>
-            </div>
-            <div>
-              <div className="font-bold">Hart Hagerty</div>
-              <div className="text-sm opacity-50">United States</div>
-            </div>
-          </div>
-        </td>
-        <td>
-          09021282126114
-          <br/>
-          <span className="badge badge-ghost badge-sm">fiqrijambi@gmail.com</span>
-        </td>
-        <td>Sudah selesai</td>
-        <td><PrimaryButton>
-                  <IconContext.Provider
-      value={{ color: 'white', size: '50px' }}
-    >
-      <FaUserEdit className='max-h-7'/>
-    </IconContext.Provider>
-          </PrimaryButton>
-          <PrimaryButton>
-                  <IconContext.Provider
-      value={{ color: 'white', size: '50px' }}
-    >
-      <IoTrashSharp className='max-h-7'/>
-    </IconContext.Provider>
-          </PrimaryButton>
-          </td>
-      </tr>
       
     </tbody>
     {/* foot */}

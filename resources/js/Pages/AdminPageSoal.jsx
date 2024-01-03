@@ -9,6 +9,7 @@ import { Link } from "@inertiajs/react";
 import PrimaryButton from '@/Components/PrimaryButton';
 
 export default function AdminPageSoal(props) {
+  console.log(props.exam)
     const { data, setData, post, processing, errors } = useForm({
         question: '',
         choice: [],
@@ -65,20 +66,21 @@ export default function AdminPageSoal(props) {
                 </dialog>
               </div>
 {/* content */}
-
-<div className="card w-3/4 my-3 bg-secondary text-primary-content">
+{props.exam.map((data, i) =>
+  <div className="card w-3/4 my-3 bg-secondary text-primary-content" key={i}>
   <div className="card-body">
     {/* <h2 className="card-title">Soal nomor 1</h2> */}
-    <p>1. If andy has 2 apple  and bryan has a stomacache, calculate the mass of the sun and the planet he’s currently in</p>
+    <h2 className="card-title">Soal materi {data.subject}</h2>
+    <p>{i+1}. {data.question}</p>
     <ul>
-      <li className='font-bold'>A. Bababoey</li>
-      <li className='font-bold'>B. Bababoey</li>
-      <li className='font-bold'>C. Bababoey</li>
-      <li className='font-bold'>D. Bababoey</li>
+      <li className='font-bold'>A. {data.choice[0]}</li>
+      <li className='font-bold'>B. {data.choice[1]}</li>
+      <li className='font-bold'>C. {data.choice[2]}</li>
+      <li className='font-bold'>D. {data.choice[3]}</li>
     </ul>
     <div className="card-actions justify-start">
       {/* <button className="btn">Buy Now</button> */}
-      <h1>Jawaban : A</h1>
+      <h1>Jawaban : {data.actual_answer}</h1>
     </div>
 
     <div className="card-actions justify-end">
@@ -87,50 +89,9 @@ export default function AdminPageSoal(props) {
     </div>
   </div>
 </div>
+)}
 
-<div className="card w-3/4 my-3 bg-secondary text-primary-content">
-  <div className="card-body">
-    {/* <h2 className="card-title">Soal nomor 1</h2> */}
-    <p>2. If andy has 2 apple  and bryan has a stomacache, calculate the mass of the sun and the planet he’s currently in</p>
-    <ul>
-      <li className='font-bold'>A. Bababoey</li>
-      <li className='font-bold'>B. Bababoey</li>
-      <li className='font-bold'>C. Bababoey</li>
-      <li className='font-bold'>D. Bababoey</li>
-    </ul>
-    <div className="card-actions justify-start">
-      {/* <button className="btn">Buy Now</button> */}
-      <h1>Jawaban : A</h1>
-    </div>
 
-    <div className="card-actions justify-end">
-      {/* <button className="btn">Buy Now</button> */}
-      <PrimaryButton>Edit</PrimaryButton> <PrimaryButton>Delete</PrimaryButton>
-    </div>
-  </div>
-</div>
-
-<div className="card w-3/4 my-3 bg-secondary text-primary-content">
-  <div className="card-body">
-    {/* <h2 className="card-title">Soal nomor 1</h2> */}
-    <p>3. If andy has 2 apple  and bryan has a stomacache, calculate the mass of the sun and the planet he’s currently in</p>
-    <ul>
-      <li className='font-bold'>A. Bababoey</li>
-      <li className='font-bold'>B. Bababoey</li>
-      <li className='font-bold'>C. Bababoey</li>
-      <li className='font-bold'>D. Bababoey</li>
-    </ul>
-    <div className="card-actions justify-start">
-      {/* <button className="btn">Buy Now</button> */}
-      <h1>Jawaban : A</h1>
-    </div>
-
-    <div className="card-actions justify-end">
-      {/* <button className="btn">Buy Now</button> */}
-      <PrimaryButton>Edit</PrimaryButton> <PrimaryButton>Delete</PrimaryButton>
-    </div>
-  </div>
-</div>
 
 
 {/* end of content               */}
