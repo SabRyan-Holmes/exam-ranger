@@ -35,7 +35,7 @@ const ExamPage = ({ auth, exam, title, subject, }) => {
 
                         {/* Question */}
                         <div className='m-7 w-1/2 '>
-                            <strong>Pertanyaan {active} dari {exam.length}</strong>
+                            <strong>Pertanyaan {active + 1} dari {exam.length}</strong>
                             <p>{exam[active].question}</p>
                         </div>
 
