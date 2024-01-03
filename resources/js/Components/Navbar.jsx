@@ -15,7 +15,7 @@ const Navbar = ({user}) => {
 
     return (
       <div className="">
-        <hr className="h-1 bg-neutral-content" />
+        <hr className="h-1 bg-base" />
         <div className="navbar bg-neutral text-neutral-content">
             <div className="flex-none">
                 <label htmlFor="my-drawer-2" className="btn btn-square btn-ghost lg:hidden">
@@ -25,24 +25,6 @@ const Navbar = ({user}) => {
           <div className="navbar-start">
             <Link href="/" method="GET" as="button"><a className="btn btn-ghost normal-case text-xl">Dashboard admin</a></Link>
           </div>
-          {/* <div className="navbar-center flex">
-            <div className="px-1"><Link href=""><button className="btn btn-ghost">Home</button></Link></div>
-            <div className="px-1"><Link href=""><button className="btn btn-ghost">Search Resep</button></Link></div>
-            {!user ? 
-              <Link href="/dashboard"><div className="px-1"><button className="btn btn-ghost">Post Your Own Resep</button></div></Link>
-              : 
-              ""
-            }
-            {loggedIn && !admin ? 
-            <Link href="/dashboard"><div className="px-1"><button className="btn btn-ghost">My Resep</button></div></Link>
-            : 
-            ""}
-            {loggedIn && admin ? 
-            <Link href="/dashboard-admin"><div className="px-1"><button className="btn btn-ghost">Dashboard Admin</button></div></Link>
-            : 
-            ""}
-
-          </div> */}
           <div className="navbar-end">
                     <div className="dropdown dropdown-end">
                       <label tabIndex={0} className="">
@@ -51,22 +33,15 @@ const Navbar = ({user}) => {
 
                       </label>
                       <ul tabIndex={0} className="mt-3 p-2 shadow menu menu-sm dropdown-content bg-neutral rounded-box w-52 z-[50] relative text-black">
-                        {!user ? 
-                          <>
-                            <li ><Link href={route('login')} as="button">Login</Link></li>
-                            <li><Link href={route('register')} as="button">Register</Link></li>       
-                          </>
-                          : 
                           <>
                         <li><Link href={route('profile.edit')}>Edit Profile</Link></li>
                         <li><Link href={route('logout')} method="post" as="button">Logout</Link></li>
                           </>
-                        }
                       </ul>
                     </div>
           </div>
         </div>
-        <hr className="h-1 bg-neutral-content" />
+        <hr className="h-1 bg-base" />
       </div>
     );
 }
