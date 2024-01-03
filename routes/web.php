@@ -43,7 +43,7 @@ Route::get('/dashboard-admin/soal', function () {
 })->middleware(['auth', 'verified', 'isAdmin'])->name('AdminPageSoal');
 
 Route::get('/dashboard-admin/peserta', function () {
-    return Inertia::render('AdminPage');
+    return Inertia::render('AdminPagePeserta');
 })->middleware(['auth', 'verified', 'isAdmin'])->name('AdminPagePeserta');
 
 Route::middleware('auth')->group(function () {

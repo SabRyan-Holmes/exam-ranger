@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import Navbar from '@/Components/Navbar';
 import { useForm } from '@inertiajs/react';
 import AdminDrawer from '@/Components/AdminDrawer';
-import { FaCheck } from "react-icons/fa";
+import PrimaryButton from '@/Components/PrimaryButton';
+import { IoTrashSharp } from "react-icons/io5";
 import { IconContext } from "react-icons";
-import { FaXmark } from "react-icons/fa6";
-import { Link } from "@inertiajs/react";
+import { FaUserEdit } from "react-icons/fa";
 
 export default function AdminPagePeserta(props) {
     const { data, setData, post, processing, errors } = useForm({
@@ -30,10 +30,10 @@ export default function AdminPagePeserta(props) {
           <Navbar user={props.auth.user}/>
             <div className='mx-6 mt-6 h-full'>
               <div className='flex justify-between'>
-                {/* <h1 className='font-bold py-3'>Data Soal</h1> */}
+                <h1 className='font-bold py-3'>Data Peserta</h1>
 
                 {/* Open the modal using document.getElementById('ID').showModal() method */}
-                {/* <button className="btn" onClick={()=>document.getElementById('create_data').showModal()}>Tambah soal</button> */}
+                <PrimaryButton onClick={()=>document.getElementById('create_data').showModal()}>Tambah Peserta</PrimaryButton>
 
                 <dialog id="create_data" className="modal">
                   <div className="modal-box">
@@ -63,60 +63,182 @@ export default function AdminPagePeserta(props) {
                 </dialog>
               </div>
 {/* content */}
-<div class="grid grid-cols-1 gap-4 px-4 mt-8 sm:grid-cols-4 sm:px-8">
-    <div class="flex items-center bg-white border rounded-sm overflow-hidden shadow">
-        <div class="p-4 bg-green-400"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white" fill="none"
-                viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
-                </path>
-            </svg></div>
-        <div class="px-4 text-gray-700">
-            <h3 class="text-sm tracking-wider">Total Peserta</h3>
-            <p class="text-3xl">9</p>
-        </div>
-    </div>
-    <div class="flex items-center bg-white border rounded-sm overflow-hidden shadow">
-        <div class="p-4 bg-blue-400"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white" fill="none"
-                viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2">
-                </path>
-            </svg></div>
-        <div class="px-4 text-gray-700">
-            <h3 class="text-sm tracking-wider">Total Soal</h3>
-            <p class="text-3xl">50</p>
-        </div>
-    </div>
-    <div class="flex items-center bg-white border rounded-sm overflow-hidden shadow">
-        <div class="p-4 bg-indigo-400 h-full">
-        <IconContext.Provider
-      value={{ color: 'white', size: '50px' }}
-    >
-      <FaCheck className='h-full w-12'/>
-    </IconContext.Provider>
-          
-          
+
+<div className="overflow-x-auto">
+  <table className="table">
+    {/* head */}
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email/NIM</th>
+        <th>Status Pengerjaan Tes</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody>
+      {/* row 1 */}
+      <tr>
+        <td>
+          <div className="flex items-center gap-3">
+            <div className="avatar">
+              <div className="mask mask-squircle w-12 h-12">
+                <img src="/img/personexample.jpeg" alt="Avatar Tailwind CSS Component" />
+              </div>
+            </div>
+            <div>
+              <div className="font-bold">Hart Hagerty</div>
+              <div className="text-sm opacity-50">United States</div>
+            </div>
           </div>
-        <div class="px-4 text-gray-700">
-            <h3 class="text-sm tracking-wider">Peserta yang sudah selesai</h3>
-            <p class="text-3xl">3</p>
-        </div>
-    </div>
-    <div class="flex items-center bg-white border rounded-sm overflow-hidden shadow">
-        <div class="p-4 bg-red-400">
-        <IconContext.Provider
+        </td>
+        <td>
+          09021282126114
+          <br/>
+          <span className="badge badge-ghost badge-sm">fiqrijambi@gmail.com</span>
+        </td>
+        <td>Sudah selesai</td>
+        <td><PrimaryButton>
+                  <IconContext.Provider
       value={{ color: 'white', size: '50px' }}
     >
-      <FaXmark className='h-full w-12'/>
+      <FaUserEdit className='max-h-7'/>
     </IconContext.Provider>
-        </div>
-        <div class="px-4 text-gray-700">
-            <h3 class="text-sm tracking-wider">Peserta yang belum selesai</h3>
-            <p class="text-3xl">6</p>
-        </div>
-    </div>
+          </PrimaryButton>
+          <PrimaryButton>
+                  <IconContext.Provider
+      value={{ color: 'white', size: '50px' }}
+    >
+      <IoTrashSharp className='max-h-7'/>
+    </IconContext.Provider>
+          </PrimaryButton>
+          </td>
+      </tr>
+
+      <tr>
+        <td>
+          <div className="flex items-center gap-3">
+            <div className="avatar">
+              <div className="mask mask-squircle w-12 h-12">
+                <img src="/img/personexample.jpeg" alt="Avatar Tailwind CSS Component" />
+              </div>
+            </div>
+            <div>
+              <div className="font-bold">Hart Hagerty</div>
+              <div className="text-sm opacity-50">United States</div>
+            </div>
+          </div>
+        </td>
+        <td>
+          09021282126114
+          <br/>
+          <span className="badge badge-ghost badge-sm">fiqrijambi@gmail.com</span>
+        </td>
+        <td>Sudah selesai</td>
+        <td><PrimaryButton>
+                  <IconContext.Provider
+      value={{ color: 'white', size: '50px' }}
+    >
+      <FaUserEdit className='max-h-7'/>
+    </IconContext.Provider>
+          </PrimaryButton>
+          <PrimaryButton>
+                  <IconContext.Provider
+      value={{ color: 'white', size: '50px' }}
+    >
+      <IoTrashSharp className='max-h-7'/>
+    </IconContext.Provider>
+          </PrimaryButton>
+          </td>
+      </tr>
+
+      <tr>
+        <td>
+          <div className="flex items-center gap-3">
+            <div className="avatar">
+              <div className="mask mask-squircle w-12 h-12">
+                <img src="/img/personexample.jpeg" alt="Avatar Tailwind CSS Component" />
+              </div>
+            </div>
+            <div>
+              <div className="font-bold">Hart Hagerty</div>
+              <div className="text-sm opacity-50">United States</div>
+            </div>
+          </div>
+        </td>
+        <td>
+          09021282126114
+          <br/>
+          <span className="badge badge-ghost badge-sm">fiqrijambi@gmail.com</span>
+        </td>
+        <td>Sudah selesai</td>
+        <td><PrimaryButton>
+                  <IconContext.Provider
+      value={{ color: 'white', size: '50px' }}
+    >
+      <FaUserEdit className='max-h-7'/>
+    </IconContext.Provider>
+          </PrimaryButton>
+          <PrimaryButton>
+                  <IconContext.Provider
+      value={{ color: 'white', size: '50px' }}
+    >
+      <IoTrashSharp className='max-h-7'/>
+    </IconContext.Provider>
+          </PrimaryButton>
+          </td>
+      </tr>
+
+      <tr>
+        <td>
+          <div className="flex items-center gap-3">
+            <div className="avatar">
+              <div className="mask mask-squircle w-12 h-12">
+                <img src="/img/personexample.jpeg" alt="Avatar Tailwind CSS Component" />
+              </div>
+            </div>
+            <div>
+              <div className="font-bold">Hart Hagerty</div>
+              <div className="text-sm opacity-50">United States</div>
+            </div>
+          </div>
+        </td>
+        <td>
+          09021282126114
+          <br/>
+          <span className="badge badge-ghost badge-sm">fiqrijambi@gmail.com</span>
+        </td>
+        <td>Sudah selesai</td>
+        <td><PrimaryButton>
+                  <IconContext.Provider
+      value={{ color: 'white', size: '50px' }}
+    >
+      <FaUserEdit className='max-h-7'/>
+    </IconContext.Provider>
+          </PrimaryButton>
+          <PrimaryButton>
+                  <IconContext.Provider
+      value={{ color: 'white', size: '50px' }}
+    >
+      <IoTrashSharp className='max-h-7'/>
+    </IconContext.Provider>
+          </PrimaryButton>
+          </td>
+      </tr>
+      
+    </tbody>
+    {/* foot */}
+    <tfoot>
+      <tr>
+        <th>Name</th>
+        <th>Email/NIM</th>
+        <th>Status Pengerjaan Tes</th>
+        <th>Aksi</th>
+      </tr>
+    </tfoot>
+    
+  </table>
 </div>
+
 {/* end of content               */}
             </div>
 
