@@ -11,9 +11,10 @@ class ExamController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $exam = Exam::where('subject', 'subjects_1')->get();
+        $exam = Exam::where('subject', $request->subject)->get();
+        // dd($exam);
         return Inertia::render('ExamPage', [
             'title' => "Exam",
             'subject' => "subject_1",
@@ -22,14 +23,17 @@ class ExamController extends Controller
         ]);
     }
 
-    public function adminGet()
+    public function all()
     {
-        $exam = Exam::all();
-        return Inertia::render('AdminPageSoal', [
-            'exam' => $exam,
+        $exams = Exam::all()->groupBy('subject');
+        return Inertia::render('StudentHome', [
+            'title' => "Exam",
+            'exams' => $exams,
             // 'status' => session('status'),
         ]);
     }
+
+
 
     /**
      * Show the form for creating a new resource.
