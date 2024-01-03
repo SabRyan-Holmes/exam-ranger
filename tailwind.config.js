@@ -14,6 +14,9 @@ export default {
         extend: {
             fontFamily: {
                 sans: ["Figtree", ...defaultTheme.fontFamily.sans],
+                hemihead: ["Hemi Head"],
+                signika: ["Signika Negative"],
+                explora: ["Explora"],
             },
             backgroundImage: {
                 card: "url('/resources/assets/card.png')",
@@ -33,7 +36,7 @@ export default {
 
                     neutral: "#ffffff",
 
-                    base: "#F1C594",
+                    base: "#FBEDD7",
 
                     "base-100": "#F1C594",
 

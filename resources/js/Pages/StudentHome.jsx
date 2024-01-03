@@ -1,6 +1,6 @@
 import PrimaryButton from '@/Components/PrimaryButton';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
@@ -43,8 +43,15 @@ export default function StudentHome({ auth }) {
                     <p className="">Hi, {auth.user.name} !</p>
                     <h2 className="text-3xl font-semibold">Selamat Datang di Ujian Kompetisi Anatomi</h2>
                     <div className="card-actions">
-                        <PrimaryButton>Cara Melaksanakan</PrimaryButton>
-                        <PrimaryButton>Mulai Mengerjakan</PrimaryButton>
+                        <PrimaryButton>
+                            Cara Melaksanakan
+
+                        </PrimaryButton>
+                        <PrimaryButton>
+                            <Link href={route('exam')}>
+                                Mulai Mengerjakan
+                            </Link>
+                        </PrimaryButton>
                     </div>
                 </div>
             </div>

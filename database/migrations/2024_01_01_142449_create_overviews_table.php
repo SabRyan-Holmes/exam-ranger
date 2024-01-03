@@ -17,9 +17,9 @@ return new class extends Migration
             $table->foreignId('student_id');
             $table->foreignId('exam_id');
             $table->boolean('is_correct');
-            $table->double('mark');
-            $table->double('average_mark');
-            $table->double('final_mark');
+            $table->double('mark')->nullable();
+            $table->double('average_mark')->nullable();
+            $table->double('final_mark')->nullable();
         });
     }
 

@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url("https://typodermicfonts.com/return-of-the-hemi-head-muscle-font/");
+
 .btn-glass {
     @apply btn glass bg-orange-400 text-orange-800 mt-3  hover:bg-primary hover:scale-105 text-lg;
 }
