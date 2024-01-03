@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Exam;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ExamController extends Controller
 {
@@ -12,7 +13,13 @@ class ExamController extends Controller
      */
     public function index()
     {
-        //
+        $exam = Exam::where('subject', 'subjects_1')->get();
+        return Inertia::render('ExamPage', [
+            'title' => "Exam",
+            'subject' => "subject_1",
+            'exam' => $exam,
+            // 'status' => session('status'),
+        ]);
     }
 
     /**
