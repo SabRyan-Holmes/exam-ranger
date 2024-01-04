@@ -13,7 +13,7 @@ export default function AdminPageSoal(props) {
         question: '',
         choice: [],
         image: null,
-        isEssay: '',
+        isEssay: false,
         actualAnswer: ''
       })
 
@@ -132,7 +132,7 @@ export default function AdminPageSoal(props) {
                       <label className="label">
                           <span className="label-text font-bold">Jawaban soal</span>
                       </label>
-                      <select className="bg-white select select-primary w-full max-w-xs">
+                      <select className="bg-white select select-primary w-full max-w-xs" onChange={e => setData('actualAnswer', e.target.value)}>
                         {data.choice.map((data, i) => 
                         <option key={i}>{data}</option>
                         )}
