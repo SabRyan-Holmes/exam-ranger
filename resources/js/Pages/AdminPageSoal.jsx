@@ -9,13 +9,57 @@ import { Link } from "@inertiajs/react";
 import PrimaryButton from '@/Components/PrimaryButton';
 
 export default function AdminPageSoal(props) {
-  console.log(props.exam)
     const { data, setData, post, processing, errors } = useForm({
         question: '',
         choice: [],
-        image: '',
-        isEssay: ''
+        image: null,
+        isEssay: '',
+        actualAnswer: ''
       })
+
+      const datachoice = [
+        {
+          id: 1,
+          choice: '',
+        },
+        {
+          id: 2,
+          choice: '',
+        },
+        {
+          id: 3,
+          choice: '',
+        },
+        {
+          id: 4,
+          choice: '',
+        },
+      ];
+
+      const [tempChoice, setTempChoice] = useState(datachoice);
+
+      const updateStateChoice = (index) => (e) => {
+        const newArray = tempChoice.map((item, i) => {
+          if (index === i) {
+            return { ...item, choice: e.target.value };
+          } else {
+            return item;
+          }
+        });
+        const trueChoice = []
+        setTempChoice(newArray)
+        newArray.map((choices) => {
+          trueChoice.push(choices.choice)
+        })
+        setData('choice', trueChoice)
+        console.log(trueChoice)
+        console.log(e.target.value)
+      };
+
+      function blobUrl() {
+        const url = URL.createObjectURL(data.image)
+        return url
+      }
     
       function submit(e) {
         e.preventDefault()
@@ -36,7 +80,6 @@ export default function AdminPageSoal(props) {
 
                 {/* Open the modal using document.getElementById('ID').showModal() method */}
                 <PrimaryButton onClick={()=>document.getElementById('create_data').showModal()}>Tambah soal</PrimaryButton>
-                {/* <button className="btn" onClick={()=>document.getElementById('create_data').showModal()}>Tambah soal</button> */}
 
                 <dialog id="create_data" className="modal">
                   <div className="modal-box">
@@ -44,11 +87,56 @@ export default function AdminPageSoal(props) {
 
                     <form onSubmit={submit}>
 
+                      {data.image ? 
+                        <div className='flex justify-center'>                       
+                        <img src={blobUrl()} alt="Gambar" className='h-60'/> 
+                        </div>
+                        : ""}
+
+                      <label className="label">
+                          <span className="label-text font-bold">Gambar</span>
+                      </label>
+                      <input type="file" className="bg-white file-input file-input-bordered file-input-primary w-full max-w-xs" onChange={e => setData('image', e.target.files[0])} />
+                      {errors.image && <div>{errors.image}</div>}
+
                       <label className="label">
                           <span className="label-text font-bold">Pertanyaan</span>
                       </label>
                       <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={data.question} onChange={e => setData('question', e.target.value)} />
                       {errors.question && <div>{errors.question}</div>}
+
+                      <label className="label">
+                          <span className="label-text font-bold">Pilihan jawaban A</span>
+                      </label>
+                      <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={data.choice[0]} onChange={updateStateChoice(0)} />
+                      {errors.choice && <div>{errors.choice}</div>}
+
+                      <label className="label">
+                          <span className="label-text font-bold">Pilihan jawaban B</span>
+                      </label>
+                      <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={data.choice[1]} onChange={updateStateChoice(1)} />
+                      {errors.choice && <div>{errors.choice}</div>}
+
+                      <label className="label">
+                          <span className="label-text font-bold">Pilihan jawaban C</span>
+                      </label>
+                      <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={data.choice[2]} onChange={updateStateChoice(2)} />
+                      {errors.choice && <div>{errors.choice}</div>}
+
+                      <label className="label">
+                          <span className="label-text font-bold">Pilihan jawaban D</span>
+                      </label>
+                      <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={data.choice[3]} onChange={updateStateChoice(3)} />
+                      {errors.choice && <div>{errors.choice}</div>}
+
+                      <label className="label">
+                          <span className="label-text font-bold">Jawaban soal</span>
+                      </label>
+                      <select className="bg-white select select-primary w-full max-w-xs">
+                        {data.choice.map((data, i) => 
+                        <option key={i}>{data}</option>
+                        )}
+                      </select>
 
                       <div className='flex justify-between'>
                         <button type="submit" className="btn btn-secondary mt-6" disabled={processing}>Submit</button>
