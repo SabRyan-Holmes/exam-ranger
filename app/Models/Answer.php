@@ -20,9 +20,9 @@ class Answer extends Model
         return $this->hasOne(User::class);
     }
 
-    public function exam(): HasOne 
+    public function exam_subject(): HasOne 
     {
-        return $this->hasOne(Exam::class);
+        return $this->hasOne(Exam::class, 'exam_subject');
     }
 
 

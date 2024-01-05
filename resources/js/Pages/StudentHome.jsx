@@ -41,7 +41,7 @@ export default function StudentHome({ auth, exams }) {
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Student</h2>}
         >
             <Head title="Home" />
-            <div className="mx-16 my-10 bg-card bg-cover overflow-hidden card shadow-xl pb-12">
+            <div className="mx-auto max-w-screen-2xl my-10 bg-card bg-cover overflow-hidden card shadow-xl pb-12">
                 <div className="card-body flex items-center justify-center ">
                     <p className="">Hi, {auth.user.name} !</p>
                     <h2 className="text-3xl font-semibold">Selamat Datang di Ujian Kompetisi Anatomi</h2>
@@ -51,17 +51,15 @@ export default function StudentHome({ auth, exams }) {
 
                         </PrimaryButton>
                         <PrimaryButton>
-                            <Link href={route('exam')}>
-                                Mulai Mengerjakan
-                            </Link>
+                            Mulai Mengerjakan
                         </PrimaryButton>
                     </div>
                 </div>
             </div>
 
-            <div className="flex pb-56">
+            <div className="flex justify-evenly mx-auto pb-56">
 
-                <div className="mx-16">
+                <div className="">
                     <h1 className="mb-6 font-bold">Konten Soal Kompetisi</h1>
 
 
@@ -106,7 +104,7 @@ export default function StudentHome({ auth, exams }) {
                 </div>
 
                 <div className="mx-16">
-                    <h1 className="mb-6 font-bold">Konten Soal Kompetisi</h1>
+                    <h1 className="mb-6 font-bold">Tanggal Ujian</h1>
                     <CalendarContainer>
                         <Calendar onChange={onChange} value={date} />
                     </CalendarContainer>

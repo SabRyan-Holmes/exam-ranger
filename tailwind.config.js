@@ -21,6 +21,13 @@ export default {
             backgroundImage: {
                 card: "url('/resources/assets/card.png')",
             },
+
+            screens: {
+                xs: "400px",
+                // "2xl": "1320px",
+                // "3xl": "1536px",
+                "8xl": "2400px",
+            },
         },
     },
 
