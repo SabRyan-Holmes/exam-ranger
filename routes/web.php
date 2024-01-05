@@ -33,11 +33,11 @@ Route::get('/', function () {
 // })->middleware(['guest'])->name('logins');
 
 
-Route::get('/dashboard', [ExamController::class, 'all'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/home', [ExamController::class, 'all'])->middleware(['auth', 'verified'])->name('home');
 
 Route::middleware('auth')->group(function () {
     Route::get('/exam', [ExamController::class, 'index'])->name('exam');
-    Route::get('/exam/submit', [AnswerController::class, 'store'])->name('exam.submit');
+    Route::post('/exam/submit', [AnswerController::class, 'store'])->name('exam.submit');
 
 });
 

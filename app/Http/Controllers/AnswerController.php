@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Answer;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Redirect;
 class AnswerController extends Controller
 {
     /**
@@ -28,9 +28,16 @@ class AnswerController extends Controller
      */
     public function store(Request $request)
     {
+        ddd($request);
         $validatedData = $request->validate([
-            'title' => 'required|max:255',
+            'answer' => 'required|array|max:255',
+            'student_id' => 'required',
+            'exam_subject' => 'required|max:20',
         ]);
+
+        Answer::create($validatedData);
+        // return redirect()->back()->with('message', 'Postingan Berhasil Dibuat');
+        return Redirect::route('home');
     }
 
     /**
