@@ -144,7 +144,7 @@ const ExamPage = ({ auth, exam, title, subject, }) => {
                         <div className='m-7 w-80 grid grid-cols-2 gap-2'>
                             <p className=" ml-3 font-semibibold w-full">Pilih salah satu</p>
                             <br />
-                            {choice.map((choice, i) => {
+                            {exam[active].choice.map((choice, i) => {
                                 const letter = ['A', 'B', 'C', 'D']
                                 return <div onClick={() => { handleChoices(choice) }} className={' shadow-lg ring-1 normal-case p-2 rounded-lg border ' + (answer[active] == choice ? 'bg-primary' : 'bg-white')} >
                                     <strong>

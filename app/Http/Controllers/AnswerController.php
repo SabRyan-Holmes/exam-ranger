@@ -28,7 +28,7 @@ class AnswerController extends Controller
      */
     public function store(Request $request)
     {
-        ddd($request);
+        // ddd($request);
         $validatedData = $request->validate([
             'answer' => 'required|array|max:255',
             'student_id' => 'required',

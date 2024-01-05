@@ -80,39 +80,36 @@ const ExamPage = ({ auth, exam, title, subject, }) => {
     const [isChange, setisChange] = useState(false)
     const [answer, setAnswer] = useState(Array(exam.length).fill(null))
     const [selected, setSelected] = useState(Array(exam.length).fill(false))
-    const { data, setData, post, errors, processing, recentlySuccessful } = useForm({
-        answer: [],
+    const { data, post, processing, recentlySuccessful } = useForm({
+        answer: null,
+        student_id: auth.user.id,
+        exam_subject: subject,
     });
 
     const datachoice = [
         {
-          id: 1,
-          choice: '',
+            choice: '',
         },
-      ];
+    ];
 
     const [tempChoice, setTempChoice] = useState(datachoice);
 
     function updateStateAnswer(index, value) {
         const newArray = tempChoice.map((item, i) => {
-          if (index === i) {
-            return { ...item, choice: value };
-          } else {
-            return item;
-          }
+            if (index === i) {
+                return { ...item, choice: value };
+            } else {
+                return item;
+            }
         });
         setTempChoice(newArray)
         const trueChoice = []
         newArray.map((choices) => {
             trueChoice.push(choices.choice)
-          })
-      };
+        })
+    };
 
-    function handleSubmit(e) {
-        e.preventDefault();
-        setData("answer", answer)
-        post(route('exam.submit', { data }))
-    }
+
 
     function handleChoices(choice) {
         console.log("choice value : " + choice)
@@ -128,6 +125,15 @@ const ExamPage = ({ auth, exam, title, subject, }) => {
 
     console.log("All Answer : " + answer)
     console.log("detik : " + timerSeconds)
+
+    function handleSubmit() {
+        data.answer = answer
+        post(route('exam.submit', { data }));
+        console.log(`isi data ke database ${data}`)
+        console.log("done ???")
+
+    }
+
     return (
         <Authenticated user={auth.user}>
             <Head title={title} />

@@ -41,7 +41,7 @@ export default function StudentHome({ auth, exams }) {
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Student</h2>}
         >
             <Head title="Home" />
-            <div className="mx-auto max-w-screen-2xl my-10 bg-card bg-cover overflow-hidden card shadow-xl pb-12">
+            <div className="mx-auto max-w-screen-xl my-10 bg-card bg-cover overflow-hidden card shadow-xl pb-12">
                 <div className="card-body flex items-center justify-center ">
                     <p className="">Hi, {auth.user.name} !</p>
                     <h2 className="text-3xl font-semibold">Selamat Datang di Ujian Kompetisi Anatomi</h2>

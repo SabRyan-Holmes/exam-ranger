@@ -4,7 +4,7 @@ import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
-import pp from "./../../assets/pp.jpg";
+import pp from "./../../assets/profile.png";
 
 export default function Authenticated({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
@@ -36,12 +36,12 @@ export default function Authenticated({ user, header, children }) {
 
                                             <button
                                                 type="button"
-                                                className="flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                                                className="flex items-center px-3 py-1 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
                                             >
                                                 <div class="flex items-center">
                                                     <img src={user.profil_pic ? user.profil_pic : pp} className="w-10 h-10 m-2 rounded-xl" />
                                                     <div class="">
-                                                        <strong className="font-extrabold te text-">{user.name}</strong>
+                                                        <strong className="font-extrabold text-">{user.name}</strong>
                                                         <p className="font-medium">{user.nim}</p>
                                                     </div>
                                                 </div>

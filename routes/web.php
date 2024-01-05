@@ -41,15 +41,15 @@ Route::middleware('auth')->group(function () {
 
 });
 
-Route::get('/dashboard-admin', function () {
+Route::get('/dashboard', function () {
     return Inertia::render('AdminPage');
 })->middleware(['auth', 'verified', 'isAdmin'])->name('AdminPage');
 
-Route::get('/dashboard-admin/soal', [AdminController::class, 'soal'])->middleware(['auth', 'verified', 'isAdmin'])->name('AdminPageSoal');
+Route::get('/dashboard/soal', [AdminController::class, 'soal'])->middleware(['auth', 'verified', 'isAdmin'])->name('admin.soal');
 
-Route::get('/dashboard-admin/peserta', [AdminController::class, 'peserta'])->middleware(['auth', 'verified', 'isAdmin'])->name('AdminPagePeserta');
+Route::get('/dashboard/peserta', [AdminController::class, 'peserta'])->middleware(['auth', 'verified', 'isAdmin'])->name('admin.peserta');
 
-Route::post('/dashboard-admin/soal/add-soal', [AdminController::class, 'store'])->middleware(['auth', 'verified', 'isAdmin'])->name('create.soal');
+Route::post('/dashboard/soal/add-soal', [AdminController::class, 'store'])->middleware(['auth', 'verified', 'isAdmin'])->name('admin.create-soal');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

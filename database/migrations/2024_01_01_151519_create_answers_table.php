@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->json('answer');
             $table->foreignId('student_id');
-            $table->foreignId('exam_subject');
+            $table->string('exam_subject');
             $table->timestamps();
         });
     }

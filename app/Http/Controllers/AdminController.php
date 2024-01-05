@@ -64,7 +64,7 @@ class AdminController extends Controller
         $exam->exam_ended = "2024-01-03 11:42:17";
         $exam->exam_duration = "90";
         $exam->save();
-        return to_route('AdminPageSoal');
+        return to_route('admin.soal');
     }
 
     /**

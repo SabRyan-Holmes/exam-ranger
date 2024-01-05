@@ -15,6 +15,11 @@ class Answer extends Model
         'id',
     ];
 
+    // Choice jadi array
+    protected $casts = [
+        'answer' => 'array'
+    ];
+
     public function student(): HasOne 
     {
         return $this->hasOne(User::class);

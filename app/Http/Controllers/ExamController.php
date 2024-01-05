@@ -17,7 +17,7 @@ class ExamController extends Controller
         // dd($exam);
         return Inertia::render('ExamPage', [
             'title' => "Exam",
-            'subject' => "subject_1",
+            'subject' =>  $request->subject,
             'exam' => $exam,
             // 'status' => session('status'),
         ]);
