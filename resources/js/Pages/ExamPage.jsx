@@ -31,7 +31,6 @@ const ExamPage = ({ auth, exam, title, subject, }) => {
         return num + " minutes = " + rhours + " hour(s) and " + rminutes + " minute(s) and " + rsecond + " rsecond(s).";
     }
 
-
     const [timerHours, setTimerHours] = useState(hoursR)
     const [timerMinutes, setTimerMinutes] = useState(minutesR)
     const [timerSeconds, setTimerSeconds] = useState(secondsR)
@@ -76,6 +75,7 @@ const ExamPage = ({ auth, exam, title, subject, }) => {
     // convert minutes to hours, minutes and second
 
     // Submit Data to Answer db
+    console.log(exam)
     const [choice, setchoice] = useState(exam[active].choice)
     const [isChange, setisChange] = useState(false)
     const [answer, setAnswer] = useState(Array(exam.length).fill(null))
@@ -84,6 +84,30 @@ const ExamPage = ({ auth, exam, title, subject, }) => {
         answer: [],
     });
 
+    const datachoice = [
+        {
+          id: 1,
+          choice: '',
+        },
+      ];
+
+    const [tempChoice, setTempChoice] = useState(datachoice);
+
+    function updateStateAnswer(index, value) {
+        const newArray = tempChoice.map((item, i) => {
+          if (index === i) {
+            return { ...item, choice: value };
+          } else {
+            return item;
+          }
+        });
+        setTempChoice(newArray)
+        const trueChoice = []
+        newArray.map((choices) => {
+            trueChoice.push(choices.choice)
+          })
+      };
+
     function handleSubmit(e) {
         e.preventDefault();
         setData("answer", answer)
@@ -91,9 +115,12 @@ const ExamPage = ({ auth, exam, title, subject, }) => {
     }
 
     function handleChoices(choice) {
+        console.log("choice value : " + choice)
         if (answer[active] != null) {
+            updateStateAnswer(active, choice)
             answer[active] = choice
         } else {
+            updateStateAnswer(active, choice)
             answer[active] = choice
         }
         selected[active] = true
@@ -138,11 +165,11 @@ const ExamPage = ({ auth, exam, title, subject, }) => {
                             <br />
                             {choice.map((choice, i) => {
                                 const letter = ['A', 'B', 'C', 'D']
-                                return <div onClick={() => { handleChoices(choice) }} className={' shadow-lg ring-1 normal-case p-2 rounded-lg border ' + (answer[active] == choice ? 'bg-primary' : 'bg-white')} >
+                                return <button onClick={() => { handleChoices(choice) }} className={' shadow-lg ring-1 normal-case p-2 rounded-lg border ' + (answer[active] == choice ? 'bg-primary' : 'bg-white')} >
                                     <strong>
                                         {letter[i]} . {choice}
                                     </strong>
-                                </div>
+                                </button>
                             })}
                         </div>
                         :

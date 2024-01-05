@@ -10,14 +10,15 @@ import PrimaryButton from '@/Components/PrimaryButton';
 
 export default function AdminPageSoal(props) {
     const { data, setData, post, processing, errors } = useForm({
-        question: '',
+        question: null,
         choice: ['', '', '', ''],
         image: null,
         isEssay: false,
-        actualAnswer: '',
-        subject: ''
+        actualAnswer: null,
+        subject: null
       })
 
+      console.log(errors)
       const datachoice = [
         {
           id: 1,
@@ -67,7 +68,7 @@ export default function AdminPageSoal(props) {
       function submit(e) {
         e.preventDefault()
         post(route('create.soal', data, {
-            _method: 'post'
+            _method: 'POST'
         }));
       }
 
@@ -100,52 +101,54 @@ export default function AdminPageSoal(props) {
                           <span className="label-text font-bold">Gambar</span>
                       </label>
                       <input type="file" className="bg-white file-input file-input-bordered file-input-primary w-full max-w-xs" onChange={e => setData('image', e.target.files[0])} />
-                      {errors.image && <div>{errors.image}</div>}
+                      {errors.image && <div className='text-red-600'>{errors.image}</div>}
 
                       <label className="label">
                           <span className="label-text font-bold">Pertanyaan</span>
                       </label>
                       <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={data.question} onChange={e => setData('question', e.target.value)} />
-                      {errors.question && <div>{errors.question}</div>}
+                      {errors.question && <div className='text-red-600'>{errors.question}</div>}
 
                       <label className="label">
                           <span className="label-text font-bold">Subject</span>
                       </label>
                       <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={data.subject} onChange={e => setData('subject', e.target.value)} />
-                      {errors.subject && <div>{errors.subject}</div>}
+                      {errors.subject && <div className='text-red-600'>{errors.subject}</div>}
 
                       <label className="label">
                           <span className="label-text font-bold">Pilihan jawaban A</span>
                       </label>
                       <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={data.choice[0]} onChange={updateStateChoice(0)} />
-                      {errors.choice && <div>{errors.choice}</div>}
+                      {errors["choice.0"] && <div className='text-red-600'>{errors["choice.0"].slice(-6) == "value." ? "Jawaban A mempunyai duplikat yang sama" : "Pilihan jawaban A harus diisi"}</div>}
 
                       <label className="label">
                           <span className="label-text font-bold">Pilihan jawaban B</span>
                       </label>
                       <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={data.choice[1]} onChange={updateStateChoice(1)} />
-                      {errors.choice && <div>{errors.choice}</div>}
+                      {errors["choice.1"] && <div className='text-red-600'>{errors["choice.1"].slice(-6) == "value." ? "Jawaban B mempunyai duplikat yang sama" : "Pilihan jawaban B harus diisi"}</div>}
 
                       <label className="label">
                           <span className="label-text font-bold">Pilihan jawaban C</span>
                       </label>
                       <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={data.choice[2]} onChange={updateStateChoice(2)} />
-                      {errors.choice && <div>{errors.choice}</div>}
+                      {errors["choice.2"] && <div className='text-red-600'>{errors["choice.2"].slice(-6) == "value." ? "Jawaban C mempunyai duplikat yang sama" : "Pilihan jawaban C harus diisi"}</div>}
 
                       <label className="label">
                           <span className="label-text font-bold">Pilihan jawaban D</span>
                       </label>
                       <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={data.choice[3]} onChange={updateStateChoice(3)} />
-                      {errors.choice && <div>{errors.choice}</div>}
+                      {errors["choice.3"] && <div className='text-red-600'>{errors["choice.3"].slice(-6) == "value." ? "Jawaban D mempunyai duplikat yang sama" : "Pilihan jawaban D harus diisi"}</div>}
 
                       <label className="label">
                           <span className="label-text font-bold">Jawaban soal</span>
                       </label>
                       <select className="bg-white select select-primary w-full max-w-xs" onChange={e => setData('actualAnswer', e.target.value)}>
+                        <option value="" disabled selected>Pilih jawaban untuk soal</option>
                         {data.choice.map((data, i) => 
                         <option key={i}>{data}</option>
                         )}
                       </select>
+                      {errors.actualAnswer && <div className='text-red-600'>{errors.actualAnswer}</div>}
 
                       <div className='flex justify-between'>
                         <button type="submit" className="btn btn-secondary mt-6" disabled={processing}>Submit</button>

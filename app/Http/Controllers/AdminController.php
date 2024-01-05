@@ -46,7 +46,25 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
+        $request->validate([
+            'question' => "required",
+            'isEssay' => "required",
+            'actualAnswer' => "required",
+            'subject' => "required",
+            "choice" => "required|array|min:1",
+            'choice.*' => "required|string|distinct|min:1",
+       ]);
+        $exam = new Exam();
+        $exam->question = $request->question;
+        $exam->is_essay = $request->isEssay;
+        $exam->actual_answer = $request->actualAnswer;
+        $exam->subject = $request->subject;
+        $exam->choice = $request->choice;
+        $exam->exam_started = "2024-01-03 10:42:17";
+        $exam->exam_ended = "2024-01-03 11:42:17";
+        $exam->exam_duration = "90";
+        $exam->save();
+        return to_route('AdminPageSoal');
     }
 
     /**
