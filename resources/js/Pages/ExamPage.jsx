@@ -39,7 +39,6 @@ const ExamPage = ({ auth, exam, title, subject, }) => {
 
     const startTimer = () => {
         const countdownDate = new Date().getTime();
-
         interval = setInterval(() => {
             const now = new Date().getTime()
             const distance = countdownDate - now;
@@ -71,16 +70,36 @@ const ExamPage = ({ auth, exam, title, subject, }) => {
     })
 
     const trixInput = useRef('');
-    const { data, setData, post, errors, processing, recentlySuccessful } = useForm({
-        answer: {},
 
-    });
 
     // console.log("isi isEssay " + exam[active].is_essay)
     // convert minutes to hours, minutes and second
 
+    // Submit Data to Answer db
+    const [choice, setchoice] = useState(exam[active].choice)
+    const [isChange, setisChange] = useState(false)
+    const [answer, setAnswer] = useState(Array(exam.length).fill(null))
+    const [selected, setSelected] = useState(Array(exam.length).fill(false))
+    const { data, setData, post, errors, processing, recentlySuccessful } = useForm({
+        answer: [],
+    });
 
+    function handleSubmit(e) {
+        e.preventDefault();
+        setData("answer", answer)
+        post(route('exam.submit', { data }))
+    }
 
+    function handleChoices(choice) {
+        if (answer[active] != null) {
+            answer[active] = choice
+        } else {
+            answer[active] = choice
+        }
+        selected[active] = true
+    }
+
+    console.log("All Answer : " + answer)
     console.log("detik : " + timerSeconds)
     return (
         <Authenticated user={auth.user}>
@@ -105,17 +124,21 @@ const ExamPage = ({ auth, exam, title, subject, }) => {
                         <strong>Pertanyaan {active + 1} dari {exam.length}</strong>
                         <br />
                         <strong className='text-slate-600 '>{2} point</strong>
+
+                        {/* Logika Gambar Soal jika ada */}
+                        {/* {exam.image == null ? : } */}
+
                         <p className='mt-1'>{exam[active].question}</p>
                     </div>
 
                     {/* Choice & Essay*/}
                     {exam[active].is_essay == 0 || false ?
-                        <div className='m-7 w-80 grid grid-cols-2'>
+                        <div className='m-7 w-80 grid grid-cols-2 gap-2'>
                             <p className=" ml-3 font-semibibold w-full">Pilih salah satu</p>
                             <br />
-                            {exam[active].choice.map((choice, i) => {
+                            {choice.map((choice, i) => {
                                 const letter = ['A', 'B', 'C', 'D']
-                                return <div className='bg-white shadow-lg ring-1 normal-case p-2 rounded-lg border m-2'>
+                                return <div onClick={() => { handleChoices(choice) }} className={' shadow-lg ring-1 normal-case p-2 rounded-lg border ' + (answer[active] == choice ? 'bg-primary' : 'bg-white')} >
                                     <strong>
                                         {letter[i]} . {choice}
                                     </strong>
@@ -123,10 +146,11 @@ const ExamPage = ({ auth, exam, title, subject, }) => {
                             })}
                         </div>
                         :
-                        <div className="ml-10 w-1/3">
+
+                        <div className="ml-10 w-2/5">
                             <InputLabel className="my-2" htmlFor="body" value="Jawaban" />
                             <textarea id="essay" className="w-full border-primary rounded-lg bg-base-100/35 " name='body' placeholder="ketik jawabanmu disini"
-                            // onChange={(e) => setData('body', e.target.value)}
+                                onChange={(e) => { answer[active] = e.target.value }}
                             />
 
                         </div>
@@ -165,7 +189,7 @@ const ExamPage = ({ auth, exam, title, subject, }) => {
 
                     <div className="justify-center items-center flex mt-10">
                         <div className=" w-28 h-28 radial-progress text-primary font-extrabold  border-4 border-orange-300 " style={{ "--value": (active + 1) / exam.length * 100 }} role="progressbar">{active + 1} /{exam.length}</div>
-                        <PrimaryButton className="my-10 ">
+                        <PrimaryButton className="my-10" onClick={handleSubmit} disabled={processing}>
                             Kumpul Jawaban
                         </PrimaryButton>
                     </div>

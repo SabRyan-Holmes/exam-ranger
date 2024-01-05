@@ -109,6 +109,12 @@ export default function Login({ status, canResetPassword, login }) {
                         <PrimaryButton className="" disabled={processing}>
                             Log in
                         </PrimaryButton>
+
+                        {/* Probably not used */}
+                        {/* <PrimaryButton href={route('register')} className="" disabled={processing}>
+                            Register
+                        </PrimaryButton> */}
+
                     </div>
                 </form>
 
