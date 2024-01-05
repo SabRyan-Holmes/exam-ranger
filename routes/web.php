@@ -41,6 +41,8 @@ Route::get('/dashboard-admin/soal', [AdminController::class, 'soal'])->middlewar
 
 Route::get('/dashboard-admin/peserta', [AdminController::class, 'peserta'])->middleware(['auth', 'verified', 'isAdmin'])->name('AdminPagePeserta');
 
+Route::post('/dashboard-admin/peserta/add-peserta', [AdminController::class, 'store'])->middleware(['auth', 'verified', 'isAdmin'])->name('create.soal');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

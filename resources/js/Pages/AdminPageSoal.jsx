@@ -11,10 +11,11 @@ import PrimaryButton from '@/Components/PrimaryButton';
 export default function AdminPageSoal(props) {
     const { data, setData, post, processing, errors } = useForm({
         question: '',
-        choice: [],
+        choice: ['', '', '', ''],
         image: null,
         isEssay: false,
-        actualAnswer: ''
+        actualAnswer: '',
+        subject: ''
       })
 
       const datachoice = [
@@ -52,8 +53,10 @@ export default function AdminPageSoal(props) {
           trueChoice.push(choices.choice)
         })
         setData('choice', trueChoice)
+        console.log(data.choice)
         console.log(trueChoice)
-        console.log(e.target.value)
+
+        console.log(data.question)
       };
 
       function blobUrl() {
@@ -104,6 +107,12 @@ export default function AdminPageSoal(props) {
                       </label>
                       <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={data.question} onChange={e => setData('question', e.target.value)} />
                       {errors.question && <div>{errors.question}</div>}
+
+                      <label className="label">
+                          <span className="label-text font-bold">Subject</span>
+                      </label>
+                      <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={data.subject} onChange={e => setData('subject', e.target.value)} />
+                      {errors.subject && <div>{errors.subject}</div>}
 
                       <label className="label">
                           <span className="label-text font-bold">Pilihan jawaban A</span>
