@@ -10,8 +10,8 @@ export default function Authenticated({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     return (
-        <div className="min-h-screen bg-gray-100">
-            <nav className="bg-white border-b border-gray-100">
+        <div className="min-h-screen bg-orange-50 ">
+            <nav className="border-b gradient-base  border-gray-300">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
                         <div className="flex">
@@ -36,10 +36,10 @@ export default function Authenticated({ user, header, children }) {
 
                                             <button
                                                 type="button"
-                                                className="flex items-center px-3 py-1 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                                                className="flex  items-center px-4 py-1 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500  hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
                                             >
                                                 <div class="flex items-center">
-                                                    <img src={user.profil_pic ? user.profil_pic : pp} className="w-10 h-10 m-2 rounded-xl" />
+                                                    <img src={user.profil_pic ? user.profil_pic : pp} className="w-9 h-9 mx-3 rounded-xl" />
                                                     <div class="">
                                                         <strong className="font-extrabold text-">{user.name}</strong>
                                                         <p className="font-medium">{user.nim}</p>
