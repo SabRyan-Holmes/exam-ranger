@@ -6,9 +6,22 @@ import { FaCheck } from "react-icons/fa";
 import { IconContext } from "react-icons";
 import { FaXmark } from "react-icons/fa6";
 import { Link } from "@inertiajs/react";
+import { router } from '@inertiajs/react';
 import PrimaryButton from '@/Components/PrimaryButton';
+import Swal from 'sweetalert2'
+import { usePage } from '@inertiajs/react'
+import { useEffect } from "react";
 
 export default function AdminPageSoal(props) {
+  const { flash } = usePage().props
+  const [showSuccess, setShowSuccess] = useState(false)
+  console.log(flash)
+  useEffect(() => {
+    if(flash.message?.substr(0, 11) == 'suksesinput') {
+      setShowSuccess(true)
+    }
+  }, [flash.message]);
+  
   const { data, setData, post, processing, errors } = useForm({
     question: null,
     choice: ['', '', '', ''],
@@ -17,6 +30,35 @@ export default function AdminPageSoal(props) {
     actualAnswer: null,
     subject: null
   })
+
+  const { edit, setEdit, send, processings, errorss } = useForm({
+    question: null,
+    choice: ['', '', '', ''],
+    image: null,
+    isEssay: false,
+    actualAnswer: null,
+    subject: null
+  })
+
+  const confirmDelete = (i) => {
+    const id = i
+    const data = {
+        id
+    }
+    Swal.fire({
+        title: 'Anda yakin?',
+        text: "Soal yang sudah dihapus tidak bisa dikembalikan lagi",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, saya yakin!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+            router.post('/dashboard/soal/delete-soal', data)
+        }
+      })
+    }
 
   console.log(errors)
   const datachoice = [
@@ -150,12 +192,21 @@ export default function AdminPageSoal(props) {
                     </select>
                     {errors.actualAnswer && <div className='text-red-600'>{errors.actualAnswer}</div>}
 
+
                     <div className='flex justify-between'>
                       <button type="submit" className="btn btn-secondary mt-6" disabled={processing}>Submit</button>
+                      
+                    {flash.message?.substr(0, 11) == 'suksesinput' && showSuccess ?
+                                <div className="alert alert-success mx-4 mt-5">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                    <span>Soal berhasil ditambah</span>
+                                </div> :
+                                ""
+                            }
                       <div className="modal-action">
                         <form method="dialog">
                           {/* if there is a button in form, it will close the modal */}
-                          <button className="btn btn-primary">Cancel</button>
+                          <button className="btn btn-primary" onClick={() => setShowSuccess(false)}>Cancel</button>
                         </form>
                       </div>
                     </div>
@@ -185,7 +236,7 @@ export default function AdminPageSoal(props) {
 
                   <div className="card-actions justify-end">
                     {/* <button className="btn">Buy Now</button> */}
-                    <PrimaryButton>Edit</PrimaryButton> <PrimaryButton>Delete</PrimaryButton>
+                    <PrimaryButton>Edit</PrimaryButton> <PrimaryButton onClick={() => confirmDelete(data.id)} >Delete</PrimaryButton>
                   </div>
                 </div>
               </div>
