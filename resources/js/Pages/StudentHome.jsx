@@ -38,7 +38,6 @@ export default function StudentHome({ auth, exams }) {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Student</h2>}
         >
             <Head title="Home" />
             <div className="mx-auto max-w-screen-xl my-10 bg-card bg-cover overflow-hidden card shadow-xl pb-12">
@@ -60,7 +59,7 @@ export default function StudentHome({ auth, exams }) {
             <div className="flex justify-evenly mx-auto pb-56">
 
                 <div className="">
-                    <h1 className="mb-6 font-bold">Konten Soal Kompetisi</h1>
+                    <h1 className="mb-6 font-bold">Soal Kompetisi</h1>
 
 
                     {arrExams.map((subject, i) => {

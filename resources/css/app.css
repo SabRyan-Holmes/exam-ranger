@@ -18,5 +18,13 @@
 }
 
 .gradient-base {
-    @apply bg-gradient-to-br from-orange-50  to-secondary opacity-100;
+    @apply bg-gradient-to-b from-orange-50 to-secondary opacity-100;
+}
+
+.gradient-white-base {
+    @apply bg-gradient-to-b from-orange-50 to-white opacity-100;
+}
+
+.gradient-primary {
+    @apply bg-gradient-to-b from-primary/40 to-secondary opacity-100;
 }
