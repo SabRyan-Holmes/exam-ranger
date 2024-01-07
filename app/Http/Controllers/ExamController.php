@@ -15,7 +15,7 @@ class ExamController extends Controller
     {
         $exam = Exam::where('subject', $request->subject)->get();
         // dd($exam);
-        return Inertia::render('ExamPage', [
+        return Inertia::render('Exam/ExamPage', [
             'title' => "Exam",
             'subject' =>  $request->subject,
             'exam' => $exam,

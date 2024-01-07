@@ -5,6 +5,7 @@ import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
 import pp from "./../../assets/profile.png";
+import Footer from '@/Components/Footer';
 
 export default function Authenticated({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
@@ -128,6 +129,9 @@ export default function Authenticated({ user, header, children }) {
             )}
 
             <main>{children}</main>
+
+            <Footer />
+
         </div>
     );
 }

@@ -251,16 +251,19 @@ const ExamPage = ({ auth, exam, title, subject, }) => {
                         {/* Put this part before </body> tag */}
                         {/* <input type="checkbox" id="my_modal_1" className="modal-toggle" /> */}
                         <dialog id="my_modal_1" className="modal">
-                            <div className="modal-box">
+                            <div className="modal-box bg-base-100/90">
                                 <h3 className="text-lg font-bold">Yakin Ingin Mengumpulkan Sekarang ?</h3>
                                 <p className="py-2">Pastikan jawaban anda sudah diisi dengan jujur & benar !</p>
                                 <div className="modal-action">
-                                    <form method="dialog">
+                                    <form method="dialog" >
                                         {/* if there is a button in form, it will close the modal */}
                                         <PrimaryButton className="my-6" onClick={handleSubmit} disabled={processing}>
                                             Kumpul Jawaban
                                         </PrimaryButton>
-                                        <button className="bg-red-400 inline-flex btn glass scale-75 items-center py-2 h-5  border border-transparent rounded-md font-semibold text-lg  text-white hover:bg-primary focus:bg-orange-600 active:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 ">Cancel</button>
+                                        <PrimaryButton className="bg-red-500 "><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                        </svg>
+                                            Cancel</PrimaryButton>
                                     </form>
                                 </div>
 

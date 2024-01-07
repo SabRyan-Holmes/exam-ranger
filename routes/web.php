@@ -38,6 +38,7 @@ Route::get('/home', [ExamController::class, 'all'])->middleware(['auth', 'verifi
 Route::middleware('auth')->group(function () {
     Route::get('/exam', [ExamController::class, 'index'])->name('exam');
     Route::post('/exam/submit', [AnswerController::class, 'store'])->name('exam.submit');
+    Route::get('/exam/done', [AnswerController::class, 'show'])->name('exam.done');
 
 });
 

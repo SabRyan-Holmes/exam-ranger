@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Answer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
+use Session;
+
 class AnswerController extends Controller
 {
     /**
@@ -36,16 +39,27 @@ class AnswerController extends Controller
         ]);
 
         Answer::create($validatedData);
-        // return redirect()->back()->with('message', 'Postingan Berhasil Dibuat');
         return Redirect::route('home');
+        // return Redirect::route('exam.done')->with(['data' => $validatedData]);
+        
+        // return redirect()->back()->with('message', 'Postingan Berhasil Dibuat');
     }
+    
 
     /**
      * Display the specified resource.
      */
     public function show(Answer $answer)
     {
-        //
+        $data = Session::get('data');
+        // ddd($data);
+       
+        return Inertia::render('Exam/ExamDone', [
+            'title' => "Exam Done",
+            'answer' =>  $data["answer"],
+            'exam_subject' => $data["exam_subject"],
+            // 'status' => session('status'),
+        ]);
     }
 
     /**
