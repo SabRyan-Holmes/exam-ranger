@@ -45,9 +45,7 @@ Route::get('/dashboard', function () {
     return Inertia::render('AdminPage');
 })->middleware(['auth', 'verified', 'isAdmin'])->name('AdminPage');
 
-Route::get('/dashboard/soal-ujian', function () {
-    return Inertia::render('AdminPageSoalTipe');
-})->middleware(['auth', 'verified', 'isAdmin'])->name('admin.tipe.soal');
+Route::get('/dashboard/soal-ujian', [AdminController::class, 'tipeSoal'])->middleware(['auth', 'verified', 'isAdmin'])->name('admin.soal-tipe');
 
 Route::get('/dashboard/soal', [AdminController::class, 'soal'])->middleware(['auth', 'verified', 'isAdmin'])->name('admin.soal');
 

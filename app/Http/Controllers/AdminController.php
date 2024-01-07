@@ -84,6 +84,16 @@ class AdminController extends Controller
         dd($request);
     }
 
+    public function tipeSoal()
+    {
+        $exams = Exam::all()->groupBy('subject');
+        return Inertia::render('AdminPageSoalTipe', [
+            'title' => "Exam",
+            'exams' => $exams,
+            // 'status' => session('status'),
+        ]);
+    }
+
     /**
      * Update the specified resource in storage.
      */
