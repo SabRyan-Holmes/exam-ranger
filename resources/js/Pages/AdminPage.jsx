@@ -17,7 +17,7 @@ export default function AdminPage(props) {
             <div className='mx-6 mt-6 h-full'>
           
 {/* content */}
-<div class="grid grid-cols-1 gap-4 px-4 mt-8 sm:grid-cols-4 sm:px-8">
+<div class="grid grid-cols-1 gap-4 px-4 mt-8 sm:grid-cols-3 sm:px-8">
     <div class="flex items-center bg-white border rounded-sm overflow-hidden shadow">
         <div class="p-4 bg-green-400"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white" fill="none"
                 viewBox="0 0 24 24" stroke="currentColor">

@@ -6,6 +6,7 @@ use App\Models\Exam;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Http\Requests\SoalUpdateRequest;
 
 class AdminController extends Controller
 {
@@ -44,7 +45,7 @@ class AdminController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(SoalUpdateRequest $request)
     {
         $request->validate([
             'question' => "required",
@@ -64,7 +65,7 @@ class AdminController extends Controller
         $exam->exam_ended = "2024-01-03 11:42:17";
         $exam->exam_duration = "90";
         $exam->save();
-        return to_route('admin.soal');
+        return to_route('admin.soal')->with('message', 'suksesinput'.strval(rand()));
     }
 
     /**
@@ -78,9 +79,19 @@ class AdminController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(SoalUpdateRequest $request)
     {
-        //
+        dd($request);
+    }
+
+    public function tipeSoal()
+    {
+        $exams = Exam::all()->groupBy('subject');
+        return Inertia::render('AdminPageSoalTipe', [
+            'title' => "Exam",
+            'exams' => $exams,
+            // 'status' => session('status'),
+        ]);
     }
 
     /**
@@ -94,8 +105,10 @@ class AdminController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(SoalUpdateRequest $request)
     {
-        //
+        $data = Exam::find($request->id);
+        $data->delete();
+        return to_route('admin.soal');
     }
 }
