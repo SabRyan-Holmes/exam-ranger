@@ -20,7 +20,7 @@ class AdminController extends Controller
 
     public function soal() {
         $exam = Exam::all();
-        return Inertia::render('AdminPageSoal', [
+        return Inertia::render('Admin/AdminPageSoal', [
             'exam' => $exam,
             // 'status' => session('status'),
         ]);
@@ -28,7 +28,7 @@ class AdminController extends Controller
 
     public function peserta() {
         $user = User::all();
-        return Inertia::render('AdminPagePeserta', [
+        return Inertia::render('Admin/AdminPagePeserta', [
             'user' => $user,
             // 'status' => session('status'),
         ]);
@@ -87,7 +87,7 @@ class AdminController extends Controller
     public function tipeSoal()
     {
         $exams = Exam::all()->groupBy('subject');
-        return Inertia::render('AdminPageSoalTipe', [
+        return Inertia::render('Admin/AdminPageSoalTipe', [
             'title' => "Exam",
             'exams' => $exams,
             // 'status' => session('status'),
