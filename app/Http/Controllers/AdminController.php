@@ -18,8 +18,10 @@ class AdminController extends Controller
         //
     }
 
-    public function soal() {
-        $exam = Exam::all();
+    public function soal(Request $request) {
+
+        $exam = Exam::where('subject', $request->subject)->get();
+        // ddd($request->subject);
         return Inertia::render('Admin/AdminPageSoal', [
             'exam' => $exam,
             // 'status' => session('status'),

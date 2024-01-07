@@ -12,7 +12,7 @@ const AdminDrawer = ({ active = false }) => {
   return (
     <div className="drawer-side  shadow-2xl">
       <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
-      <ul className="menu p-4 w-64 min-h-full bg-slate-700 text-slate-100 ">
+      <ul className="menu p-4 w-64 min-h-full bg-gradient-to-b text-opacity-75 from-slate-950 to bg-orange-950  text-slate-100 ">
 
         {/* Sidebar content here */}
         <div className="flex justify-center"><img src={logo} className=" text-primary/70 w-28 h-28" /></div>

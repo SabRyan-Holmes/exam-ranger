@@ -1,27 +1,39 @@
 import React from 'react'
+import ApplicationLogo from "./ApplicationLogo";
 
-const Footer = () => {
+const Footer = ({ subject }) => {
     return (
         <footer className='relative bg-gradient-to-b from-yellow-800 via-yellow-950  to-slate-900 opacity-100 shadow-inner  pt-10  pb-12'>
 
-            <div className='container'>
-                <div className="flex flex-wrap">
-                    <div className='w-full px-4 mb-12  font-medium md:w-1/3'>
-                        <h2 className='font-bold text-4xl bg-clip-text text-white/70 hover:text-secondary/50 dark-gradient2 mb-5'>ANATO RANGER</h2>
-                        <h3 className='font-bold text-2xl mb-2 text-white/70 hover:text-secondary/50'>Hubungi Kami</h3>
-                        <p className='text-white/70 hover:text-secondary/50 mb-2'>anato.ranger@gmail.com</p>
+            <div className=' justify-center '>
+                <div className="flex  flex-wrap justify-center items-center mx-auto  ">
+                    <div className='w-full px-4 pl-9 mb-12  font-medium md:w-1/3'>
+                        <div className="flex">
+                            <ApplicationLogo />
+                            <h2 className='font-bold text-4xl bg-clip-text text-white/70 hover:text-primary dark-gradient2 mb-5'>ExamRanger</h2>
+
+                        </div>
+                        <h3 className='font-bold text-2xl mb-2 text-white/70 hover:text-primary'>Hubungi Kami</h3>
+                        <p className='text-white/70 hover:text-primary mb-2'>anato.ranger@gmail.com</p>
                         <p className='text-white/70 '>Jl.Jambi, Mendalo Darat, Kec Jambi Luar Kota,</p> <span className='text-white/70'> Kabupaten Muaro Jambi</span>
                         <p className='text-white/70'>Jambi</p>
                     </div>
                     <div className="w-full px-4 mb-12 md:w-1/3" >
                         <h3 className='font-semibold text-2xl text-white/70 mb-8'>Kompetisi
                             <ul className='pt-2 text-white/70'>
-                                <li>
-                                    <a href="#" className='inline-block text-base hover:text-secondary  '>Subject_1</a>
-                                </li>
-                                <li>
-                                    <a href="#" className='inline-block text-base hover:text-secondary mb-1'>Subject_2</a>
-                                </li>
+                                {
+                                    subject ? subject.map((name) => {
+                                        return <li>
+                                            <a href="#" className='inline-block text-base hover:text-primary  '>{name}</a>
+                                        </li>
+                                    })
+                                        :
+                                        <li>
+                                            <a href="#" className='inline-block text-base hover:text-secondary mb-1'>Belum ada soal Kompetisi</a>
+                                        </li>
+                                }
+
+
                             </ul>
                         </h3>
                     </div>
@@ -29,13 +41,13 @@ const Footer = () => {
                         <h3 className='font-semibold text-2xl text-white/70 mb-5'>Tautan
                             <ul>
                                 <li>
-                                    <a href="#home" className='inline-block text-base hover:text-secondary  '>Home</a>
+                                    <a href="#home" className='inline-block text-base hover:text-primary  '>Home</a>
                                 </li>
                                 <li>
-                                    <a href="#informasi" className='inline-block text-base hover:text-secondary '>Exam</a>
+                                    <a href="#informasi" className='inline-block text-base hover:text-primary '>Exam</a>
                                 </li>
                                 <li>
-                                    <a href="#about" className='inline-block text-base hover:text-secondary '>About</a>
+                                    <a href="#about" className='inline-block text-base hover:text-primary '>About</a>
                                 </li>
                             </ul>
                         </h3>

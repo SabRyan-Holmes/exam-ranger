@@ -37,7 +37,7 @@ export default function StudentHome({ auth, exams }) {
     console.log(arrExams)
     return (
         <AuthenticatedLayout
-            user={auth.user}
+            user={auth.user} data={arrExams}
         >
             <Head title="Home" />
             <section className='flex justify-center   '>
