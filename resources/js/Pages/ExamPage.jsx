@@ -79,7 +79,18 @@ const ExamPage = ({ auth, exam, title, subject, }) => {
     const [choice, setchoice] = useState(exam[active].choice)
     const [isChange, setisChange] = useState(false)
     const [answer, setAnswer] = useState(Array(exam.length).fill(null))
-    const [selected, setSelected] = useState(Array(exam.length).fill(false))
+    const [answered, setAnswered] = useState(Array(exam.length).fill(false))
+    let [alreadyAnswered, setAlreadyAnswered] = useState(0)
+
+    function setSumAnswered() {
+        answer.map((answered) => {
+            // console.log(`tess answereed map ${answered}`)
+            if (answered != null) {
+                alreadyAnswered++;
+            }
+        })
+
+    }
     const { data, post, processing, recentlySuccessful } = useForm({
         answer: null,
         student_id: auth.user.id,
@@ -91,6 +102,8 @@ const ExamPage = ({ auth, exam, title, subject, }) => {
             choice: '',
         },
     ];
+
+
 
     const [tempChoice, setTempChoice] = useState(datachoice);
 
@@ -116,11 +129,14 @@ const ExamPage = ({ auth, exam, title, subject, }) => {
         if (answer[active] != null) {
             updateStateAnswer(active, choice)
             answer[active] = choice
+            setSumAnswered()
         } else {
             updateStateAnswer(active, choice)
             answer[active] = choice
+            setSumAnswered()
         }
-        selected[active] = true
+        answered[active] = true
+        console.log(`isi yang banyak soal yg udah dijawab : ${alreadyAnswered}`)
     }
 
     console.log("All Answer : " + answer)
@@ -169,7 +185,8 @@ const ExamPage = ({ auth, exam, title, subject, }) => {
                         <div className='m-7 w-80 grid grid-cols-2 gap-2'>
                             <p className=" ml-3 font-semibibold w-full">Pilih salah satu</p>
                             <br />
-                            {choice.map((choice, i) => {
+
+                            {exam[active].choice.map((choice, i) => {
                                 const letter = ['A', 'B', 'C', 'D']
                                 return <button onClick={() => { handleChoices(choice) }} className={' shadow-lg ring-1 normal-case p-2 rounded-lg border ' + (answer[active] == choice ? 'bg-primary' : 'bg-white')} >
                                     <strong>
@@ -214,18 +231,46 @@ const ExamPage = ({ auth, exam, title, subject, }) => {
                 <div className="mt-7 border-2 border-primary rounded-lg m-5 ml-0 p-1 ">
                     <strong className="p-3 ">Quiz Navigation</strong>
                     <div className="grid grid-cols-10 gap-2 text-center m-1">
-                        {exam.map((exam, i) => {
-                            return <button onClick={() => { setActive(i) }} className={' shadow-lg ring-1 p-2 rounded-lg border ' + (active == i ? 'bg-primary' : 'bg-secondary')} >{i + 1}</button>
+                        {answer.map((answered, i) => {
+                            return <button onClick={() => { setActive(i) }} className={' shadow-lg ring-1 p-2 rounded-lg border ' + (active == i ? 'bg-primary' : (answered == null ? 'bg-secondary' : 'bg-green-400'))} >{i + 1}</button>
 
                         })}
                     </div>
 
                     <div className="justify-center items-center flex mt-10">
-                        <div className=" w-28 h-28 radial-progress text-primary font-extrabold  border-4 border-orange-300 " style={{ "--value": (active + 1) / exam.length * 100 }} role="progressbar">{active + 1} /{exam.length}</div>
-                        <PrimaryButton className="my-10" onClick={handleSubmit} disabled={processing}>
-                            Kumpul Jawaban
+                        <div className=" w-28 h-28 radial-progress text-primary font-extrabold  border-4 border-orange-300 text-lg " style={{ "--value": (active + 1) / exam.length * 100, "--size": "12rem", "--thickness": "5px" }} role="progressbar">{alreadyAnswered} /{exam.length} <span className='text-sm'>
+                            Terjawab</span></div>
+                        {/* <label htmlFor="my_modal_7">
+                                Kumpul Jawaban
+                        </label> */}
+                        {/* The button to open modal */}
+                        <PrimaryButton className="my-10" onClick={() => document.getElementById('my_modal_1').showModal()} disabled={processing}>Kumpul Jawaban
+                            {/* <label htmlFor="my_modal_7" >Kumpul Jawaban</label> */}
                         </PrimaryButton>
+
+                        {/* Put this part before </body> tag */}
+                        {/* <input type="checkbox" id="my_modal_1" className="modal-toggle" /> */}
+                        <dialog id="my_modal_1" className="modal">
+                            <div className="modal-box">
+                                <h3 className="text-lg font-bold">Yakin Ingin Mengumpulkan Sekarang ?</h3>
+                                <p className="py-2">Pastikan jawaban anda sudah diisi dengan jujur & benar !</p>
+                                <div className="modal-action">
+                                    <form method="dialog">
+                                        {/* if there is a button in form, it will close the modal */}
+                                        <PrimaryButton className="my-6" onClick={handleSubmit} disabled={processing}>
+                                            Kumpul Jawaban
+                                        </PrimaryButton>
+                                        <button className="bg-red-400 inline-flex btn glass scale-75 items-center py-2 h-5  border border-transparent rounded-md font-semibold text-lg  text-white hover:bg-primary focus:bg-orange-600 active:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 ">Cancel</button>
+                                    </form>
+                                </div>
+
+                                <label className="modal-backdrop" htmlFor="my_modal_1" >Close</label>
+                            </div>
+                        </dialog>
                     </div>
+
+
+
                 </div>
 
             </div>
