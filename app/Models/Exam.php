@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class Exam extends Model
 {
     use HasFactory;
@@ -17,5 +18,9 @@ class Exam extends Model
     protected $casts = [
         'choice' => 'array'
     ];
+
+    // public function isEnded() {
+    //     if ($this->exam_ended > )
+    // }
 
 }
