@@ -45,6 +45,10 @@ Route::get('/dashboard', function () {
     return Inertia::render('AdminPage');
 })->middleware(['auth', 'verified', 'isAdmin'])->name('AdminPage');
 
+Route::get('/dashboard/soal-ujian', function () {
+    return Inertia::render('AdminPageSoalTipe');
+})->middleware(['auth', 'verified', 'isAdmin'])->name('admin.tipe.soal');
+
 Route::get('/dashboard/soal', [AdminController::class, 'soal'])->middleware(['auth', 'verified', 'isAdmin'])->name('admin.soal');
 
 Route::get('/dashboard/peserta', [AdminController::class, 'peserta'])->middleware(['auth', 'verified', 'isAdmin'])->name('admin.peserta');
@@ -52,6 +56,8 @@ Route::get('/dashboard/peserta', [AdminController::class, 'peserta'])->middlewar
 Route::post('/dashboard/soal/add-soal', [AdminController::class, 'store'])->middleware(['auth', 'verified', 'isAdmin'])->name('admin.create-soal');
 
 Route::post('/dashboard/soal/delete-soal', [AdminController::class, 'destroy'])->middleware(['auth', 'verified', 'isAdmin'])->name('admin.delete-soal');
+
+Route::post('/dashboard/soal/edit-soal', [AdminController::class, 'edit'])->middleware(['auth', 'verified', 'isAdmin'])->name('admin.edit-soal');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

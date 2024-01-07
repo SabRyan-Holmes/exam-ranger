@@ -12,7 +12,7 @@ const AdminDrawer = () => {
         {/* Sidebar content here */}
         <div className="flex justify-center"><MdAdminPanelSettings className="min-h-16 min-w-28" /></div>
         <li className="font-bold mt-4"><Link href="/dashboard"><MdSpaceDashboard />Dashboard</Link></li>
-        <li className="font-bold"><Link href="/dashboard/soal"><FaNotesMedical />Soal</Link></li>
+        <li className="font-bold"><Link href="/dashboard/soal-ujian"><FaNotesMedical />Soal</Link></li>
         <li className="font-bold"><Link href="/dashboard/peserta"><MdSwitchAccount />Peserta</Link></li>
 
       </ul>
