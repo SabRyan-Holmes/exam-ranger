@@ -90,14 +90,13 @@ class AdminController extends Controller
             "choiceEdit" => "required|array|min:1",
             'choiceEdit.*' => "required|string|distinct|min:1",
        ]);
-
        $data = Exam::find($request->id);
        $data->subject = $request->subjectEdit;
        $data->question = $request->questionEdit;
        $data->choice = $request->choiceEdit;
        $data->actual_answer = $request->actualAnswerEdit;
        $data->update();
-       return back()->with('message', strval($request->id));
+       return back()->with('message', strval($request->id).strval(rand()));
     }
 
     public function tipeSoal()

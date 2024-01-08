@@ -28,6 +28,7 @@ export default function AdminPageSoal(props) {
   const [imageEdit, setEditImage] = useState(null);
   const [isEssayEdit, setEditIsEssay] = useState(false);
   const [actualAnswerEdit, setEditActualAnswer] = useState(null);
+  const [indexAns, setEditIndexAns] = useState(null);
   const [subjectEdit, setEditSubject] = useState(null);
 
   const { data, setData, post, processing, errors } = useForm({
@@ -122,6 +123,11 @@ export default function AdminPageSoal(props) {
         return item;
       }
     });
+
+    if (index == choiceEdit.indexOf(actualAnswerEdit)) {
+      setEditActualAnswer(e.target.value)
+    }
+
     const trueChoiceEdit = []
     setTempEditChoice(newArrayEdit)
     console.log(newArrayEdit)
@@ -353,8 +359,8 @@ export default function AdminPageSoal(props) {
                           <span className="label-text font-bold">Jawaban soal</span>
                         </label>
                         <select className="bg-white select select-primary w-full max-w-xs" onChange={(answer) => setEditActualAnswer(answer.target.value)}>
-                          {data.choice.map((choice, i) => {
-                              if(choice == data.actual_answer) {
+                          {choiceEdit.map((choice, i) => {
+                              if(i == data.choice.indexOf(data.actual_answer)) {
                                 return (<option key={i} selected>{choice}</option>)
                               } else {
                                 return (<option key={i}>{choice}</option>)
@@ -366,7 +372,7 @@ export default function AdminPageSoal(props) {
                         <div className='flex justify-between'>
                           <button type="submit" className="btn btn-secondary mt-6">Save</button>
 
-                          {flash.message == data.id.toString() && showSuccess ?
+                          {flash.message?.substr(0, data.id.toString().length) == data.id.toString() && showSuccess ?
                             <div className="alert alert-success mx-4 mt-5">
                               <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                               <span>Soal berhasil diedit</span>
