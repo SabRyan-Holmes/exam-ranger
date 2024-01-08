@@ -128,7 +128,9 @@ class AdminController extends Controller
         $data->image = $request->file('imageEdit')->store('exam-images');
         $data->update($request->except(['imageEdit']));
        } else {
-        $data->image = null;
+        if($request->isDeleteImg) {
+            $data->image = null;
+        }
         $data->update($request->except(['imageEdit']));
        }
        return back()->with('message', strval($request->id).strval(rand()));

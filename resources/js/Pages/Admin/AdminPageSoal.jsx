@@ -24,6 +24,7 @@ export default function AdminPageSoal(props) {
   }, [flash.message]);
 
   const [examState, setEditExamState] = useState(props.exam);
+  const [isDeleteImg, setIsDeleteImg] = useState(false);
   const [questionEdit, setEditQuestion] = useState(null);
   const [id, setIdEdit] = useState(null);
   const [choiceEdit, setEditChoice] = useState(['', '', '', '']);
@@ -170,7 +171,7 @@ export default function AdminPageSoal(props) {
     e.preventDefault()
 
     const edit = {
-      id, imageEdit, questionEdit, subjectEdit, choiceEdit, actualAnswerEdit
+      id, imageEdit, questionEdit, subjectEdit, choiceEdit, actualAnswerEdit, isDeleteImg
     }
 
     router.post('/dashboard/soal/edit-soal', edit)
@@ -357,6 +358,7 @@ export default function AdminPageSoal(props) {
                             <input type="file" className="bg-white file-input file-input-bordered file-input-primary w-full max-w-xs" onChange={e => setEditImage(e.target.files[0])} />
                             <a className='mx-3 btn btn-primary' onClick={() => {setEditImage(null)
                             setImgDelete('a')
+                            setIsDeleteImg(true)
                             }}><IoTrashSharp></IoTrashSharp></a>
     
                             <label className="label">
@@ -418,6 +420,7 @@ export default function AdminPageSoal(props) {
                                 <form method="dialog">
                                   {/* if there is a button in form, it will close the modal */}
                                   <button className="btn btn-primary" onClick={() => {
+                                    setIsDeleteImg(false)
                                     setImgDelete('');
                                     setEditImage(null);
                                     setShowSuccess(false);
@@ -485,6 +488,7 @@ export default function AdminPageSoal(props) {
                             <input type="file" className="bg-white file-input file-input-bordered file-input-primary w-full max-w-xs" onChange={e => setEditImage(e.target.files[0])} />
                             <a className='btn btn-primary mx-3' onClick={() => {setEditImage(null)
                             setImgDelete('a')
+                            setIsDeleteImg(true)
                             }}><IoTrashSharp></IoTrashSharp></a>
     
                             <label className="label">
@@ -511,6 +515,7 @@ export default function AdminPageSoal(props) {
                                 <form method="dialog">
                                   {/* if there is a button in form, it will close the modal */}
                                   <button className="btn btn-primary" onClick={() => {
+                                    setIsDeleteImg(false)
                                     setEditImage(null);
                                     setShowSuccess(false);
                                     setImgDelete('');
