@@ -53,7 +53,7 @@ export default function AdminPageSoalTipe(props) {
                                 </Link>
 
                             )
-                        })};
+                        })}
                         {/* end of content               */}
                     </div>
 

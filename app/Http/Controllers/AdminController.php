@@ -59,24 +59,21 @@ class AdminController extends Controller
      */
     public function store(SoalUpdateRequest $request)
     {
-        $request->validate([
+        $validatedData = $request->validate([
             'question' => "required",
-            'isEssay' => "required",
-            'actualAnswer' => "required",
+            'is_essay' => "required",
+            'actual_answer' => "required",
             'subject' => "required",
             "choice" => "required|array|min:1",
             'choice.*' => "required|string|distinct|min:1",
+            "exam_started" => "required",
+            "exam_ended" => "required",
+            "exam_duration" => "required"
        ]);
-        $exam = new Exam();
-        $exam->question = $request->question;
-        $exam->is_essay = $request->isEssay;
-        $exam->actual_answer = $request->actualAnswer;
-        $exam->subject = $request->subject;
-        $exam->choice = $request->choice;
-        $exam->exam_started = "2024-01-03 10:42:17";
-        $exam->exam_ended = "2024-01-03 11:42:17";
-        $exam->exam_duration = "90";
-        $exam->save();
+       if($request->image != null) {
+           $validatedData['image'] = $request->file('image')->store('exam-images');
+       };
+        Exam::create($validatedData);
         return back()->with('message', 'suksesinput'.strval(rand()));
     }
 
@@ -127,7 +124,13 @@ class AdminController extends Controller
        $data->question = $request->questionEdit;
        $data->choice = $request->choiceEdit;
        $data->actual_answer = $request->actualAnswerEdit;
-       $data->update();
+       if($request->imageEdit != null){
+        $data->image = $request->file('imageEdit')->store('exam-images');
+        $data->update($request->except(['imageEdit']));
+       } else {
+        $data->image = null;
+        $data->update($request->except(['imageEdit']));
+       }
        return back()->with('message', strval($request->id).strval(rand()));
     }
 

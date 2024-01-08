@@ -23,7 +23,7 @@ const Navbar = ({user}) => {
                 </label>
             </div>
           <div className="navbar-start">
-            <Link href="/" method="GET" as="button"><a className="btn btn-ghost normal-case text-xl">Dashboard admin</a></Link>
+            <Link href="/dashboard" method="GET" as="button"><a className="btn btn-ghost normal-case text-xl">Dashboard admin</a></Link>
           </div>
           <div className="navbar-end">
                     <div className="dropdown dropdown-end">
