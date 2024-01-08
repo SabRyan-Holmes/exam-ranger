@@ -1,4 +1,4 @@
-import logo from "./../../assets/logo_sementara.png";
+import logo from "./../../assets/logo.png";
 
 export default function ApplicationLogo(props) {
     return (

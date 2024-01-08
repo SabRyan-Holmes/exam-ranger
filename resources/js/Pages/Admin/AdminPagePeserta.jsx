@@ -1,189 +1,276 @@
 import React, { useState } from 'react';
 import Navbar from '@/Components/Navbar';
-import { useForm } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 import AdminDrawer from '@/Components/AdminDrawer';
 import PrimaryButton from '@/Components/PrimaryButton';
 import { IoTrashSharp } from "react-icons/io5";
 import { IconContext } from "react-icons";
 import { FaUserEdit } from "react-icons/fa";
+import InputLabel from '@/Components/InputLabel';
+import TextInput from '@/Components/TextInput';
+import InputError from '@/Components/InputError';
 
-export default function AdminPagePeserta(props) {
-  console.log(props.user)
-    const { data, setData, post, processing, errors } = useForm({
-        question: '',
-        choice: [],
-        image: '',
-        isEssay: ''
-      })
-    
-      function submit(e) {
-        e.preventDefault()
-        post(route('create.soal', data, {
-            _method: 'post'
-        }));
-      }
 
-    return (
-      <div className='h-full'>
-        <div className="drawer lg:drawer-open h-full">
-          <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-          <div className="drawer-content flex flex-col bg-neutral h-full">
-          <Navbar user={props.auth.user}/>
-            <div className='mx-6 mt-6 h-full'>
-              <div className='flex justify-between'>
-                <h1 className='font-bold py-3'>Data Peserta</h1>
 
-                {/* Open the modal using document.getElementById('ID').showModal() method */}
-                <PrimaryButton onClick={()=>document.getElementById('create_data').showModal()}>Tambah Peserta</PrimaryButton>
+export default function AdminPagePeserta({ auth, user, flash, title }) {
 
-                <dialog id="create_data" className="modal">
-                  <div className="modal-box">
-                    <h3 className="font-bold text-lg">Masukkan data soal</h3>
+  const { data, setData, post, processing, errors } = useForm({
+    name: '',
+    nim: '',
+    email: '',
+    password: '12345678',
+    password_confirmation: '',
+  })
+  console.log("isi dari data" + data.name + data.email + data.password)
+  function submit(e) {
+    e.preventDefault()
+    post(route('admin.create-peserta', data, {
+      _method: 'post'
+    }));
+  }
 
-                    <form onSubmit={submit}>
+  return (
 
-                      <label className="label">
-                          <span className="label-text font-bold">Pertanyaan</span>
-                      </label>
-                      <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={data.question} onChange={e => setData('question', e.target.value)} />
-                      {errors.question && <div>{errors.question}</div>}
+    <div className='h-full'>
+      <Head title={title} />
+      <div className="drawer lg:drawer-open h-full">
+        <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
+        <div className="drawer-content flex flex-col bg-neutral h-full">
+          <Navbar user={auth.user} />
+          <div className='mx-6 mt-6 h-full'>
+            <div className='flex justify-between'>
+              <h1 className='font-bold py-3'>Data Peserta</h1>
 
-                      <div className='flex justify-between'>
-                        <button type="submit" className="btn btn-secondary mt-6" disabled={processing}>Submit</button>
-                        <div className="modal-action">
-                          <form method="dialog">
-                            {/* if there is a button in form, it will close the modal */}
-                            <button className="btn btn-primary">Cancel</button>
-                          </form>
-                        </div>                     
+              {/* Open the modal using document.getElementById('ID').showModal() method */}
+              <PrimaryButton className='scale-75' onClick={() => document.getElementById('create_data').showModal()}>Tambah Peserta</PrimaryButton>
+
+              <dialog id="create_data" className="modal mx-auto">
+                <div className="modal-box bg-base-100/90">
+                  <form onSubmit={submit}>
+                    <div>
+                      <h2 className="text-3xl font-bold text-primary">Tambah Peserta</h2>
+                      <p className="my-2 text-base">Masukkan data peserta</p>
+                      <InputLabel htmlFor="name" value="Nama" />
+
+                      {/* Nama */}
+                      <TextInput
+                        id="name"
+                        type="text"
+                        name="name"
+                        className="mt-1 block w-full"
+                        autoComplete="name"
+                        isFocused={true}
+                        onChange={(e) => setData('name', e.target.value)}
+                      />
+
+                      <InputError message={errors.name} className="mt-2" />
+                    </div>
+
+                    {/* NIM */}
+
+                    <div className="mt-4">
+                      <InputLabel htmlFor="nim" value="NIM Peserta" />
+                      <TextInput
+                        id="nim"
+                        type="text"
+                        name="nim"
+                        className="mt-1 block w-full "
+                        onChange={(e) => setData('nim', e.target.value)}
+                      />
+
+                      <InputError message={errors.nim} className="mt-2" />
+                    </div>
+
+                    {/* Email(Opsional) */}
+
+                    <div className="mt-4">
+                      <InputLabel htmlFor="email" value="Email Peserta (Opsional)" />
+                      <TextInput
+                        id="email"
+                        type="email"
+                        name="email"
+                        className="mt-1 block w-full "
+                        onChange={(e) => setData('email', e.target.value)}
+                      />
+
+                      <InputError message={errors.email} className="mt-2" />
+                    </div>
+
+                    {/* Password(Default 12345678) */}
+
+                    <div className="mt-4">
+                      <InputLabel htmlFor="password" value="Password Peserta (Secara Default '12345678')" />
+                      <TextInput
+                        id="password"
+                        type="password"
+                        name="password"
+                        className="mt-1 block w-full"
+                        defaultValue={data.password}
+                        onChange={(e) => setData('password', e.target.value)}
+                      />
+
+                      <InputError message={errors.password} className="mt-2" />
+                    </div>
+
+                    {/* Password Confirmation */}
+
+                    <div className="mt-4">
+                      <InputLabel htmlFor="password_confirmation" value="Konfirmasi Password" />
+                      <TextInput
+                        id="password_confirmation"
+                        type="password"
+                        name="password_confirmation"
+                        className="mt-1 block w-full "
+                        onChange={(e) => setData('password_confirmation', e.target.value)}
+                      />
+
+                      <InputError message={errors.password_confirmation} className="mt-2" />
+                    </div>
+                    {flash.message &&
+                      <div className="alert bg-primary/40 mx-auto mt-5">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <span>{flash.message}</span>
                       </div>
+                    }
+                    <div className='flex justify-evenly'>
+                      <PrimaryButton type="submit" className="scale-[1] mt-6" disabled={processing}>Submit</PrimaryButton>
+                      <div className="modal-action">
+                        <form method="dialog ">
+                          {/* if there is a button in form, it will close the modal */}
+                          <PrimaryButton className="scale-[0.97]  bg-red-500 "><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                          </svg>
+                            Cancel</PrimaryButton>
+                        </form>
+                      </div>
+                    </div>
 
-                    </form>
+                  </form>
 
-                  </div>
-                </dialog>
-              </div>
-{/* content */}
-
-<div className="overflow-x-auto">
-  <table className="table">
-    {/* head */}
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Email/NIM</th>
-        <th>Status Pengerjaan Tes</th>
-        <th>Aksi</th>
-      </tr>
-    </thead>
-    <tbody>
-
-    {props.user.map((data, i) => 
-      <tr key={i}>
-      <td>
-        <div className="flex items-center gap-3">
-          <div className="avatar">
-            <div className="mask mask-squircle w-12 h-12">
-              <img src="/img/personexample.jpeg" alt="Avatar Tailwind CSS Component" />
+                </div>
+              </dialog>
             </div>
+            {/* content */}
+
+            <div className="overflow-x-auto">
+              <table className="table">
+                {/* head */}
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email/NIM</th>
+                    <th>Status Pengerjaan Tes</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  {user.map((data, i) =>
+                    <tr key={i}>
+                      <td>
+                        <div className="flex items-center gap-3">
+                          <div className="avatar">
+                            <div className="mask mask-squircle w-12 h-12">
+                              <img src="/img/personexample.jpeg" alt="Avatar Tailwind CSS Component" />
+                            </div>
+                          </div>
+                          <div>
+                            <div className="font-bold">{data.name}</div>
+                            <div className="text-sm opacity-50">Universitas Jambi</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        {data.nim}
+                        <br />
+                        <span className="badge badge-ghost badge-sm">{data.email}</span>
+                      </td>
+                      <td>
+                        {data.answer == null ?
+                          <>Belum selesai</>
+                          :
+                          <>Sudah selesai</>
+                        }
+
+                      </td>
+                      <td><PrimaryButton >
+                        <IconContext.Provider
+                          value={{ color: 'white', size: '50px' }}
+                        >
+                          <FaUserEdit className='max-h-7' />
+                        </IconContext.Provider>
+                      </PrimaryButton>
+                        <PrimaryButton >
+                          <IconContext.Provider
+                            value={{ color: 'white', size: '50px' }}
+                          >
+                            <IoTrashSharp className='max-h-7' />
+                          </IconContext.Provider>
+                        </PrimaryButton>
+                      </td>
+                    </tr>
+                  )}
+
+                  <tr>
+                    <td>
+                      <div className="flex items-center gap-3">
+                        <div className="avatar">
+                          <div className="mask mask-squircle w-12 h-12">
+                            <img src="/img/personexample.jpeg" alt="Avatar Tailwind CSS Component" />
+                          </div>
+                        </div>
+                        <div>
+                          <div className="font-bold">Hart Hagerty</div>
+                          <div className="text-sm opacity-50">United States</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      09021282126114
+                      <br />
+                      <span className="badge badge-ghost badge-sm">fiqrijambi@gmail.com</span>
+                    </td>
+                    <td>Sudah selesai</td>
+                    <td><PrimaryButton className='scale-75'>
+                      <IconContext.Provider
+                        value={{ color: 'white', size: '50px' }}
+                      >
+                        <FaUserEdit className='max-h-7' />
+                      </IconContext.Provider>
+                    </PrimaryButton>
+                      <PrimaryButton className='scale-75'>
+                        <IconContext.Provider
+                          value={{ color: 'white', size: '50px' }}
+                        >
+                          <IoTrashSharp className='max-h-7' />
+                        </IconContext.Provider>
+                      </PrimaryButton>
+                    </td>
+                  </tr>
+
+
+                </tbody>
+                {/* foot */}
+                <tfoot>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email/NIM</th>
+                    <th>Status Pengerjaan Tes</th>
+                    <th>Aksi</th>
+                  </tr>
+                </tfoot>
+
+              </table>
+            </div>
+
+            {/* end of content               */}
           </div>
-          <div>
-            <div className="font-bold">{data.name}</div>
-            <div className="text-sm opacity-50">Universitas Jambi</div>
-          </div>
+
         </div>
-      </td>
-      <td>
-        {data.nim}
-        <br/>
-        <span className="badge badge-ghost badge-sm">{data.email}</span>
-      </td>
-      <td>
-      {data.answer == null ? 
-      <>Belum selesai</>
-      :
-      <>Sudah selesai</>
-      }
-
-      </td>
-      <td><PrimaryButton>
-                <IconContext.Provider
-    value={{ color: 'white', size: '50px' }}
-  >
-    <FaUserEdit className='max-h-7'/>
-  </IconContext.Provider>
-        </PrimaryButton>
-        <PrimaryButton>
-                <IconContext.Provider
-    value={{ color: 'white', size: '50px' }}
-  >
-    <IoTrashSharp className='max-h-7'/>
-  </IconContext.Provider>
-        </PrimaryButton>
-        </td>
-  </tr>
-    )}
-
-      <tr>
-        <td>
-          <div className="flex items-center gap-3">
-            <div className="avatar">
-              <div className="mask mask-squircle w-12 h-12">
-                <img src="/img/personexample.jpeg" alt="Avatar Tailwind CSS Component" />
-              </div>
-            </div>
-            <div>
-              <div className="font-bold">Hart Hagerty</div>
-              <div className="text-sm opacity-50">United States</div>
-            </div>
-          </div>
-        </td>
-        <td>
-          09021282126114
-          <br/>
-          <span className="badge badge-ghost badge-sm">fiqrijambi@gmail.com</span>
-        </td>
-        <td>Sudah selesai</td>
-        <td><PrimaryButton>
-                  <IconContext.Provider
-      value={{ color: 'white', size: '50px' }}
-    >
-      <FaUserEdit className='max-h-7'/>
-    </IconContext.Provider>
-          </PrimaryButton>
-          <PrimaryButton>
-                  <IconContext.Provider
-      value={{ color: 'white', size: '50px' }}
-    >
-      <IoTrashSharp className='max-h-7'/>
-    </IconContext.Provider>
-          </PrimaryButton>
-          </td>
-    </tr>
-
-      
-    </tbody>
-    {/* foot */}
-    <tfoot>
-      <tr>
-        <th>Name</th>
-        <th>Email/NIM</th>
-        <th>Status Pengerjaan Tes</th>
-        <th>Aksi</th>
-      </tr>
-    </tfoot>
-    
-  </table>
-</div>
-
-{/* end of content               */}
-            </div>
-
-          </div> 
-          <AdminDrawer></AdminDrawer>
+        <AdminDrawer></AdminDrawer>
 
 
-        </div>
       </div>
-    )
+    </div>
+  )
 }

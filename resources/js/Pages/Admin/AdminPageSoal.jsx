@@ -5,7 +5,7 @@ import AdminDrawer from '@/Components/AdminDrawer';
 import { FaCheck } from "react-icons/fa";
 import { IconContext } from "react-icons";
 import { FaXmark } from "react-icons/fa6";
-import { Link } from "@inertiajs/react";
+import { Link, Head } from "@inertiajs/react";
 import { router } from '@inertiajs/react';
 import PrimaryButton from '@/Components/PrimaryButton';
 import Swal from 'sweetalert2'
@@ -160,13 +160,15 @@ export default function AdminPageSoal(props) {
 
   return (
     <div className='h-full'>
+      <Head title={`${props.title}  ${props.subject}`} />
+
       <div className="drawer lg:drawer-open h-full">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content flex flex-col bg-neutral h-full">
           <Navbar user={props.auth.user} />
           <div className='mx-6 mt-6 h-full'>
             <div className='flex justify-between'>
-              <h1 className='font-bold'>Data Soal</h1>
+              <h1 className='font-bold'>Daftar Soal Ujian {props.subject}</h1>
 
               {/* Open the modal using document.getElementById('ID').showModal() method */}
               <PrimaryButton onClick={() => { document.getElementById('create_data').showModal() }}>Tambah soal</PrimaryButton>
@@ -259,7 +261,7 @@ export default function AdminPageSoal(props) {
 
                 </div>
               </dialog>
-              
+
             </div>
             {/* content */}
             {props.exam.map((data, i) =>
@@ -354,12 +356,12 @@ export default function AdminPageSoal(props) {
                         </label>
                         <select className="bg-white select select-primary w-full max-w-xs" onChange={(answer) => setEditActualAnswer(answer.target.value)}>
                           {data.choice.map((choice, i) => {
-                              if(choice == data.actual_answer) {
-                                return (<option key={i} selected>{choice}</option>)
-                              } else {
-                                return (<option key={i}>{choice}</option>)
-                              }
+                            if (choice == data.actual_answer) {
+                              return (<option key={i} selected>{choice}</option>)
+                            } else {
+                              return (<option key={i}>{choice}</option>)
                             }
+                          }
                           )}
                         </select>
 
