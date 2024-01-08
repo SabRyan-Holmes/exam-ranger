@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Navbar from '@/Components/Navbar';
-import { useForm } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 import AdminDrawer from '@/Components/AdminDrawer';
 import { FaCheck } from "react-icons/fa";
 import { IconContext } from "react-icons";
@@ -11,6 +11,8 @@ export default function AdminPageSoalTipe(props) {
     let arrExams = Object.keys(props.exams)
     return (
         <div className='h-full'>
+            <Head title={props.title} />
+
             <div className="drawer lg:drawer-open h-full">
                 <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
                 <div className="drawer-content flex flex-col bg-neutral h-full">

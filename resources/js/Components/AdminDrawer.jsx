@@ -3,7 +3,7 @@ import { MdSpaceDashboard } from "react-icons/md";
 import { FaNotesMedical } from "react-icons/fa6";
 import { MdSwitchAccount } from "react-icons/md";
 import { Link } from "@inertiajs/react";
-import logo from "../../assets/logo_sementara.png"
+import logo from "../../assets/logo.png"
 import ApplicationLogo from "./ApplicationLogo";
 import NavLinkDashboard from "./NavbarLinkDashboard";
 
@@ -15,13 +15,14 @@ const AdminDrawer = ({ active = false }) => {
       <ul className="menu p-4 w-64 min-h-full bg-gradient-to-b text-opacity-75 from-slate-950 to bg-orange-950  text-slate-100 ">
 
         {/* Sidebar content here */}
-        <div className="flex justify-center"><img src={logo} className=" text-primary/70 w-28 h-28" /></div>
+        <div className="flex justify-center"><img src={logo} className=" text-primary/70 w-24 h-24 m-3" />
+        </div>
 
         {/* <ApplicationLogo className="mx-16 " /> */}
         <div className="border-b-2 border-yellow-600 mt-4 mb-2" />
 
-        {/* <li href={route('dashboard')} active={route().current('dashboard')} className={`font-bold hover:text-yellow-600 active:text-primary mt-4` + (active && 'text-primary')}><Link href={route('dashboard')}>Dashboard</Link></li> */}
-        <NavLinkDashboard href={route('dashboard')} active={route().current('dashboard')}><MdSpaceDashboard />
+
+        <NavLinkDashboard href={route('admin.dashboard')} active={route().current('admin.dashboard')}><MdSpaceDashboard />
           Dashboard
         </NavLinkDashboard>
 

@@ -18,7 +18,7 @@ export default function Authenticated({ user, header, children, data }) {
                         <div className="flex">
                             <div className="shrink-0 flex items-center">
                                 <Link href="/">
-                                    <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
+                                    <ApplicationLogo className="block fill-current text-gray-800" />
                                 </Link>
                             </div>
 
@@ -65,6 +65,8 @@ export default function Authenticated({ user, header, children, data }) {
 
                                     <Dropdown.Content>
                                         <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
+                                        {user.is_admin ?
+                                            <Dropdown.Link href={route('admin.dashboard')}>Administrator</Dropdown.Link> : ''}
                                         <Dropdown.Link href={route('logout')} method="post" as="button">
                                             Log Out
                                         </Dropdown.Link>

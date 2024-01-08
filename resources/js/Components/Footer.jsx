@@ -3,7 +3,7 @@ import ApplicationLogo from "./ApplicationLogo";
 
 const Footer = ({ subject }) => {
     return (
-        <footer className='relative bg-gradient-to-b from-yellow-800 via-yellow-950  to-slate-900 opacity-100 shadow-inner  pt-10  pb-12'>
+        <footer className='relative bg-gradient-to-b from-yellow-950 via-orange-950  to-slate-900 opacity-100 shadow-inner  pt-10  pb-12'>
 
             <div className=' justify-center '>
                 <div className="flex  flex-wrap justify-center items-center mx-auto  ">

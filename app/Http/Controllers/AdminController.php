@@ -7,6 +7,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Http\Requests\SoalUpdateRequest;
+use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Registered;
 
 class AdminController extends Controller
 {
@@ -15,7 +18,10 @@ class AdminController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('Admin/AdminPage', [
+            'title' => "Administrator",
+            // 'status' => session('status'),
+        ]);
     }
 
     public function soal(Request $request) {
@@ -23,14 +29,18 @@ class AdminController extends Controller
         $exam = Exam::where('subject', $request->subject)->get();
         // ddd($request->subject);
         return Inertia::render('Admin/AdminPageSoal', [
+            'title' => "Soal",
             'exam' => $exam,
+            'subject' => $request->subject,
+
             // 'status' => session('status'),
         ]);
     }
 
     public function peserta() {
-        $user = User::all();
+        $user = User::where('is_admin', false)->get();
         return Inertia::render('Admin/AdminPagePeserta', [
+            'title' => "Daftar Peserta",
             'user' => $user,
             // 'status' => session('status'),
         ]);
@@ -70,6 +80,28 @@ class AdminController extends Controller
         return back()->with('message', 'suksesinput'.strval(rand()));
     }
 
+    public function store_peserta(Request $request)
+    {
+        $request->validate([
+            'name' => "required|string|min:2|max:30",
+            'nim' => "required|min:9|max:12|unique:users",
+            'email' => "nullable||string|email:unique|max:40|unique:users",
+            "password" => ['required', 'confirmed', Rules\Password::defaults()],
+       ]);
+
+       $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'nim' => $request->nim,
+        'password' => Hash::make($request->password),
+        ]);
+
+        event(new Registered($user));
+
+        
+        return back()->with('message', 'Berhasil Menambahkan Peserta');
+    }
+
     /**
      * Display the specified resource.
      */
@@ -103,7 +135,7 @@ class AdminController extends Controller
     {
         $exams = Exam::all()->groupBy('subject');
         return Inertia::render('Admin/AdminPageSoalTipe', [
-            'title' => "Exam",
+            'title' => "Materi Soal",
             'exams' => $exams,
             // 'status' => session('status'),
         ]);
