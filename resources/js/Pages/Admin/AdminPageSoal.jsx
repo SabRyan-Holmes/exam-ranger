@@ -347,7 +347,7 @@ export default function AdminPageSoal(props) {
                             </div>
                             : 
                             <div className='flex justify-center'>
-                            <img src={'/storage/'+data.image} className='max-h-60' />
+                            <img src={'/storage/'+data.image+imgDelete} className='max-h-60' />
                             </div>
                           }
                           {/* {data.image && <img src={'/storage/'+data.image} className='max-h-32'></img>} */}
