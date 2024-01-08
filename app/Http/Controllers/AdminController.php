@@ -67,7 +67,7 @@ class AdminController extends Controller
         $exam->exam_ended = "2024-01-03 11:42:17";
         $exam->exam_duration = "90";
         $exam->save();
-        return to_route('admin.soal')->with('message', 'suksesinput'.strval(rand()));
+        return back()->with('message', 'suksesinput'.strval(rand()));
     }
 
     /**
@@ -83,7 +83,21 @@ class AdminController extends Controller
      */
     public function edit(SoalUpdateRequest $request)
     {
-        dd($request);
+        $request->validate([
+            'questionEdit' => "required",
+            'actualAnswerEdit' => "required",
+            'subjectEdit' => "required",
+            "choiceEdit" => "required|array|min:1",
+            'choiceEdit.*' => "required|string|distinct|min:1",
+       ]);
+
+       $data = Exam::find($request->id);
+       $data->subject = $request->subjectEdit;
+       $data->question = $request->questionEdit;
+       $data->choice = $request->choiceEdit;
+       $data->actual_answer = $request->actualAnswerEdit;
+       $data->update();
+       return back()->with('message', strval($request->id));
     }
 
     public function tipeSoal()
@@ -111,6 +125,6 @@ class AdminController extends Controller
     {
         $data = Exam::find($request->id);
         $data->delete();
-        return to_route('admin.soal');
+        return back();
     }
 }

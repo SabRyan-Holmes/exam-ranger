@@ -13,22 +13,18 @@ import { usePage } from '@inertiajs/react'
 import { useEffect } from "react";
 
 export default function AdminPageSoal(props) {
-  console.log(props.exam)
   const { flash } = usePage().props
   const [showSuccess, setShowSuccess] = useState(false)
   useEffect(() => {
-    if (flash.message?.substr(0, 11) == 'suksesinput') {
+    if (flash.message?.substr(0, 11) != null) {
       setShowSuccess(true)
     }
   }, [flash.message]);
 
+  const [examState, setEditExamState] = useState(props.exam);
   const [questionEdit, setEditQuestion] = useState(null);
+  const [id, setIdEdit] = useState(null);
   const [choiceEdit, setEditChoice] = useState(['', '', '', '']);
-  const [choiceA, setEditChoiceA] = useState('');
-  const [choiceAPrev, setEditChoiceAPrev] = useState('');
-  const [choiceB, setEditChoiceB] = useState('');
-  const [choiceC, setEditChoiceC] = useState('');
-  const [choiceD, setEditChoiceD] = useState('');
   const [imageEdit, setEditImage] = useState(null);
   const [isEssayEdit, setEditIsEssay] = useState(false);
   const [actualAnswerEdit, setEditActualAnswer] = useState(null);
@@ -82,26 +78,24 @@ export default function AdminPageSoal(props) {
     },
   ];
 
-  const dataedit = [
+  const datachoiceedit = [
     {
-      id: 1,
       choice: '',
     },
     {
-      id: 2,
       choice: '',
     },
     {
-      id: 3,
       choice: '',
     },
     {
-      id: 4,
       choice: '',
     },
   ];
 
   const [tempChoice, setTempChoice] = useState(datachoice);
+
+  const [tempEditChoice, setTempEditChoice] = useState(datachoiceedit);
 
 
   const updateStateChoice = (index) => (e) => {
@@ -120,6 +114,24 @@ export default function AdminPageSoal(props) {
     setData('choice', trueChoice)
   };
 
+  const updateStateEditChoice = (index) => (e) => {
+    const newArrayEdit = tempEditChoice.map((item, i) => {
+      if (index === i) {
+        return { choice: e.target.value };
+      } else {
+        return item;
+      }
+    });
+    const trueChoiceEdit = []
+    setTempEditChoice(newArrayEdit)
+    console.log(newArrayEdit)
+    newArrayEdit.map((choices) => {
+      trueChoiceEdit.push(choices.choice)
+    })
+    setEditChoice(trueChoiceEdit)
+    console.log(choiceEdit)
+  };
+
   function blobUrl() {
     const url = URL.createObjectURL(data.image)
     return url
@@ -134,9 +146,12 @@ export default function AdminPageSoal(props) {
 
   function editSoal(e) {
     e.preventDefault()
-    post(route('admin.edit-soal', edit, {
-      _method: 'POST'
-    }));
+
+    const edit = {
+      id, questionEdit, subjectEdit, choiceEdit, actualAnswerEdit
+    }
+
+    router.post('/dashboard/soal/edit-soal', edit)
   }
 
   function setEditFunction(target, value) {
@@ -244,6 +259,7 @@ export default function AdminPageSoal(props) {
 
                 </div>
               </dialog>
+              
             </div>
             {/* content */}
             {props.exam.map((data, i) =>
@@ -265,13 +281,24 @@ export default function AdminPageSoal(props) {
                   <div className="card-actions justify-end">
                     {/* <button className="btn">Buy Now</button> */}
                     <PrimaryButton onClick={() => {
+                      setTempEditChoice([
+                        {
+                          choice: data.choice[0],
+                        },
+                        {
+                          choice: data.choice[1],
+                        },
+                        {
+                          choice: data.choice[2],
+                        },
+                        {
+                          choice: data.choice[3],
+                        },
+                      ])
+                      const choicess = data.choice;
+                      setIdEdit(data.id);
                       setEditQuestion(data.question);
-                      setEditChoice(data.choice);
-                      setEditChoiceA(data.choice[0]);
-                      setEditChoiceAPrev(data.choice[0])
-                      setEditChoiceB(data.choice[1]);
-                      setEditChoiceC(data.choice[2]);
-                      setEditChoiceD(data.choice[3]);
+                      setEditChoice(choicess);
                       setEditActualAnswer(data.actual_answer);
                       setEditSubject(data.subject);
                       document.getElementById('edit_data' + data.id.toString()).showModal()
@@ -293,71 +320,53 @@ export default function AdminPageSoal(props) {
                         <label className="label">
                           <span className="label-text font-bold">Pertanyaan</span>
                         </label>
-                        <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={questionEdit} onChange={e => setEditQuestion(e.target.value)} />
+                        <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={questionEdit} onChange={(question) => setEditQuestion(question.target.value)} />
 
                         <label className="label">
                           <span className="label-text font-bold">Subject</span>
                         </label>
-                        <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={subjectEdit} onChange={e => setEditSubject(e.target.value)} />
+                        <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={subjectEdit} onChange={(subject) => setEditSubject(subject.target.value)} />
 
 
                         <label className="label">
                           <span className="label-text font-bold">Pilihan jawaban A</span>
                         </label>
-                        <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={choiceA} onChange={e => {
-                          setEditChoiceA(e.target.value);
-                          let tempochoice = choiceEdit;
-                          tempochoice[0] = e.target.value;
-                          setEditChoice(tempochoice);
-                        }} />
+                        <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={choiceEdit[0]} onChange={updateStateEditChoice(0)} />
 
                         <label className="label">
                           <span className="label-text font-bold">Pilihan jawaban B</span>
                         </label>
-                        <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={choiceB} onChange={e => {
-                          setEditChoiceB(e.target.value);
-                          let tempochoice = choiceEdit;
-                          tempochoice[1] = e.target.value;
-                          setEditChoice(tempochoice);
-                        }} />
+                        <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={choiceEdit[1]} onChange={updateStateEditChoice(1)} />
 
                         <label className="label">
                           <span className="label-text font-bold">Pilihan jawaban C</span>
                         </label>
-                        <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={choiceC} onChange={e => {
-                          setEditChoiceC(e.target.value);
-                          let tempochoice = choiceEdit;
-                          tempochoice[2] = e.target.value;
-                          setEditChoice(tempochoice);
-                          console.log(choiceEdit);
-                        }} />
+                        <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={choiceEdit[2]} onChange={updateStateEditChoice(2)} />
 
 
                         <label className="label">
                           <span className="label-text font-bold">Pilihan jawaban D</span>
                         </label>
-                        <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={choiceD} onChange={e => {
-                          setEditChoiceD(e.target.value);
-                          let tempochoice = choiceEdit;
-                          tempochoice[3] = e.target.value;
-                          setEditChoice(tempochoice);
-                          console.log(choiceEdit);
-                        }} />
+                        <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={choiceEdit[3]} onChange={updateStateEditChoice(3)} />
 
                         <label className="label">
                           <span className="label-text font-bold">Jawaban soal</span>
                         </label>
-                        <select className="bg-white select select-primary w-full max-w-xs" onChange={e => setEditActualAnswer(e.target.value)}>
-                          <option value="" disabled selected>Pilih jawaban untuk soal</option>
-                          {data.choice.map((choice, i) =>
-                            <option key={i}>{choice}</option>
+                        <select className="bg-white select select-primary w-full max-w-xs" onChange={(answer) => setEditActualAnswer(answer.target.value)}>
+                          {data.choice.map((choice, i) => {
+                              if(choice == data.actual_answer) {
+                                return (<option key={i} selected>{choice}</option>)
+                              } else {
+                                return (<option key={i}>{choice}</option>)
+                              }
+                            }
                           )}
                         </select>
 
                         <div className='flex justify-between'>
                           <button type="submit" className="btn btn-secondary mt-6">Save</button>
 
-                          {flash.message?.substr(0, 11) == data.id.toString() && showSuccess ?
+                          {flash.message == data.id.toString() && showSuccess ?
                             <div className="alert alert-success mx-4 mt-5">
                               <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                               <span>Soal berhasil diedit</span>
@@ -369,16 +378,12 @@ export default function AdminPageSoal(props) {
                               {/* if there is a button in form, it will close the modal */}
                               <button className="btn btn-primary" onClick={() => {
                                 setShowSuccess(false);
-                                console.log(choiceAPrev);
                                 setEditQuestion(data.question);
                                 setEditChoice(data.choice);
-                                setEditChoiceA(choiceAPrev);
-                                console.log(choiceA);
-                                setEditChoiceB(data.choice[1]);
-                                setEditChoiceC(data.choice[2]);
-                                setEditChoiceD(data.choice[3]);
                                 setEditActualAnswer(data.actual_answer);
                                 setEditSubject(data.subject);
+                                console.log(examState);
+                                console.log(flash.message)
                               }}>Cancel</button>
                             </form>
                           </div>
