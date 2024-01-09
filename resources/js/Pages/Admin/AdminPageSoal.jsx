@@ -392,7 +392,7 @@ export default function AdminPageSoal(props) {
                   <div className="card w-4/4 my-3 bg-secondary text-primary-content" key={i}>
                     <div className="card-body">
                       {/* <h2 className="card-title">Soal nomor 1</h2> */}
-                      {data.image && <img src={'/storage/'+data.image} className='max-h-32'></img>}
+                      {data.image && <img src={'/storage/'+data.image} className='justify-start max-w-2xl'></img>}
                       <p>{i + 1}. {data.question} {'('+data.point+' points)'}</p>
                       <ul>
                         <li className='font-bold'>A. {data.choice[0]}</li>
@@ -556,7 +556,7 @@ export default function AdminPageSoal(props) {
                     <div className="card w-4/4 my-3 bg-secondary text-primary-content" key={i}>
                     <div className="card-body">
                       {/* <h2 className="card-title">Soal nomor 1</h2> */}
-                      {data.image && <img src={'/storage/'+data.image} className='max-h-32'></img>}
+                      {data.image && <img src={'/storage/'+data.image} className='justify-start max-w-2xl'></img>}
                       <p>{i + 1}. {data.question} {'('+data.point+' points)'}</p>
                       <div className="card-actions justify-start">
                         {/* <button className="btn">Buy Now</button> */}
