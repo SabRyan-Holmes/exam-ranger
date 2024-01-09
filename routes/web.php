@@ -59,6 +59,8 @@ Route::prefix('dashboard')->middleware(['auth', 'verified', 'isAdmin'])->name('a
     // CRUD Peserta
     Route::get('/peserta', [AdminController::class, 'peserta'])->name('peserta');
     Route::post('/peserta', [AdminController::class, 'store_peserta'])->name('create-peserta');
+    Route::patch('/peserta', [AdminController::class, 'update_peserta'])->name('update-peserta');
+    Route::delete('/peserta', [AdminController::class, 'destroy_peserta'])->name('delete-peserta');
 
 
 });

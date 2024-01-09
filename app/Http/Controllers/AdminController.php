@@ -7,9 +7,14 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Http\Requests\SoalUpdateRequest;
+use App\Http\Requests\PesertaUpdateRequest;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 class AdminController extends Controller
 {
@@ -163,4 +168,50 @@ class AdminController extends Controller
         $data->delete();
         return back();
     }
+
+
+    // public function edit()
+    // {   
+    //     return Inertia::render()
+    // }
+
+    public function update_peserta(Request $request): RedirectResponse
+    {
+        // ddd($request->query->get('name'));
+        $query = $request->query->all();
+        $validatedData = validator($query, [
+            'name' => "required|string|min:2|max:30",
+            'nim' => [
+                'required',
+                'min:9',
+                'max:12',
+                'unique:users,nim,' .$request->query->get('id')
+            ],
+            'email' => "nullable|string|email:unique|max:40|",
+            "password" => ['required', 'confirmed', Rules\Password::defaults()],
+       ])->validate();
+
+        $validatedData['password'] = Hash::make($request->query->get('password'));
+        User::where('id', $request->query->get('id'))
+            ->update($validatedData);
+
+        return Redirect::route('admin.peserta')->with('message', 'Peserta  Berhasil Diupdate');
+        
+        // $user = User::create([
+        //     'name' => $request->name,
+        //     'email' => $request->email,
+        //     'nim' => $request->nim,
+        //     'password' => Hash::make($request->password),
+        //     ]);
+    }
+
+    public function destroy_peserta(Request $request)
+    {
+        User::destroy($request->id);
+        return Redirect::route('admin.peserta')->with('message', 'Peserta Berhasil Dihapus');
+    }
+
+   
+   
+
 }
