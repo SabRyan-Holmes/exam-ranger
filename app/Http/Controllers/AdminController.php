@@ -64,17 +64,32 @@ class AdminController extends Controller
      */
     public function store(SoalUpdateRequest $request)
     {
-        $validatedData = $request->validate([
-            'question' => "required",
-            'is_essay' => "required",
-            'actual_answer' => "required",
-            'subject' => "required",
-            "choice" => "required|array|min:1",
-            'choice.*' => "required|string|distinct|min:1",
-            "exam_started" => "required",
-            "exam_ended" => "required",
-            "exam_duration" => "required"
-       ]);
+        if($request->isEssay) {
+            $validatedData = $request->validate([
+                'question' => "required",
+                'is_essay' => "required",
+                'actual_answer' => "required",
+                'subject' => "required",
+                "choice" => "required|array|min:1",
+                "exam_started" => "required",
+                "exam_ended" => "required",
+                "exam_duration" => "required",
+                "point" => "required"
+           ]);
+        } else {
+            $validatedData = $request->validate([
+                'question' => "required",
+                'is_essay' => "required",
+                'actual_answer' => "required",
+                'subject' => "required",
+                "choice" => "required|array|min:1",
+                'choice.*' => "required|string|distinct|min:1",
+                "exam_started" => "required",
+                "exam_ended" => "required",
+                "exam_duration" => "required",
+                "point" => "required"
+           ]);
+        }
        if($request->image != null) {
            $validatedData['image'] = $request->file('image')->store('exam-images');
        };
@@ -123,12 +138,14 @@ class AdminController extends Controller
             'subjectEdit' => "required",
             "choiceEdit" => "required|array|min:1",
             'choiceEdit.*' => "required|string|distinct|min:1",
+            'pointEdit' => "required",
        ]);
        $data = Exam::find($request->id);
        $data->subject = $request->subjectEdit;
        $data->question = $request->questionEdit;
        $data->choice = $request->choiceEdit;
        $data->actual_answer = $request->actualAnswerEdit;
+       $data->point = $request->pointEdit;
        if($request->imageEdit != null){
         $data->image = $request->file('imageEdit')->store('exam-images');
         $data->update($request->except(['imageEdit']));

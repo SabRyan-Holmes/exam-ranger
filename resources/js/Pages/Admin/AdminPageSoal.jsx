@@ -14,7 +14,6 @@ import { usePage } from '@inertiajs/react'
 import { useEffect } from "react";
 
 export default function AdminPageSoal(props) {
-  console.log(props.errors)
   const { flash } = usePage().props
   const [showSuccess, setShowSuccess] = useState(false)
   useEffect(() => {
@@ -25,6 +24,7 @@ export default function AdminPageSoal(props) {
 
   const [examState, setEditExamState] = useState(props.exam);
   const [isDeleteImg, setIsDeleteImg] = useState(false);
+  const [pointEdit, setEditPoint] = useState(2);
   const [questionEdit, setEditQuestion] = useState(null);
   const [id, setIdEdit] = useState(null);
   const [choiceEdit, setEditChoice] = useState(['', '', '', '']);
@@ -33,6 +33,17 @@ export default function AdminPageSoal(props) {
   const [actualAnswerEdit, setEditActualAnswer] = useState(null);
   const [indexAns, setEditIndexAns] = useState(null);
   const [subjectEdit, setEditSubject] = useState(null);
+
+  const [question, setQuestion] = useState('');
+  const [choice, setChoice] = useState(["soal essay"]);
+  const [image, setImage] = useState(null);
+  const [is_essay, setIsEssay] = useState(true);
+  const [actual_answer, setActualAnswer] = useState("Jawaban essay");
+  const [exam_started, setExamStarted] = useState("2024-01-03 10:42:17");
+  const [exam_ended, setExamEnded] = useState("2024-01-03 11:42:17");
+  const [exam_duration, setExamDuration] = useState("90");
+  const [point, setPoint] = useState(2);
+  const [subject, setSubject] = useState('');
 
   const { data, setData, post, processing, errors } = useForm({
     question: null,
@@ -43,6 +54,7 @@ export default function AdminPageSoal(props) {
     exam_started: "2024-01-03 10:42:17",
     exam_ended: "2024-01-03 11:42:17",
     exam_duration: "90",
+    point: 2,
     subject: null
   })
 
@@ -151,6 +163,11 @@ export default function AdminPageSoal(props) {
     return url
   }
 
+  function blobUrlEssay() {
+    const url = URL.createObjectURL(image)
+    return url
+  }
+
   function blobUrlEdit() {
     if(imageEdit != null) {
       const url = URL.createObjectURL(imageEdit)
@@ -171,14 +188,20 @@ export default function AdminPageSoal(props) {
     e.preventDefault()
 
     const edit = {
-      id, imageEdit, questionEdit, subjectEdit, choiceEdit, actualAnswerEdit, isDeleteImg
+      id, imageEdit, questionEdit, subjectEdit, choiceEdit, actualAnswerEdit, isDeleteImg, pointEdit
     }
 
     router.post('/dashboard/soal/edit-soal', edit)
   }
 
-  function setEditFunction(target, value) {
-    setEdit(target, value)
+  function submitEssay(e) {
+    e.preventDefault()
+
+    const edit = {
+      question, choice, image, is_essay, actual_answer, exam_started, exam_ended, exam_duration, point, subject
+    }
+
+    router.post('/dashboard/soal/add-soal', edit)
   }
 
   return (
@@ -194,7 +217,10 @@ export default function AdminPageSoal(props) {
               <h1 className='font-bold'>Daftar Soal Ujian {props.subject}</h1>
 
               {/* Open the modal using document.getElementById('ID').showModal() method */}
-              <PrimaryButton onClick={() => { document.getElementById('create_data').showModal() }}>Tambah soal</PrimaryButton>
+              <div>
+                <PrimaryButton onClick={() => {document.getElementById('create_data_essay').showModal() }}>Tambah soal essay</PrimaryButton>
+                <PrimaryButton onClick={() => { document.getElementById('create_data').showModal() }}>Tambah soal pilihan ganda</PrimaryButton>
+              </div>
 
               <dialog id="create_data" className="modal">
                 <div className="modal-box">
@@ -225,6 +251,16 @@ export default function AdminPageSoal(props) {
                     </label>
                     <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={data.subject} onChange={e => setData('subject', e.target.value)} />
                     {errors.subject && <div className='text-red-600'>{errors.subject}</div>}
+
+                    <label className="label">
+                      <span className="label-text font-bold">Point</span>
+                    </label>
+                    <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={data.point} onChange={e => setData('point', e.target.value)} onKeyPress={(event) => {
+                      if (!/[0-9]/.test(event.key)) {
+                        event.preventDefault();
+                      }
+                    }} />
+                    {errors.point && <div className='text-red-600'>{errors.point}</div>}
 
                     <label className="label">
                       <span className="label-text font-bold">Pilihan jawaban A</span>
@@ -285,6 +321,69 @@ export default function AdminPageSoal(props) {
                 </div>
               </dialog>
 
+              <dialog id="create_data_essay" className="modal">
+                <div className="modal-box">
+                  <h3 className="font-bold text-lg">Masukkan data soal</h3>
+
+                  <form onSubmit={submitEssay}>
+
+                    {image ?
+                      <div className='flex justify-center'>
+                        <img src={blobUrlEssay()} alt="Gambar" className='h-60' />
+                      </div>
+                      : ""}
+
+                    <label className="label">
+                      <span className="label-text font-bold">Gambar</span>
+                    </label>
+                    <input type="file" className="bg-white file-input file-input-bordered file-input-primary w-full max-w-xs" onChange={e => setImage(e.target.files[0])} />
+                    {errors.image && <div className='text-red-600'>{errors.image}</div>}
+
+                    <label className="label">
+                      <span className="label-text font-bold">Pertanyaan</span>
+                    </label>
+                    <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={question} onChange={e => setQuestion(e.target.value)} />
+                    {errors.question && <div className='text-red-600'>{errors.question}</div>}
+
+                    <label className="label">
+                      <span className="label-text font-bold">Subject</span>
+                    </label>
+                    <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={subject} onChange={e => setSubject(e.target.value)} />
+                    {errors.subject && <div className='text-red-600'>{errors.subject}</div>}
+
+                    <label className="label">
+                      <span className="label-text font-bold">Point</span>
+                    </label>
+                    <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={point} onChange={e => setPoint(e.target.value)} onKeyPress={(event) => {
+                      if (!/[0-9]/.test(event.key)) {
+                        event.preventDefault();
+                      }
+                    }} />
+                    {errors.point && <div className='text-red-600'>{errors.point}</div>}
+
+                    <div className='flex justify-between'>
+                      <button type="submit" className="btn btn-secondary mt-6" disabled={processing}>Submit</button>
+
+                      {flash.message?.substr(0, 11) == 'suksesinput' && showSuccess ?
+                        <div className="alert alert-success mx-4 mt-5">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                          <span>Soal berhasil ditambah</span>
+                        </div> :
+                        ""
+                      }
+                      <div className="modal-action">
+                        <form method="dialog">
+                          {/* if there is a button in form, it will close the modal */}
+                          <button className="btn btn-primary" onClick={() => {setShowSuccess(false)}}>Cancel</button>
+                        </form>
+                      </div>
+                    </div>
+
+                  </form>
+
+                </div>
+              </dialog>
+
             </div>
             {/* content */}
             {props.exam.map((data, i) =>
@@ -294,7 +393,7 @@ export default function AdminPageSoal(props) {
                     <div className="card-body">
                       {/* <h2 className="card-title">Soal nomor 1</h2> */}
                       {data.image && <img src={'/storage/'+data.image} className='max-h-32'></img>}
-                      <p>{i + 1}. {data.question}</p>
+                      <p>{i + 1}. {data.question} {'('+data.point+' points)'}</p>
                       <ul>
                         <li className='font-bold'>A. {data.choice[0]}</li>
                         <li className='font-bold'>B. {data.choice[1]}</li>
@@ -309,6 +408,7 @@ export default function AdminPageSoal(props) {
                       <div className="card-actions justify-end">
                         {/* <button className="btn">Buy Now</button> */}
                         <PrimaryButton onClick={() => {
+                          setEditPoint(data.point)
                           setImgDelete('');
                           setEditIsEssay(false);
                           setTempEditChoice([
@@ -371,6 +471,14 @@ export default function AdminPageSoal(props) {
                             </label>
                             <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={subjectEdit} onChange={(subject) => setEditSubject(subject.target.value)} />
     
+                            <label className="label">
+                              <span className="label-text font-bold">Point</span>
+                            </label>
+                            <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={pointEdit} onChange={(point) => setEditPoint(point.target.value)} onKeyPress={(event) => {
+                              if (!/[0-9]/.test(event.key)) {
+                                event.preventDefault();
+                              }
+                            }} />
     
                             <label className="label">
                               <span className="label-text font-bold">Pilihan jawaban A</span>
@@ -420,6 +528,7 @@ export default function AdminPageSoal(props) {
                                 <form method="dialog">
                                   {/* if there is a button in form, it will close the modal */}
                                   <button className="btn btn-primary" onClick={() => {
+                                    setEditPoint(data.point);
                                     setIsDeleteImg(false)
                                     setImgDelete('');
                                     setEditImage(null);
@@ -448,7 +557,7 @@ export default function AdminPageSoal(props) {
                     <div className="card-body">
                       {/* <h2 className="card-title">Soal nomor 1</h2> */}
                       {data.image && <img src={'/storage/'+data.image} className='max-h-32'></img>}
-                      <p>{i + 1}. {data.question}</p>
+                      <p>{i + 1}. {data.question} {'('+data.point+' points)'}</p>
                       <div className="card-actions justify-start">
                         {/* <button className="btn">Buy Now</button> */}
                         <h1>Jawaban : Essay</h1>
@@ -457,6 +566,7 @@ export default function AdminPageSoal(props) {
                       <div className="card-actions justify-end">
                         {/* <button className="btn">Buy Now</button> */}
                         <PrimaryButton onClick={() => {
+                          setEditPoint(data.point);
                           setEditActualAnswer("Jawaban essay");
                           setEditIsEssay(true);
                           setIdEdit(data.id);
@@ -500,6 +610,15 @@ export default function AdminPageSoal(props) {
                               <span className="label-text font-bold">Subject</span>
                             </label>
                             <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={subjectEdit} onChange={(subject) => setEditSubject(subject.target.value)} />
+
+                            <label className="label">
+                              <span className="label-text font-bold">Point</span>
+                            </label>
+                            <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={pointEdit} onChange={(point) => setEditPoint(point.target.value)} onKeyPress={(event) => {
+                              if (!/[0-9]/.test(event.key)) {
+                                event.preventDefault();
+                              }
+                            }} />
     
                             <div className='flex justify-between'>
                               <button type="submit" className="btn btn-secondary mt-6">Save</button>
@@ -515,6 +634,7 @@ export default function AdminPageSoal(props) {
                                 <form method="dialog">
                                   {/* if there is a button in form, it will close the modal */}
                                   <button className="btn btn-primary" onClick={() => {
+                                    setEditPoint(data.point);
                                     setIsDeleteImg(false)
                                     setEditImage(null);
                                     setShowSuccess(false);
