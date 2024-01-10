@@ -75,7 +75,6 @@ const ExamPage = ({ auth, exam, title, subject, }) => {
     // convert minutes to hours, minutes and second
 
     // Submit Data to Answer db
-    console.log(exam)
     const [choice, setchoice] = useState(exam[active].choice)
     const [isChange, setisChange] = useState(false)
     const [answer, setAnswer] = useState(Array(exam.length).fill(null))
@@ -122,7 +121,29 @@ const ExamPage = ({ auth, exam, title, subject, }) => {
         })
     };
 
+    useEffect(() => {
+        if(localStorage.getItem("answer"+subject) != null) {
+            setAnswer(localStorage.getItem("answer"+subject).toString().split(","))
+        }
+    }, [])
 
+    const dataanswer = [
+        {
+            answer: '',
+        },
+    ];
+
+
+    const [tempEssay, setTempEssay] = useState(Object.fromEntries(answer.map(k => [k, k])));
+
+    const updateStateEditAnswer = (index) => (e) => {
+        const trueAnswer = answer.toString().split(",")
+        trueAnswer[index] = e.target.value
+        localStorage.setItem("answer"+subject, trueAnswer)
+        answered[index] = true
+        localStorage.setItem("answered"+subject, answered)
+        setAnswer(trueAnswer)
+      };
 
     function handleChoices(choice) {
         console.log("choice value : " + choice)
@@ -136,6 +157,12 @@ const ExamPage = ({ auth, exam, title, subject, }) => {
             setSumAnswered()
         }
         answered[active] = true
+        localStorage.setItem("answer"+subject, answer)
+        localStorage.setItem("answered"+subject, answered)
+        // console.log(localStorage.getItem("answer"+subject).toString().split(","))
+        // console.log(localStorage.getItem("answered"+subject).split(",").map((a) => Boolean.valueOf(a)))
+        // setAnswer(localStorage.getItem("answer"+subject).toString().split(","))
+        // setAnswered(localStorage.getItem("answered"+subject).split(",").map((a) => Boolean.valueOf(a)))
         console.log(`isi yang banyak soal yg udah dijawab : ${alreadyAnswered}`)
     }
 
@@ -199,8 +226,8 @@ const ExamPage = ({ auth, exam, title, subject, }) => {
 
                         <div className="ml-10 w-2/5">
                             <InputLabel className="my-2" htmlFor="body" value="Jawaban" />
-                            <textarea id="essay" className="w-full border-primary rounded-lg bg-base-100/35 " name='body' placeholder="ketik jawabanmu disini"
-                                onChange={(e) => { answer[active] = e.target.value }}
+                            <textarea id="essay" className="w-full border-primary rounded-lg bg-base-100/35 " name='body' placeholder="ketik jawabanmu disini" value={answer[active]}
+                                onChange={updateStateEditAnswer(active)}
                             />
 
                         </div>
@@ -232,7 +259,7 @@ const ExamPage = ({ auth, exam, title, subject, }) => {
                     <strong className="p-3 ">Quiz Navigation</strong>
                     <div className="grid grid-cols-10 gap-2 text-center m-1">
                         {answer.map((answered, i) => {
-                            return <button onClick={() => { setActive(i) }} className={' shadow-lg ring-1 p-2 rounded-lg border ' + (active == i ? 'bg-primary' : (answered == null ? 'bg-secondary' : 'bg-green-400'))} >{i + 1}</button>
+                            return <button onClick={() => { setActive(i) }} className={' shadow-lg ring-1 p-2 rounded-lg border ' + (active == i ? 'bg-primary' : (answered?.length == 0 || answered == null ? 'bg-secondary' : 'bg-green-400'))} >{i + 1}</button>
 
                         })}
                     </div>
