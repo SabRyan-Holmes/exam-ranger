@@ -134,8 +134,6 @@ const ExamPage = ({ auth, exam, title, subject, }) => {
     ];
 
 
-    const [tempEssay, setTempEssay] = useState(Object.fromEntries(answer.map(k => [k, k])));
-
     const updateStateEditAnswer = (index) => (e) => {
         const trueAnswer = answer.toString().split(",")
         trueAnswer[index] = e.target.value

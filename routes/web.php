@@ -26,7 +26,7 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->middleware(['isAlreadyLoggedIn']);
 
 // Route::get('/', function () {
 //     return Inertia::render('Auth/Login');
