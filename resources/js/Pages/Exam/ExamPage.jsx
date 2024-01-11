@@ -157,10 +157,6 @@ const ExamPage = ({ auth, exam, title, subject, }) => {
         answered[active] = true
         localStorage.setItem("answer"+subject, answer)
         localStorage.setItem("answered"+subject, answered)
-        // console.log(localStorage.getItem("answer"+subject).toString().split(","))
-        // console.log(localStorage.getItem("answered"+subject).split(",").map((a) => Boolean.valueOf(a)))
-        // setAnswer(localStorage.getItem("answer"+subject).toString().split(","))
-        // setAnswered(localStorage.getItem("answered"+subject).split(",").map((a) => Boolean.valueOf(a)))
         console.log(`isi yang banyak soal yg udah dijawab : ${alreadyAnswered}`)
     }
 
