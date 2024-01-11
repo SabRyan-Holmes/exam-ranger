@@ -31,6 +31,8 @@ const ExamPage = ({ auth, exam, title, subject, timestampForTimer }) => {
         })
 
     }
+
+
     const { data, post, processing, recentlySuccessful } = useForm({
         answer: null,
         student_id: auth.user.id,
@@ -62,11 +64,22 @@ const ExamPage = ({ auth, exam, title, subject, timestampForTimer }) => {
         })
     };
 
+    const [amountAnswered, setAmountAnswered] = useState(0)
+
     useEffect(() => {
         if (localStorage.getItem("answer" + subject) != null) {
             setAnswer(localStorage.getItem("answer" + subject).toString().split(","))
         }
+        var aaa = 0
+        answer.map((data) => {if(!(data?.length == 0 || data == null)) {
+            setAmountAnswered(aaa+1)
+        }})
     }, [])
+
+    useEffect(() => {
+        length = answer.filter(d => d?.length > 0).length;
+        setAmountAnswered(length)
+    }, [answer])
 
     const updateStateEditAnswer = (index) => (e) => {
         const trueAnswer = answer.toString().split(",")
@@ -92,6 +105,8 @@ const ExamPage = ({ auth, exam, title, subject, timestampForTimer }) => {
         localStorage.setItem("answer" + subject, answer)
         localStorage.setItem("answered" + subject, answered)
         console.log(`isi yang banyak soal yg udah dijawab : ${alreadyAnswered}`)
+        length = answer.filter(d => d?.length > 0).length;
+        setAmountAnswered(length)
     }
 
     console.log("All Answer : " + answer)
@@ -192,7 +207,7 @@ const ExamPage = ({ auth, exam, title, subject, timestampForTimer }) => {
                     </div>
 
                     <div className="justify-center items-center flex mt-10">
-                        <div className=" w-28 h-28 radial-progress text-primary font-extrabold  border-4 border-orange-300 text-lg " style={{ "--value": (active + 1) / exam.length * 100, "--size": "12rem", "--thickness": "5px" }} role="progressbar">{alreadyAnswered} /{exam.length} <span className='text-sm'>
+                        <div className=" w-28 h-28 radial-progress text-primary font-extrabold  border-4 border-orange-300 text-lg " style={{ "--value": (active + 1) / exam.length * 100, "--size": "12rem", "--thickness": "5px" }} role="progressbar">{amountAnswered} /{exam.length} <span className='text-sm'>
                             Terjawab</span></div>
                         {/* <label htmlFor="my_modal_7">
                                 Kumpul Jawaban

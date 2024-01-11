@@ -32,10 +32,8 @@ const CountdownTimer = ({ countdownTimestampMs, subject }) => {
 
     function updateRemainingTime(countdown) {        
         if(localStorage.getItem("timestamp"+subject) == null) {
-            console.log("gaa")
             setRemainingTime(getRemainingTimeUntilMsTimestamp(countdown));
         } else {
-            console.log(timestampForLocalPerma)
             setRemainingTime(getRemainingTimeUntilMsTimestamp(timestampForLocalPerma));
         }
         tempCountdown = tempCountdown - 250
