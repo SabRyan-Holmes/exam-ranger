@@ -69,7 +69,7 @@ export default function StudentHome({ auth, exams }) {
                                 console.log(exams[subject]);
                                 console.log(exams[subject][0].question);
                                 return (
-                                    <Link href={route('exam', { subject })} >
+                                    <Link href={route('exam.show', { subject })} >
                                         <div className="mb-2  card w-fit shadow-md hover:bg-primary/30 ">
                                             <div className="m-6 rounded-md   ">
                                                 <div className="card-actions  items-center ">
@@ -110,7 +110,7 @@ export default function StudentHome({ auth, exams }) {
                                 console.log(exams[subject]);
                                 console.log(exams[subject][0].question);
                                 return (
-                                    <Link href={route('exam', { subject })} >
+                                    <Link href={route('exam.show', { subject })} >
                                         <div className="mb-2 card w-full shadow-md  hover:scale-110">
                                             <div className="m-6 rounded-md   ">
                                                 <div className="card-actions  items-center ">

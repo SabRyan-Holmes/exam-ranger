@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Exam;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use \Datetime;
+use DateInterval;
 
 class ExamController extends Controller
 {
@@ -54,9 +56,40 @@ class ExamController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Exam $exam)
+    public function show(Request $request)
     {
-        //
+        $exam = Exam::where('subject', $request->subject)->get();
+
+        
+        function menitKeTimestamp($menit) {
+            // Membuat objek DateTime untuk hari ini
+            $sekarang = new DateTime();
+        
+            // Menghitung waktu tambahan berdasarkan menit
+            $waktuTambahan = $menit * 60 * 1000;
+            // $waktuTambahan = menitKeTimestamp($menit);
+        
+            // Menambahkan waktu tambahan ke objek DateTime
+            $sekarang->add(new DateInterval('PT' . round($waktuTambahan / 1000) . 'S'));
+        
+            // Mendapatkan timestamp dalam milidetik
+            $timestamp = $sekarang->getTimestamp() * 1000;
+        
+            return $timestamp;
+        }
+        
+        // Contoh penggunaan fungsi
+        $menit = $exam[0]->exam_duration;
+        $timestampMs = menitKeTimestamp($menit);
+        // dd($timestampMs);
+
+        return Inertia::render('Exam/ExamPage', [
+            'title' => "Exam",
+            'subject' =>  $request->subject,
+            'exam' => $exam,
+            'timestampForTimer' => $timestampMs
+            // 'status' => session('status'),
+        ]);
     }
 
     /**

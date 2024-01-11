@@ -5,85 +5,26 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
 import InputError from '@/Components/InputError';
+import CountdownTimer from '@/Components/CountdownTimer';
 
-const ExamPage = ({ auth, exam, title, subject, }) => {
+
+const ExamPage = ({ auth, exam, title, subject, timestampForTimer }) => {
     const [active, setActive] = useState(0)
-    let hoursR = ''
-    let minutesR = ''
-    let secondsR = ''
 
-
-    function timeConvert(n) {
-        var num = n;
-        var hours = (num / 60);
-        var rhours = Math.floor(hours);
-        var minutes = (hours - rhours) * 60;
-        var rminutes = Math.round(minutes);
-        var rsecond = Math.floor((num * 60) - (hours * 3600) - (minutes * 60));
-        // Appends 0 when unit is less than 10
-        if (rhours < 10) { rhours = "0" + rhours; }
-        if (rminutes < 10) { rminutes = "0" + rminutes; }
-        if (rsecond < 10) { rsecond = "0" + rsecond; }
-
-        hoursR = rhours
-        minutesR = rminutes
-        secondsR = rsecond
-        return num + " minutes = " + rhours + " hour(s) and " + rminutes + " minute(s) and " + rsecond + " rsecond(s).";
-    }
-
-    const [timerHours, setTimerHours] = useState(hoursR)
-    const [timerMinutes, setTimerMinutes] = useState(minutesR)
-    const [timerSeconds, setTimerSeconds] = useState(secondsR)
-    let interval = useState()
-
-    const startTimer = () => {
-        const countdownDate = new Date().getTime();
-        interval = setInterval(() => {
-            const now = new Date().getTime()
-            const distance = countdownDate - now;
-            // const now = new Date
-            const hours = Math.floor(distance % (1000 * 60 * 60 * 24) / (1000 * 60 * 60))
-            const minutes = Math.floor(distance % (1000 * 60 * 60 * 24))
-            const seconds = Math.floor(distance % (1000 * 60 * 60 * 24))
+    // Logic Timer
 
 
 
-            if (distance < 0) {
-                clearInterval(interval.current)
-            } else {
-                setTimerHours(hours);
-                setTimerMinutes(minutes);
-                setTimerSeconds(seconds);
-            }
-        }, 1000);
-    }
-    // componen dimount
-    useEffect(() => {
-        timeConvert(exam[0].exam_duration)
-        console.log(timeConvert(exam[0].exam_duration))
 
-        startTimer();
-        return () => {
-            clearInterval(interval.current)
-        }
-    })
-
-    const trixInput = useRef('');
-
-
-    // console.log("isi isEssay " + exam[active].is_essay)
-    // convert minutes to hours, minutes and second
 
     // Submit Data to Answer db
-    const [choice, setchoice] = useState(exam[active].choice)
-    const [isChange, setisChange] = useState(false)
+
     const [answer, setAnswer] = useState(Array(exam.length).fill(null))
     const [answered, setAnswered] = useState(Array(exam.length).fill(false))
     let [alreadyAnswered, setAlreadyAnswered] = useState(0)
 
     function setSumAnswered() {
         answer.map((answered) => {
-            // console.log(`tess answereed map ${answered}`)
             if (answered != null) {
                 alreadyAnswered++;
             }
@@ -122,26 +63,21 @@ const ExamPage = ({ auth, exam, title, subject, }) => {
     };
 
     useEffect(() => {
-        if(localStorage.getItem("answer"+subject) != null) {
-            setAnswer(localStorage.getItem("answer"+subject).toString().split(","))
+        if (localStorage.getItem("answer" + subject) != null) {
+            setAnswer(localStorage.getItem("answer" + subject).toString().split(","))
         }
     }, [])
 
-    const dataanswer = [
-        {
-            answer: '',
-        },
-    ];
 
 
     const updateStateEditAnswer = (index) => (e) => {
         const trueAnswer = answer.toString().split(",")
         trueAnswer[index] = e.target.value
-        localStorage.setItem("answer"+subject, trueAnswer)
+        localStorage.setItem("answer" + subject, trueAnswer)
         answered[index] = true
-        localStorage.setItem("answered"+subject, answered)
+        localStorage.setItem("answered" + subject, answered)
         setAnswer(trueAnswer)
-      };
+    };
 
     function handleChoices(choice) {
         console.log("choice value : " + choice)
@@ -155,13 +91,12 @@ const ExamPage = ({ auth, exam, title, subject, }) => {
             setSumAnswered()
         }
         answered[active] = true
-        localStorage.setItem("answer"+subject, answer)
-        localStorage.setItem("answered"+subject, answered)
+        localStorage.setItem("answer" + subject, answer)
+        localStorage.setItem("answered" + subject, answered)
         console.log(`isi yang banyak soal yg udah dijawab : ${alreadyAnswered}`)
     }
 
     console.log("All Answer : " + answer)
-    console.log("detik : " + timerSeconds)
 
     function handleSubmit() {
         data.answer = answer
@@ -185,7 +120,7 @@ const ExamPage = ({ auth, exam, title, subject, }) => {
                         </svg>
                         <div>
                             <p>Sisa waktu</p>
-                            <p className='font-semibold'>{timerHours}:{timerMinutes}:{timerSeconds}</p>
+                            <CountdownTimer countdownTimestampMs={timestampForTimer} />
                         </div>
                     </div>
 

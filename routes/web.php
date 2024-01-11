@@ -28,22 +28,15 @@ Route::get('/', function () {
     ]);
 })->middleware(['isAlreadyLoggedIn']);
 
-// Route::get('/', function () {
-//     return Inertia::render('Auth/Login');
-// })->middleware(['guest'])->name('logins');
 
-
-Route::get('/home', [ExamController::class, 'all'])->middleware(['auth', 'verified'])->name('home');
-
-Route::middleware('auth')->group(function () {
-    Route::get('/exam', [ExamController::class, 'index'])->name('exam');
-    Route::post('/exam/submit', [AnswerController::class, 'store'])->name('exam.submit');
+Route::middleware('auth', 'verified')->group(function () {
+    Route::get('/home', [ExamController::class, 'all'])->name('home');
+    Route::post('/exam', [AnswerController::class, 'store'])->name('exam.submit');
+    Route::get('/exam', [ExamController::class, 'show'])->name('exam.show');
     Route::get('/exam/done', [AnswerController::class, 'show'])->name('exam.done');
 
 });
 
-// ;
-// })->middleware(['auth', 'verified', 'isAdmin']);
 
 Route::prefix('dashboard')->middleware(['auth', 'verified', 'isAdmin'])->name('admin.')->group(function () {
     // Dashboard
@@ -62,22 +55,8 @@ Route::prefix('dashboard')->middleware(['auth', 'verified', 'isAdmin'])->name('a
     Route::patch('/peserta', [AdminController::class, 'update_peserta'])->name('update-peserta');
     Route::delete('/peserta', [AdminController::class, 'destroy_peserta'])->name('delete-peserta');
 
-
 });
 
-
-
-// ->middleware(['auth', 'verified', 'isAdmin']);
-
-// ->middleware(['auth', 'verified', 'isAdmin'])->name('admin.soal-delete');
-
-// ->middleware(['auth', 'verified', 'isAdmin'])->name('admin.soal-tipe');
-
-// ->middleware(['auth', 'verified', 'isAdmin'])->name('admin.peserta');
-
-// ->middleware(['auth', 'verified', 'isAdmin'])->name('admin.create-soal');
-
-// ->middleware(['auth', 'verified', 'isAdmin'])->name('admin.edit-soal');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
