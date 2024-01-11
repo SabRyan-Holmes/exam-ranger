@@ -15,7 +15,7 @@ const ExamPage = ({ auth, exam, title, subject, timestampForTimer }) => {
 
 
 
-
+    console.log('isi timestamp' + timestampForTimer)
 
     // Submit Data to Answer db
 
@@ -66,9 +66,29 @@ const ExamPage = ({ auth, exam, title, subject, timestampForTimer }) => {
         if (localStorage.getItem("answer" + subject) != null) {
             setAnswer(localStorage.getItem("answer" + subject).toString().split(","))
         }
+        setTimestamp(timestampForTimer)
     }, [])
 
+    const [timestamp, setTimestamp] = useState(timestampForTimer);
 
+    // Fungsi untuk mengurangi timestamp setiap detik
+    const decreaseTimestamp = () => {
+        setTimestamp(prevTimestamp => prevTimestamp);
+    };
+
+    // Effect untuk memulai pengurangan saat komponen dimount
+    useEffect(() => {
+
+        // if
+        // Fungsi untuk mengurangi timestamp setiap detik
+        const intervalId = setInterval(decreaseTimestamp, 1000);
+
+        // Simpan nilai timestamp ke dalam localStorage
+        localStorage.setItem('timestamp', timestamp.toString());
+        console.log('isi local storage timestamp ' + localStorage.getItem('timestamp'))
+        // Membersihkan interval jika komponen di-unmount
+        return () => clearInterval(intervalId);
+    }, [timestamp]);
 
     const updateStateEditAnswer = (index) => (e) => {
         const trueAnswer = answer.toString().split(",")
@@ -120,7 +140,7 @@ const ExamPage = ({ auth, exam, title, subject, timestampForTimer }) => {
                         </svg>
                         <div>
                             <p>Sisa waktu</p>
-                            <CountdownTimer countdownTimestampMs={timestampForTimer} />
+                            <CountdownTimer countdownTimestampMs={timestamp} />
                         </div>
                     </div>
 
