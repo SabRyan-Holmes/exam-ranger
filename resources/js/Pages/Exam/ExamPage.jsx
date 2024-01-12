@@ -13,8 +13,6 @@ const ExamPage = ({ auth, exam, title, subject, timestampForTimer }) => {
 
     // Logic Timer
 
-
-
     console.log('isi timestamp' + timestampForTimer)
 
     // Submit Data to Answer db
@@ -104,8 +102,8 @@ const ExamPage = ({ auth, exam, title, subject, timestampForTimer }) => {
         answered[active] = true
         localStorage.setItem("answer" + subject, answer)
         localStorage.setItem("answered" + subject, answered)
-        console.log(`isi yang banyak soal yg udah dijawab : ${alreadyAnswered}`)
         length = answer.filter(d => d?.length > 0).length;
+        console.log(`isi yang banyak soal yg udah dijawab : ${length}`)
         setAmountAnswered(length)
     }
 
@@ -125,7 +123,7 @@ const ExamPage = ({ auth, exam, title, subject, timestampForTimer }) => {
             {/* container */}
             <div className="flex mx-auto justify-center ">
 
-                <div className="m-7 mr-4 rounded-lg max-w-5xl w-full pb-12 bg-secondary ">
+                <div className="m-7 mr-4 rounded-lg max-w-5xl w-full pb-6 bg-secondary ">
                     {/* Time */}
                     <div className="flex items-center  w-1/2">
                         <svg className="m-7 mr-4 w-12 h-12" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" >
@@ -138,13 +136,13 @@ const ExamPage = ({ auth, exam, title, subject, timestampForTimer }) => {
                     </div>
 
                     {/* Question */}
-                    <div className='m-9 mb-4 w-1/2 '>
+                    <div className='ml-9 mb-4 w-1/2 '>
                         <strong>Pertanyaan {active + 1} dari {exam.length}</strong>
                         <br />
                         <strong className='text-slate-600 '>{2} point</strong>
 
                         {/* Logika Gambar Soal jika ada */}
-                        {/* {exam.image == null ? : } */}
+                        {exam[active].image == null ? <></> : <img src={"/storage/" + exam[active].image} alt="" className='max-h-64'/> }
 
                         <p className='mt-1'>{exam[active].question}</p>
                     </div>
@@ -178,7 +176,7 @@ const ExamPage = ({ auth, exam, title, subject, timestampForTimer }) => {
 
 
                     {/* Prev & Next */}
-                    <div className="w-full mx-auto flex justify-center gap-7 font-bold ">
+                    <div className="w-full mx-auto flex justify-center gap-7 font-bold mt-9">
                         {active > 0 &&
                             <button className="bg-white shadow-lg ring-1 focus:glass focus:bg-secondary/70  p-3 rounded-lg border m-2  px-5" onClick={() => { setActive(active - 1), setPlus(active - 1) }}>
                                 Prev
