@@ -55,6 +55,13 @@ Route::prefix('dashboard')->middleware(['auth', 'verified', 'isAdmin'])->name('a
     Route::patch('/peserta', [AdminController::class, 'update_peserta'])->name('update-peserta');
     Route::delete('/peserta', [AdminController::class, 'destroy_peserta'])->name('delete-peserta');
 
+    // CRUD Overview
+    Route::get('/overview', [AdminController::class, 'overview'])->name('overview');
+    Route::get('/overview/subject', [AdminController::class, 'show_subject'])->name('show-subject');
+    Route::post('/overview', [AdminController::class, 'store_overview'])->name('create-overview');
+    Route::patch('/overview', [AdminController::class, 'update_overview'])->name('update-overview');
+    Route::delete('/overview', [AdminController::class, 'destroy_overview'])->name('delete-overview');
+
 });
 
 

@@ -6,6 +6,8 @@ import { Link } from "@inertiajs/react";
 import logo from "../../assets/logo.png"
 import ApplicationLogo from "./ApplicationLogo";
 import NavLinkDashboard from "./NavbarLinkDashboard";
+import { CiViewTimeline } from "react-icons/ci";
+import { GrOverview } from "react-icons/gr";
 
 const AdminDrawer = ({ active = false }) => {
   console.log(`isi active dari drawer ${active}`)
@@ -34,6 +36,10 @@ const AdminDrawer = ({ active = false }) => {
 
         <NavLinkDashboard href={route('admin.peserta')} active={route().current('admin.peserta')}><MdSwitchAccount />
           Peserta
+        </NavLinkDashboard>
+
+        <NavLinkDashboard href={route('admin.overview')} active={route().current('admin.overview')}><GrOverview />
+          Overview
         </NavLinkDashboard>
 
       </ul>
