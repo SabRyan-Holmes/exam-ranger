@@ -69,9 +69,11 @@ const ExamPage = ({ auth, exam, title, subject, timestampForTimer }) => {
             setAnswer(localStorage.getItem("answer" + subject).toString().split(","))
         }
         var aaa = 0
-        answer.map((data) => {if(!(data?.length == 0 || data == null)) {
-            setAmountAnswered(aaa+1)
-        }})
+        answer.map((data) => {
+            if (!(data?.length == 0 || data == null)) {
+                setAmountAnswered(aaa + 1)
+            }
+        })
     }, [])
 
     useEffect(() => {
@@ -139,10 +141,10 @@ const ExamPage = ({ auth, exam, title, subject, timestampForTimer }) => {
                     <div className='ml-9 mb-4 w-1/2 '>
                         <strong>Pertanyaan {active + 1} dari {exam.length}</strong>
                         <br />
-                        <strong className='text-slate-600 '>{2} point</strong>
+                        <strong className='text-slate-600 '>{exam[active].point} point</strong>
 
                         {/* Logika Gambar Soal jika ada */}
-                        {exam[active].image == null ? <></> : <img src={"/storage/" + exam[active].image} alt="" className='max-h-64'/> }
+                        {exam[active].image == null ? <></> : <img src={"/storage/" + exam[active].image} alt="" className='max-h-64' />}
 
                         <p className='mt-1'>{exam[active].question}</p>
                     </div>
