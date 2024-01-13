@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Exam;
 use App\Models\User;
+use App\Models\Overview;
+use App\Models\Answer;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Http\Requests\SoalUpdateRequest;
@@ -229,6 +231,30 @@ class AdminController extends Controller
     }
 
    
-   
+    //    Overview
+    public function overview()
+    {
+        $user = User::where('is_admin', false)->with('answer')->get();
+        // $answer = Answer::get();
+        return Inertia::render('Admin/OverviewPage', [
+            'title' => "Daftar Peserta",
+            'user' => $user,
+            // 'answer' => $answer,
+            // 'status' => session('status'),
+        ]);
+    }
+
+    // Show Answer
+    public function show_subject(Request $request)
+    {
+        // dd($request->subject);
+        $exams = Exam::all()->groupBy('subject');
+        return Inertia::render('Admin/AnswerPage', [
+            'title' => "Materi Soal ",
+            'exams' => $exams,
+            'answeredSubject' => $request->subject,
+            // 'status' => session('status'),
+        ]);
+    }
 
 }
