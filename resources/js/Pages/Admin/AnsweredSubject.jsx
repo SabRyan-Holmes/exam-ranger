@@ -10,6 +10,7 @@ import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
 import InputError from '@/Components/InputError';
 import profile from '@/../assets/profile.png';
+import subjectImage from '@/../assets/subject_image.jpg';
 import Swal from 'sweetalert2'
 import { FiEye } from "react-icons/fi";
 import moment from "moment/min/moment-with-locales";
@@ -17,75 +18,9 @@ import moment from "moment/min/moment-with-locales";
 
 
 
-export default function AdminPagePeserta({ auth, user, flash, title, }) {
-
-    const { data, setData, post, patch, processing, errors } = useForm({
-        name: '',
-        nim: '',
-        email: '',
-        password: '12345678',
-        password_confirmation: '',
-    })
-    console.log("isi dari data" + data.name + data.email + data.password)
-    function submit(e) {
-        e.preventDefault()
-        post(route('admin.create-peserta', data, {
-            _method: 'post'
-        }));
-    }
-    const [dataEdit, setDataEdit] = useState({
-        id: '',
-        name: '',
-        nim: '',
-        email: '',
-        password: '',
-        password_confirmation: '',
-    })
-
-    function openEditDialog(id, _name, nim, email,) {
-        setDataEdit({
-            id: id,
-            name: _name,
-            nim: nim,
-            email: email,
-            // Dk bisa nampilin password lol
-        });
-        document.getElementById('edit_data :' + id.toString()).showModal()
-    }
-
-    function submitEdit(e) {
-        console.log("tes submit edit")
-        e.preventDefault()
-        patch(route('admin.update-peserta', dataEdit, {
-            _method: 'patch',
-
-        }));
-    }
-
-    console.log(`isi dataEdit ${dataEdit.name}`)
-    console.log(`isi Flash message sekarang ${flash.message}`)
-
-    // Delete Confirmation
-    const confirmDelete = (id) => {
-        console.log(`is id cuy ${id}`);
-        Swal.fire({
-            title: 'Anda yakin?',
-            text: "Soal yang sudah dihapus tidak bisa dikembalikan lagi",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, saya yakin!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                router.delete(route('admin.delete-peserta', { id: id }), { preserveScroll: true })
-            }
-        })
-    }
-
-
-    // moment.format('LLL');
+export default function AnsweredSubject({ auth, title, flash, answeredSubject }) {
     moment.locale('id')
+    const student = answeredSubject[0].student
     return (
 
         <div className='h-full'>
@@ -96,7 +31,8 @@ export default function AdminPagePeserta({ auth, user, flash, title, }) {
                     <Navbar user={auth.user} />
                     <div className='mx-6 mt-6 h-full'>
                         <div className='flex justify-between'>
-                            <h1 className='font-bold py-3'>Data Peserta Ujian</h1>
+                            <h1 className='font-bold py-3'>Jawaban <span className='text-primary'>
+                                {student.name}</span> - <span className='text-primary/80'> {student.nim}</span> </h1>
 
                         </div>
                         {/* content */}
@@ -106,78 +42,61 @@ export default function AdminPagePeserta({ auth, user, flash, title, }) {
                                 {/* head */}
                                 <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Email/NIM</th>
-                                        <th>Status Pengerjaan Tes</th>
+                                        <th>Nama Materi Ujian</th>
+                                        <th>Banyak Soal</th>
+                                        <th>Banyak Terjawab</th>
                                         <th>Selesai Dikerjakan</th>
+                                        <th>Point Sekarang(tanpa essay)</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
 
-                                    {user.map((data, i) => {
-                                        var answered = data.subject_with_answered
-                                        console.log('answered.id')
-                                        // console.log(answered[0].updated_at)
-                                        // console.log(`isi password dari user ke ${i} == ${data.password}`)
+                                    {answeredSubject.map((data, i) => {
+                                        console.log('length')
+                                        console.log(data.answer.length)
+                                        let length = Object.keys(data.answer).length
                                         return (
                                             <tr key={i}>
                                                 <td>
                                                     <div className="flex items-center gap-3">
                                                         <div className="avatar">
                                                             <div className="mask mask-squircle w-12 h-12">
-                                                                <img src={profile} alt="Avatar Tailwind CSS Component" />
+                                                                <img src={subjectImage} alt="Avatar Tailwind CSS Component" />
                                                             </div>
                                                         </div>
                                                         <div>
-                                                            <div className="font-bold">{data.name}</div>
-                                                            <div className="text-sm opacity-50">Universitas Jambi</div>
+                                                            <div className="font-bold">{data.exam_subject}</div>
+                                                            <div className="text-sm opacity-50">Kedokteran</div>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td>
                                                     {data.nim}
                                                     <br />
-                                                    <span className="badge badge-ghost badge-sm">{data.email}</span>
                                                 </td>
                                                 <td>
-                                                    {answered.length ?
-                                                        <>Sudah Selesai</>
-                                                        :
-                                                        <>Belum selesai</>
-                                                    }
-
+                                                    <>{length}</>
                                                 </td>
 
                                                 <td>
-                                                    {/* {moment(data.answer.updated_at).locale('id').fromNow()} */}
-                                                    {/* Ngebug hari waktuny dk sesuai, bahkan pake answered[0].updated_at */}
-                                                    {
-                                                        answered.length
-                                                            ?
-                                                            // moment(answered[0].updated_at).format('LLL')
-                                                            moment(answered[0].updated_at).fromNow()
-                                                            :
-                                                            '_'
-                                                    }
+
+                                                    {moment(data.updated_at).fromNow()}
+                                                </td>
+                                                <td>
+
+                                                    _
                                                 </td>
                                                 <td className="flex justify-start">
                                                     {/* Button View */}
-                                                    <Link href={route('admin.show-subject', { subject: answered })} >
+                                                    <Link  >
                                                         <PrimaryButton>
                                                             <strong className='text-white'>Lihat</strong>
                                                             <FiEye className='scale[2.4] stroke-secondary-500'
-                                                            // value={{ color: '#16a34a', size: '50px' }}
                                                             >
-                                                                {/* <FaUserEdit className='max-h-7' /> */}
                                                             </FiEye>
                                                         </PrimaryButton>
                                                     </Link>
-
-
-
-
-
                                                 </td>
                                             </tr>
                                         )

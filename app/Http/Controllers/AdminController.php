@@ -216,12 +216,7 @@ class AdminController extends Controller
 
         return Redirect::route('admin.peserta')->with('message', 'Peserta  Berhasil Diupdate');
         
-        // $user = User::create([
-        //     'name' => $request->name,
-        //     'email' => $request->email,
-        //     'nim' => $request->nim,
-        //     'password' => Hash::make($request->password),
-        //     ]);
+     
     }
 
     public function destroy_peserta(Request $request)
@@ -234,7 +229,7 @@ class AdminController extends Controller
     //    Overview
     public function overview()
     {
-        $user = User::where('is_admin', false)->with('answer')->get();
+        $user = User::where('is_admin', false)->with('subject_with_answered')->get();
         // $answer = Answer::get();
         return Inertia::render('Admin/OverviewPage', [
             'title' => "Daftar Peserta",
@@ -249,10 +244,15 @@ class AdminController extends Controller
     {
         // dd($request->subject);
         $exams = Exam::all()->groupBy('subject');
-        return Inertia::render('Admin/AnswerPage', [
+        
+        // Logika Hitung Otomatis Point
+        
+
+
+        return Inertia::render('Admin/AnsweredSubject', [
             'title' => "Materi Soal ",
-            'exams' => $exams,
             'answeredSubject' => $request->subject,
+            
             // 'status' => session('status'),
         ]);
     }

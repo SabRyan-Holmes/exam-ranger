@@ -45,7 +45,7 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function answer()
+    public function subject_with_answered()
     {
         return $this->hasMany(Answer::class, 'student_id');
     }
