@@ -9,8 +9,7 @@ import NavLinkDashboard from "./NavbarLinkDashboard";
 import { CiViewTimeline } from "react-icons/ci";
 import { GrOverview } from "react-icons/gr";
 
-const AdminDrawer = ({ active = false }) => {
-  console.log(`isi active dari drawer ${active}`)
+const AdminDrawer = () => {
   return (
     <div className="drawer-side  shadow-2xl">
       <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
