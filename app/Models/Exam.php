@@ -23,4 +23,14 @@ class Exam extends Model
     //     if ($this->exam_ended > )
     // }
 
+    public function getCorrectAnswerPoints()
+    {
+    return $this->point;
+    }
+
+    public function scopeNonEssay($query)
+    {
+    return $query->where('is_essay', false);
+    }
+    
 }
