@@ -28,9 +28,20 @@ class Answer extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function exam_subject(): HasOne 
+    // public function exam_subject()
+    // {
+    //     return $this->hasOne(Exam::class, 'exam_subject');
+    // }
+
+    public function scopeNonEssay($query)
     {
-        return $this->hasOne(Exam::class, 'exam_subject');
+    return $query->where('answer->is_essay', false);
+    }
+    
+
+    public function scopeCorrect($query)
+    {
+        return $query->whereRaw('JSON_CONTAINS(answer->choices, exam.actual_answer)');
     }
 
 
