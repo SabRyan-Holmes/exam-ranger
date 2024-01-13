@@ -43,7 +43,7 @@ export default function AdminPageSoal(props) {
   const [exam_ended, setExamEnded] = useState("2024-01-03 11:42:17");
   const [exam_duration, setExamDuration] = useState("90");
   const [point, setPoint] = useState(2);
-  const [subject, setSubject] = useState('');
+  const [subject, setSubject] = useState(props.subject);
 
   const { data, setData, post, processing, errors } = useForm({
     question: null,
@@ -55,7 +55,7 @@ export default function AdminPageSoal(props) {
     exam_ended: "2024-01-03 11:42:17",
     exam_duration: "90",
     point: 2,
-    subject: null
+    subject: props.subject
   })
 
   const confirmDelete = (i) => {
