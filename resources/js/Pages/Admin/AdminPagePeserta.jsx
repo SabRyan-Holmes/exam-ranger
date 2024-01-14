@@ -382,8 +382,8 @@ export default function AdminPagePeserta({ auth, user, flash, title }) {
                             >
                               <IoTrashSharp className='max-h-7' />
                             </IconContext.Provider>
-
                           </button>
+
                         </td>
                       </tr>
                     )

@@ -106,7 +106,7 @@ export default function StudentHome({ auth, exams, submitted }) {
                                 <h1 className="mb-6 font-bold">Riwayat Pengerjaan</h1>
                                 <h1 className="mb-6 font-bold text-primary">Lihat Semua</h1>
                             </div>
-                            {submitted.map((data, i) => {
+                            {submitted.length ? submitted.map((data, i) => {
                                 let answered = 0
                                 data.answer.map((answer) => {
                                     if (answer != null && answer != '') {
@@ -135,7 +135,12 @@ export default function StudentHome({ auth, exams, submitted }) {
                                         </div>
                                     </div>
                                 )
-                            })};
+                            })
+                                :
+                                <div className="my-auto">
+                                    Belum ada Riwayat Selesai Ujian
+                                </div>
+                            }
                         </div>
                     </div>
 
