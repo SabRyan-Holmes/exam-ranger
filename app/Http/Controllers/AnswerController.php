@@ -41,7 +41,10 @@ class AnswerController extends Controller
         ]);
         
         // Simpan jawaban
-        $answer = Answer::create($validatedData);
+        $answer = Answer::updateOrCreate(
+            ['student_id' => $validatedData['student_id'], 'exam_subject' => $validatedData['exam_subject']],
+            [ 'answer' => $validatedData['answer']]    
+        );
         
         // Ambil jawaban yang sesuai dengan urutan
         $studentAnswers = $validatedData['answer'];
