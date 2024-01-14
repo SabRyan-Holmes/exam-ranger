@@ -6,9 +6,9 @@ import { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import styled from 'styled-components';
+import moment from "moment/min/moment-with-locales";
 
-
-export default function StudentHome({ auth, exams }) {
+export default function StudentHome({ auth, exams, submitted }) {
     const [date, setDate] = useState(new Date());
     console.log("isi data" + exams)
     const onChange = () => {
@@ -34,7 +34,7 @@ export default function StudentHome({ auth, exams }) {
 
     // let dataArr = Array.from(exams)
     let arrExams = Object.keys(exams)
-    console.log(arrExams)
+    moment.locale('id')
     return (
         <AuthenticatedLayout
             user={auth.user} data={arrExams}
@@ -70,7 +70,7 @@ export default function StudentHome({ auth, exams }) {
                                 console.log(exams[subject][0].question);
                                 return (
                                     <Link href={route('exam.show', { subject })} >
-                                        <div className="mb-2  card w-fit shadow-md hover:bg-primary/30 ">
+                                        <div className="mb-2 border-card  card w-fit shadow-md hover:bg-primary/30 ">
                                             <div className="m-6 rounded-md   ">
                                                 <div className="card-actions  items-center ">
                                                     <strong className="mr-1">{subject}</strong>
@@ -106,26 +106,34 @@ export default function StudentHome({ auth, exams }) {
                                 <h1 className="mb-6 font-bold">Riwayat Pengerjaan</h1>
                                 <h1 className="mb-6 font-bold text-primary">Lihat Semua</h1>
                             </div>
-                            {arrExams.map((subject, i) => {
-                                console.log(exams[subject]);
-                                console.log(exams[subject][0].question);
+                            {submitted.map((data, i) => {
+                                let answered = 0
+                                data.answer.map((answer) => {
+                                    if (answer != null && answer != '') {
+                                        answered++;
+                                    }
+                                })
+                                let jumlah_soal = data.answer.length;
+
+                                let value = (answered / jumlah_soal) * 100
+
+                                console.log('value soal terjawab : ')
+                                console.log(value)
                                 return (
-                                    <Link href={route('exam.show', { subject })} >
-                                        <div className="mb-2 card w-full shadow-md  hover:scale-110">
-                                            <div className="m-6 rounded-md   ">
-                                                <div className="card-actions  items-center ">
-                                                    <div className="radial-progress text-primary text-sm" style={{ "--value": 70, "--size": "3rem", "--thickness": "2px" }} role="progressbar">70%</div>
-                                                    <div>
-
-                                                        <strong className="mr-1">{subject}</strong>
-                                                        <p>Dikerjakan tanggal 2 Januari 2023 (10.45)</p>
-                                                    </div>
-
+                                    <div className="mb-2 card w-full shadow-md  hover:scale-110 border-card">
+                                        <div className="m-6 my-4 rounded-md   ">
+                                            <div className="card-actions justify-between items-center ">
+                                                <div className="radial-progress text-primary text-sm" style={{ "--value": value, "--size": "3rem", "--thickness": "2px" }} role="progressbar">{Math.round(value)} %</div>
+                                                <div className="mr-16 ">
+                                                    <strong >{data.exam_subject}  </strong>
+                                                    <p className="text-sm">{answered} dari {jumlah_soal} Terjawab</p>
+                                                    <small className="block"> {moment(data.updated_at).fromNow()}</small>
                                                 </div>
+                                                <p>{moment(data.updated_at).format('L')}</p>
+
                                             </div>
                                         </div>
-                                    </Link>
-
+                                    </div>
                                 )
                             })};
                         </div>
