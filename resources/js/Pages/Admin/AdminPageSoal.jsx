@@ -15,7 +15,7 @@ import { useEffect } from "react";
 import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
 import InputError from '@/Components/InputError';
-
+import moment from "moment/min/moment-with-locales";
 
 export default function AdminPageSoal(props) {
   const { flash } = usePage().props

@@ -1,14 +1,18 @@
 import PrimaryButton from '@/Components/PrimaryButton';
+import PopUpRule from '@/Components/PopUpRule';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { data } from 'autoprefixer';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import styled from 'styled-components';
 import moment from "moment/min/moment-with-locales";
+import no_data from "@/../assets/no_data.svg";
+
 
 export default function StudentHome({ auth, exams, submitted }) {
+    const anchor = useRef('subject')
     const [date, setDate] = useState(new Date());
     console.log("isi data" + exams)
     const onChange = () => {
@@ -35,6 +39,8 @@ export default function StudentHome({ auth, exams, submitted }) {
     // let dataArr = Array.from(exams)
     let arrExams = Object.keys(exams)
     moment.locale('id')
+
+    const [openModal, setOpenModal] = useState(false);
     return (
         <AuthenticatedLayout
             user={auth.user} data={arrExams}
@@ -47,23 +53,26 @@ export default function StudentHome({ auth, exams, submitted }) {
                             <p className="">Hi, {auth.user.name} !</p>
                             <h2 className="text-3xl font-semibold">Selamat Datang di Ujian Kompetisi Anatomi</h2>
                             <div className="card-actions">
-                                <PrimaryButton>
+                                <PrimaryButton onClick={() => {
+                                    setOpenModal(true);
+                                }}>
                                     Cara Melaksanakan
 
                                 </PrimaryButton>
                                 <PrimaryButton>
                                     Mulai Mengerjakan
                                 </PrimaryButton>
+                                {openModal && <PopUpRule openModal={openModal} setOpenModal={setOpenModal} anchor={anchor} />}
                             </div>
                         </div>
                     </div>
 
-                    <div className="flex justify-start gap-8 ">
+                    <div id={anchor} className="flex justify-start gap-8 ">
                         {/* Soal Kompetisi */}
                         <div className="flex flex-col ">
                             <div className="flex justify-between">
                                 <h1 className="mb-6 font-bold">Soal Kompetisi</h1>
-                                <h1 className="mb-6 font-bold text-primary">Lihat Semua</h1>
+                                <h1 className="mb-6 font-bold text-primary">{arrExams.length ? 'Lihat Semua' : ''}</h1>
                             </div>
                             {arrExams.map((subject, i) => {
                                 console.log(exams[subject]);
@@ -104,7 +113,7 @@ export default function StudentHome({ auth, exams, submitted }) {
                         <div className='grow'>
                             <div className="flex justify-between  ">
                                 <h1 className="mb-6 font-bold">Riwayat Pengerjaan</h1>
-                                <h1 className="mb-6 font-bold text-primary">Lihat Semua</h1>
+                                <h1 className="mb-6 font-bold text-primary">{submitted.length ? 'Lihat Semua' : ''}</h1>
                             </div>
                             {submitted.length ? submitted.map((data, i) => {
                                 let answered = 0
@@ -138,7 +147,8 @@ export default function StudentHome({ auth, exams, submitted }) {
                             })
                                 :
                                 <div className="my-auto">
-                                    Belum ada Riwayat Selesai Ujian
+                                    <img className='w-40 h-32 mx-auto pt-7 mt-3' src={no_data} alt="no data" srcset="" />
+                                    <p className='text-center mt-3 text-sm text-slate-600'>Belum ada Riwayat Selesai Ujian</p>
                                 </div>
                             }
                         </div>
