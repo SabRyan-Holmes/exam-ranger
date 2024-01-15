@@ -18,9 +18,8 @@ import { FaUserEdit } from "react-icons/fa";
 import { IoTrashSharp } from "react-icons/io5";
 
 
-export default function AdminPageSoalTipe(props) {
-  const { flash } = usePage().props
-  let arrExams = Object.keys(props.exams)
+export default function AdminPageSoalTipe({ auth, flash, title, exams, subject }) {
+  let arrExams = Object.keys(exams)
 
   const [showSuccess, setShowSuccess] = useState(false)
 
@@ -47,7 +46,7 @@ export default function AdminPageSoalTipe(props) {
     exam_ended: "2024-01-03 11:42:17",
     exam_duration: "90",
     point: 2,
-    subject: props.subject
+    subject: subject
   })
 
   const datachoice = [
@@ -106,13 +105,13 @@ export default function AdminPageSoalTipe(props) {
   const [exam_ended, setExamEnded] = useState("2024-01-03 11:42:17");
   const [exam_duration, setExamDuration] = useState("90");
   const [point, setPoint] = useState(2);
-  const [subject, setSubject] = useState(props.subject);
+  const [subjects, setSubject] = useState(subject);
 
   function submitEssay(e) {
     e.preventDefault()
 
     const essay = {
-      question, choice, image, is_essay, actual_answer, exam_started, exam_ended, exam_duration, point, subject
+      question, choice, image, is_essay, actual_answer, exam_started, exam_ended, exam_duration, point, subjects
     }
 
     router.post('/dashboard/soal/add-soal', essay)
@@ -120,12 +119,12 @@ export default function AdminPageSoalTipe(props) {
   moment.locale('id')
   return (
     <div className='h-full'>
-      <Head title={props.title} />
+      <Head title={title} />
 
       <div className="drawer lg:drawer-open h-full">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content flex flex-col bg-neutral h-full">
-          <Navbar user={props.auth.user} />
+          <Navbar user={auth.user} />
           <div className='mx-6 mt-6 h-full'>
 
             {/* content */}
@@ -153,12 +152,12 @@ export default function AdminPageSoalTipe(props) {
                 <tbody>
 
                   {arrExams.map((subject, i) => {
-                    console.log(props.exams[subject]);
-                    console.log(props.exams[subject][0].question);
+                    console.log(exams[subject]);
+                    console.log(exams[subject][0].question);
                     // console.log('length')
                     // console.log(subject.answer.length)
                     // let length = Object.keys(subject.answer).length
-                    var data = props.exams[subject]
+                    var data = exams[subject]
                     console.log("isi data ke" + (i + 1))
                     console.log(data)
                     return (
@@ -248,8 +247,8 @@ export default function AdminPageSoalTipe(props) {
               </table>
             </div>
             {/* {arrExams.map((subject, i) => {
-                            console.log(props.exams[subject]);
-                            console.log(props.exams[subject][0].question);
+                            console.log(exams[subject]);
+                            console.log(exams[subject][0].question);
                             return (
                                 <Link href={route('admin.soal', { subject })} >
                                     <div className="mb-2  card w-fit shadow-md hover:bg-primary/30 ">
@@ -261,7 +260,7 @@ export default function AdminPageSoalTipe(props) {
                                                 </svg>
 
                                                 <div className="mr-4">
-                                                    <p className="font-bold text-lg -mb-2">{props.exams[subject].length} Soal </p>
+                                                    <p className="font-bold text-lg -mb-2">{exams[subject].length} Soal </p>
                                                     <p className="font-light text-slate-500">Essay & Pilihan Ganda </p>
                                                 </div>
 
@@ -271,7 +270,7 @@ export default function AdminPageSoalTipe(props) {
                                                 </svg>
 
                                                 <div className="">
-                                                    <p className="font-bold text-lg -mb-1">{props.exams[subject][0].exam_duration} Menit </p>
+                                                    <p className="font-bold text-lg -mb-1">{exams[subject][0].exam_duration} Menit </p>
                                                     <p className="font-light text-slate-500">10:00 - & 11-00 WIB </p>
                                                 </div>
                                             </div>

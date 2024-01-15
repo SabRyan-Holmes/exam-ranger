@@ -17,8 +17,7 @@ import TextInput from '@/Components/TextInput';
 import InputError from '@/Components/InputError';
 import moment from "moment/min/moment-with-locales";
 
-export default function AdminPageSoal(props) {
-  const { flash } = usePage().props
+export default function AdminPageSoal({ auth, flash, title, exam, subject }) {
   const [showSuccess, setShowSuccess] = useState(false)
   useEffect(() => {
     if (flash.message?.substr(0, 11) != null) {
@@ -26,7 +25,7 @@ export default function AdminPageSoal(props) {
     }
   }, [flash.message]);
 
-  const [examState, setEditExamState] = useState(props.exam);
+  const [examState, setEditExamState] = useState(exam);
   const [isDeleteImg, setIsDeleteImg] = useState(false);
   const [pointEdit, setEditPoint] = useState(2);
   const [questionEdit, setEditQuestion] = useState(null);
@@ -47,7 +46,7 @@ export default function AdminPageSoal(props) {
   const [exam_ended, setExamEnded] = useState("2024-01-03 11:42:17");
   const [exam_duration, setExamDuration] = useState("90");
   const [point, setPoint] = useState(2);
-  const [subject, setSubject] = useState(props.subject);
+  const [subjects, setSubject] = useState(subject);
 
   const { data, setData, post, processing, errors } = useForm({
     question: null,
@@ -59,7 +58,7 @@ export default function AdminPageSoal(props) {
     exam_ended: "2024-01-03 11:42:17",
     exam_duration: "90",
     point: 2,
-    subject: props.subject
+    subject: subjects
   })
 
   const confirmDelete = (i) => {
@@ -202,27 +201,27 @@ export default function AdminPageSoal(props) {
     e.preventDefault()
 
     const edit = {
-      question, choice, image, is_essay, actual_answer, exam_started, exam_ended, exam_duration, point, subject
+      question, choice, image, is_essay, actual_answer, exam_started, exam_ended, exam_duration, point, subjects
     }
 
     router.post('/dashboard/soal/add-soal', edit)
   }
 
-  const duration = props.exam[0].exam_duration
-  const startDate = props.exam[0].exam_started
-  const endDate = props.exam[0].exam_ended
+  const duration = exam[0].exam_duration
+  const startDate = exam[0].exam_started
+  const endDate = exam[0].exam_ended
 
   return (
     <div className='h-full'>
-      <Head title={`${props.title}  ${props.subject}`} />
+      <Head title={`${title}  ${subject}`} />
 
       <div className="drawer lg:drawer-open h-full">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content flex flex-col bg-neutral h-full">
-          <Navbar user={props.auth.user} />
+          <Navbar user={auth.user} />
           <div className='mx-6 mt-6 h-full'>
             <div className='flex justify-between'>
-              <h1 className='font-bold'>Daftar Soal Ujian {props.subject}</h1>
+              <h1 className='font-bold'>Daftar Soal Ujian {subject}</h1>
 
 
 
@@ -402,7 +401,7 @@ export default function AdminPageSoal(props) {
                 id="subject"
                 type="text"
                 name="subject"
-                defaultValue={props.subject}
+                defaultValue={subject}
                 className="mt-1 block w-full "
                 onChange={(e) => setData('subject', e.target.value)}
               />
@@ -467,7 +466,7 @@ export default function AdminPageSoal(props) {
             {/* content */}
             <section className="mt-20">
 
-              {props.exam.map((data, i) => {
+              {exam.map((data, i) => {
                 if (!data.is_essay) {
                   return (
                     <div className="card w-4/4 my-3  bg-secondary text-primary-content" key={i}>

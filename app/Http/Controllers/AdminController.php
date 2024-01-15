@@ -25,8 +25,16 @@ class AdminController extends Controller
      */
     public function index()
     {
+        $user = User::where('is_admin', false)->count();
+        $subject = Exam::all()->groupBy('subject')->count();
+        $done = Overview::all()->groupBy('student_id')->count();
         return Inertia::render('Admin/AdminPage', [
             'title' => "Administrator",
+            'user' => $user,
+            'subject' => $subject,
+            'doneSubmitted' => $done,
+            'notYet' => $user - $done,
+
             // 'status' => session('status'),
         ]);
     }
