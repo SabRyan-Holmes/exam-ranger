@@ -28,15 +28,6 @@ Route::get('/', function () {
     ]);
 })->middleware(['isAlreadyLoggedIn']);
 
-<<<<<<< HEAD
-// Route::get('/home', function () {
-//     return Inertia::render('StudentHome');
-// })->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::middleware('auth')->group(function () {
-    Route::get('/home', [ExamController::class, 'all'])->name('home');
-    Route::get('/exam', [ExamController::class, 'index'])->name('exam');
-=======
 
 Route::middleware('auth', 'verified')->group(function () {
     Route::get('/home', [ExamController::class, 'all'])->name('home');
@@ -44,7 +35,6 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get('/exam', [ExamController::class, 'show'])->name('exam.show');
     Route::get('/exam/done', [AnswerController::class, 'show'])->name('exam.done');
 
->>>>>>> 8752b647a80fcf38fcfcc73a27706928e9518e6d
 });
 
 
