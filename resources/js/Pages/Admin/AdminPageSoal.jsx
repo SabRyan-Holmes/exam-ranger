@@ -17,7 +17,7 @@ import TextInput from '@/Components/TextInput';
 import InputError from '@/Components/InputError';
 import moment from "moment/min/moment-with-locales";
 
-export default function AdminPageSoal({ auth, flash, title, exam, subject }) {
+export default function AdminPageSoal({ auth, flash, title, exam, subjects }) {
   const [showSuccess, setShowSuccess] = useState(false)
   useEffect(() => {
     if (flash.message?.substr(0, 11) != null) {
@@ -46,7 +46,7 @@ export default function AdminPageSoal({ auth, flash, title, exam, subject }) {
   const [exam_ended, setExamEnded] = useState("2024-01-03 11:42:17");
   const [exam_duration, setExamDuration] = useState("90");
   const [point, setPoint] = useState(2);
-  const [subjects, setSubject] = useState(subject);
+  const [subject, setSubject] = useState(subjects);
 
   const { data, setData, post, processing, errors } = useForm({
     question: null,
@@ -200,16 +200,16 @@ export default function AdminPageSoal({ auth, flash, title, exam, subject }) {
   function submitEssay(e) {
     e.preventDefault()
 
-    const edit = {
+    const essay = {
       question, choice, image, is_essay, actual_answer, exam_started, exam_ended, exam_duration, point, subjects
     }
 
-    router.post('/dashboard/soal/add-soal', edit)
+    router.post('/dashboard/soal/add-soal', essay)
   }
 
-  const duration = exam[0].exam_duration
-  const startDate = exam[0].exam_started
-  const endDate = exam[0].exam_ended
+  const duration = exam[0]?.exam_duration
+  const startDate = exam[0]?.exam_started
+  const endDate = exam[0]?.exam_ended
 
   return (
     <div className='h-full'>

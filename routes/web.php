@@ -31,11 +31,15 @@ Route::get('/', function () {
 
 Route::middleware('auth', 'verified')->group(function () {
     Route::get('/home', [ExamController::class, 'all'])->name('home');
+    Route::post('/exam/update-doing-exam', [ExamController::class, 'updateDoingExam']);
+});
+
+Route::middleware('auth', 'verified')->group(function () {
     Route::post('/exam', [AnswerController::class, 'store'])->name('exam.submit');
     Route::get('/exam', [ExamController::class, 'show'])->name('exam.show');
     Route::get('/exam/done', [AnswerController::class, 'show'])->name('exam.done');
-
 });
+
 
 
 Route::prefix('dashboard')->middleware(['auth', 'verified', 'isAdmin'])->name('admin.')->group(function () {

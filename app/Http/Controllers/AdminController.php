@@ -46,7 +46,7 @@ class AdminController extends Controller
         return Inertia::render('Admin/AdminPageSoal', [
             'title' => "Soal",
             'exam' => $exam,
-            'subject' => $request->subject,
+            'subjects' => $request->subject,
 
             // 'status' => session('status'),
         ]);

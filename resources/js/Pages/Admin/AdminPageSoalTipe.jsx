@@ -18,7 +18,8 @@ import { FaUserEdit } from "react-icons/fa";
 import { IoTrashSharp } from "react-icons/io5";
 
 
-export default function AdminPageSoalTipe({ auth, flash, title, exams, subject }) {
+export default function AdminPageSoalTipe({ auth, flash, title, exams }) {
+  console.log(flash)
   let arrExams = Object.keys(exams)
 
   const [showSuccess, setShowSuccess] = useState(false)
@@ -46,7 +47,7 @@ export default function AdminPageSoalTipe({ auth, flash, title, exams, subject }
     exam_ended: "2024-01-03 11:42:17",
     exam_duration: "90",
     point: 2,
-    subject: subject
+    subject: ''
   })
 
   const datachoice = [
@@ -105,13 +106,13 @@ export default function AdminPageSoalTipe({ auth, flash, title, exams, subject }
   const [exam_ended, setExamEnded] = useState("2024-01-03 11:42:17");
   const [exam_duration, setExamDuration] = useState("90");
   const [point, setPoint] = useState(2);
-  const [subjects, setSubject] = useState(subject);
+  const [subject, setSubject] = useState('');
 
   function submitEssay(e) {
     e.preventDefault()
 
     const essay = {
-      question, choice, image, is_essay, actual_answer, exam_started, exam_ended, exam_duration, point, subjects
+      question, choice, image, is_essay, actual_answer, exam_started, exam_ended, exam_duration, point, subject
     }
 
     router.post('/dashboard/soal/add-soal', essay)
@@ -152,14 +153,10 @@ export default function AdminPageSoalTipe({ auth, flash, title, exams, subject }
                 <tbody>
 
                   {arrExams.map((subject, i) => {
-                    console.log(exams[subject]);
-                    console.log(exams[subject][0].question);
                     // console.log('length')
                     // console.log(subject.answer.length)
                     // let length = Object.keys(subject.answer).length
                     var data = exams[subject]
-                    console.log("isi data ke" + (i + 1))
-                    console.log(data)
                     return (
                       <tr key={i}>
                         <td>
