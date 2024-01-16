@@ -88,6 +88,7 @@ class AnswerController extends Controller
             'mark' => $totalPoints,
             'average_mark' => $totalPoints,
             'final_mark' => $totalPoints,
+            'subject' => $validatedData['exam_subject']
         ]);
         $overview->save();
         

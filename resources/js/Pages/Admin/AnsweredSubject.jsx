@@ -111,9 +111,11 @@ export default function AnsweredSubject({ auth, title, flash, answeredSubject })
                                 {/* foot */}
                                 <tfoot>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Email/NIM</th>
-                                        <th>Status Pengerjaan Tes</th>
+                                        <th>Nama Materi Ujian</th>
+                                        <th>Banyak Soal</th>
+                                        <th>Banyak Terjawab</th>
+                                        <th>Selesai Dikerjakan</th>
+                                        <th>Point Sekarang(tanpa essay)</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </tfoot>

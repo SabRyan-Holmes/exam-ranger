@@ -48,6 +48,7 @@ Route::prefix('dashboard')->middleware(['auth', 'verified', 'isAdmin'])->name('a
     Route::get('/soal-ujian', [AdminController::class, 'tipeSoal'])->name('soal-tipe');
     Route::post('/soal/add-soal', [AdminController::class, 'store'])->name('create-soal');
     Route::post('/soal/edit-soal', [AdminController::class, 'edit'])->name('edit-soal');
+    Route::post('/soal/edit-subject', [AdminController::class, 'editSubject'])->name('edit-subject');
     
     // CRUD Peserta
     Route::get('/peserta', [AdminController::class, 'peserta'])->name('peserta');

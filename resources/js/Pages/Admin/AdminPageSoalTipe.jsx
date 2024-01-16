@@ -11,8 +11,11 @@ import Swal from 'sweetalert2'
 import { usePage } from '@inertiajs/react'
 import { useEffect } from "react";
 import { router } from '@inertiajs/react';
+import { IoIosSettings } from "react-icons/io";
+import moment from "moment/min/moment-with-locales";
 
 export default function AdminPageSoalTipe(props) {
+    moment.locale('id')
     const { flash } = usePage().props
     let arrExams = Object.keys(props.exams)
 
@@ -102,6 +105,19 @@ export default function AdminPageSoalTipe(props) {
     const [point, setPoint] = useState(2);
     const [subject, setSubject] = useState(props.subject);
 
+    const [subjectTarget, setSubjectTarget] = useState('');
+    const [editWaktu, setEditWaktu] = useState('');
+
+    function editSubject(e) {
+      e.preventDefault()
+  
+      const subjectEditted = {
+        editWaktu, subjectTarget
+      }
+  
+      router.post('/dashboard/soal/edit-subject', subjectEditted)
+  }
+
     function submitEssay(e) {
         e.preventDefault()
     
@@ -136,6 +152,7 @@ export default function AdminPageSoalTipe(props) {
                             console.log(props.exams[subject]);
                             console.log(props.exams[subject][0].question);
                             return (
+                              <div className='flex'>
                                 <Link href={route('admin.soal', { subject })} >
                                     <div className="mb-2  card w-fit shadow-md hover:bg-primary/30 ">
                                         <div className="m-6 rounded-md   ">
@@ -157,15 +174,73 @@ export default function AdminPageSoalTipe(props) {
 
                                                 <div className="">
                                                     <p className="font-bold text-lg -mb-1">{props.exams[subject][0].exam_duration} Menit </p>
-                                                    <p className="font-light text-slate-500">10:00 - & 11-00 WIB </p>
+                                                    <p className="font-light text-slate-500">{moment(props.exams[subject][0].exam_started).format('LT')} - & {moment(props.exams[subject][0].exam_ended).format('LT')} WIB </p>
+                                                </div>
+
+                                                
+                                                
+                                                <div>
+                                                 
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </Link>
+                                
+                                {/* <a className='mx-3 my-auto btn btn-primary' onClick={()=>document.getElementById('edit_subject').showModal()}><IconContext.Provider value={{ color: 'white', size: '3em' }}>   
+                                  <IoIosSettings className='my-auto'/>               
+                                </IconContext.Provider></a> */}
+                                
+                                <PrimaryButton className='my-auto ml-4' onClick={() => {
+                                  setSubjectTarget(subject)
+                                  setEditWaktu(props.exams[subject][0].exam_duration)
+                                  document.getElementById('edit_subject').showModal()
+                                  }}><IconContext.Provider value={{ color: 'white', size: '2em' }}>   
+                                  <IoIosSettings/>               
+                                </IconContext.Provider></PrimaryButton>
+
+                              </div>
 
                             )
                         })}
+
+                  {/* Open the modal using document.getElementById('ID').showModal() method */}
+                  <dialog id="edit_subject" className="modal">
+                    <div className="modal-box">
+                    <form onSubmit={editSubject}>
+
+                    <label className="label">
+                      <span className="label-text font-bold">Waktu (menit)</span>
+                    </label>
+                    <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={editWaktu} onChange={e => setEditWaktu(e.target.value)} onKeyPress={(event) => {
+                      if (!/[0-9]/.test(event.key)) {
+                        event.preventDefault();
+                      }
+                    }} />
+                    {errors.subject && <div className='text-red-600'>{errors.subject}</div>}
+
+
+                    <div className='flex justify-between'>
+                      <button type="submit" className="btn btn-secondary mt-6" disabled={processing}>Submit</button>
+
+                      {flash.message?.substr(0, 11) == 'suksesinput' && showSuccess ?
+                        <div className="alert alert-success mx-4 mt-5">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                          <span>Soal berhasil ditambah</span>
+                        </div> :
+                        ""
+                      }
+                      <div className="modal-action">
+                        <form method="dialog">
+                          {/* if there is a button in form, it will close the modal */}
+                          <button className="btn btn-primary" onClick={() => {setShowSuccess(false)}}>Cancel</button>
+                        </form>
+                      </div>
+                    </div>
+
+                  </form>
+                    </div>
+                  </dialog>
 
             <dialog id="create_data" className="modal">
                 <div className="modal-box">
