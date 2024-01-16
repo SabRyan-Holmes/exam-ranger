@@ -72,7 +72,7 @@ export default function AnsweredSubject({ auth, title, flash, answeredSubject })
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    {data.nim}
+                                                    {"sds"}
                                                     <br />
                                                 </td>
                                                 <td>

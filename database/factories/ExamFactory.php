@@ -22,7 +22,7 @@ class ExamFactory extends Factory
             
             // 'exam_started' => fake()->dateTimeThisYear(),
             // 'exam_ended' => fake()->dateTimeThisYear(),
-            'exam_duration' => fake()->randomElement([90, 120]),
+            // 'exam_duration' => fake()->randomElement([90, 120]),
             'question' => fake()->sentence(20),
             'choice' => $choice,
             // 'image' => fake()->(),

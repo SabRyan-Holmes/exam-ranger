@@ -12,9 +12,12 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import Swal from 'sweetalert2'
 import { usePage } from '@inertiajs/react'
 import { useEffect } from "react";
+import InputLabel from '@/Components/InputLabel';
+import TextInput from '@/Components/TextInput';
+import InputError from '@/Components/InputError';
+import moment from "moment/min/moment-with-locales";
 
-export default function AdminPageSoal(props) {
-  const { flash } = usePage().props
+export default function AdminPageSoal({ auth, flash, title, exam, subject }) {
   const [showSuccess, setShowSuccess] = useState(false)
   useEffect(() => {
     if (flash.message?.substr(0, 11) != null) {
@@ -22,7 +25,7 @@ export default function AdminPageSoal(props) {
     }
   }, [flash.message]);
 
-  const [examState, setEditExamState] = useState(props.exam);
+  const [examState, setEditExamState] = useState(exam);
   const [isDeleteImg, setIsDeleteImg] = useState(false);
   const [pointEdit, setEditPoint] = useState(2);
   const [questionEdit, setEditQuestion] = useState(null);
@@ -43,7 +46,7 @@ export default function AdminPageSoal(props) {
   const [exam_ended, setExamEnded] = useState("2024-01-03 11:42:17");
   const [exam_duration, setExamDuration] = useState("90");
   const [point, setPoint] = useState(2);
-  const [subject, setSubject] = useState(props.subject);
+  const [subjects, setSubject] = useState(subject);
 
   const { data, setData, post, processing, errors } = useForm({
     question: null,
@@ -55,7 +58,7 @@ export default function AdminPageSoal(props) {
     exam_ended: "2024-01-03 11:42:17",
     exam_duration: "90",
     point: 2,
-    subject: props.subject
+    subject: subjects
   })
 
   const confirmDelete = (i) => {
@@ -169,7 +172,7 @@ export default function AdminPageSoal(props) {
   }
 
   function blobUrlEdit() {
-    if(imageEdit != null) {
+    if (imageEdit != null) {
       const url = URL.createObjectURL(imageEdit)
       return url
     } else {
@@ -198,27 +201,33 @@ export default function AdminPageSoal(props) {
     e.preventDefault()
 
     const edit = {
-      question, choice, image, is_essay, actual_answer, exam_started, exam_ended, exam_duration, point, subject
+      question, choice, image, is_essay, actual_answer, exam_started, exam_ended, exam_duration, point, subjects
     }
 
     router.post('/dashboard/soal/add-soal', edit)
   }
 
+  const duration = exam[0].exam_duration
+  const startDate = exam[0].exam_started
+  const endDate = exam[0].exam_ended
+
   return (
     <div className='h-full'>
-      <Head title={`${props.title}  ${props.subject}`} />
+      <Head title={`${title}  ${subject}`} />
 
       <div className="drawer lg:drawer-open h-full">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content flex flex-col bg-neutral h-full">
-          <Navbar user={props.auth.user} />
+          <Navbar user={auth.user} />
           <div className='mx-6 mt-6 h-full'>
             <div className='flex justify-between'>
-              <h1 className='font-bold'>Daftar Soal Ujian {props.subject}</h1>
+              <h1 className='font-bold'>Daftar Soal Ujian {subject}</h1>
+
+
 
               {/* Open the modal using document.getElementById('ID').showModal() method */}
               <div>
-                <PrimaryButton onClick={() => {document.getElementById('create_data_essay').showModal() }}>Tambah soal essay</PrimaryButton>
+                <PrimaryButton onClick={() => { document.getElementById('create_data_essay').showModal() }}>Tambah soal essay</PrimaryButton>
                 <PrimaryButton onClick={() => { document.getElementById('create_data').showModal() }}>Tambah soal pilihan ganda</PrimaryButton>
               </div>
 
@@ -374,7 +383,7 @@ export default function AdminPageSoal(props) {
                       <div className="modal-action">
                         <form method="dialog">
                           {/* if there is a button in form, it will close the modal */}
-                          <button className="btn btn-primary" onClick={() => {setShowSuccess(false)}}>Cancel</button>
+                          <button className="btn btn-primary" onClick={() => { setShowSuccess(false) }}>Cancel</button>
                         </form>
                       </div>
                     </div>
@@ -385,275 +394,350 @@ export default function AdminPageSoal(props) {
               </dialog>
 
             </div>
+            {/* Subject Name */}
+            <div className="mt-4 w-1/3">
+              <InputLabel htmlFor="subject" value="Nama Materi Soal" />
+              <TextInput
+                id="subject"
+                type="text"
+                name="subject"
+                defaultValue={subject}
+                className="mt-1 block w-full "
+                onChange={(e) => setData('subject', e.target.value)}
+              />
+
+              <InputError message={errors.subject} className="mt-2" />
+            </div>
+
+            {/* Subject Duration */}
+            <div className="mt-4 w-1/3">
+              <InputLabel htmlFor="exam_duration" value="Durasi Ujian Soal" />
+              <TextInput
+                id="exam_duration"
+                type="text"
+                defaultValue={duration}
+                name="exam_duration"
+                className="mt-1 block w-full "
+                onChange={(e) => setData('exam_duration', e.target.value)}
+              />
+
+              <InputError message={errors.exam_duration} className="mt-2" />
+            </div>
+
+            <div className="mt-4 w-1/3">
+              <InputLabel htmlFor="tanggal_mulai" value="Tanggal Mulai Ujian" />
+              <TextInput
+                id="tanggal_mulai"
+                name="tanggal_mulai"
+                type="date"
+                // ini harus diconvert dulu nanti biar tampil
+                defaultValue={startDate}
+                className="my-2 block w-full bg-base"
+                onChange={(e) => setData('tanggal_mulai', e.target.value)}
+                placeholder="Masukkan Tanggal Mulai Lomba"
+
+              />
+              <InputError className="my-2" message={errors.tanggal_mulai} />
+            </div>
+
+            <div className="mt-4 w-1/3">
+              <InputLabel htmlFor="tanggal_berakhir" value="Tanggal Mulai Ujian" />
+              <TextInput
+                id="tanggal_berakhir"
+                name="tanggal_berakhir"
+                type="date"
+                // ini harus diconvert dulu nanti biar tampil
+                defaultValue={endDate}
+                className="my-2 block w-full bg-base"
+                onChange={(e) => setData('tanggal_berakhir', e.target.value)}
+                placeholder="Masukkan Tanggal Mulai Lomba"
+
+              />
+              <InputError className="my-2" message={errors.tanggal_berakhir} />
+            </div>
+
+            <button type='submit' disabled={processing}
+              // href="#my_modal_8"
+              className="my-13 btn-glass">Simpan
+              {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+              </svg> */}
+            </button>
             {/* content */}
-            {props.exam.map((data, i) =>
-              {if(!data.is_essay) {
-                  return(
-                  <div className="card w-4/4 my-3 bg-secondary text-primary-content" key={i}>
-                    <div className="card-body">
-                      {/* <h2 className="card-title">Soal nomor 1</h2> */}
-                      {data.image && <img src={'/storage/'+data.image} className='justify-start max-w-2xl'></img>}
-                      <p>{i + 1}. {data.question} {'('+data.point+' points)'}</p>
-                      <ul>
-                        <li className='font-bold'>A. {data.choice[0]}</li>
-                        <li className='font-bold'>B. {data.choice[1]}</li>
-                        <li className='font-bold'>C. {data.choice[2]}</li>
-                        <li className='font-bold'>D. {data.choice[3]}</li>
-                      </ul>
-                      <div className="card-actions justify-start">
-                        {/* <button className="btn">Buy Now</button> */}
-                        <h1>Jawaban : {data.actual_answer}</h1>
-                      </div>
-    
-                      <div className="card-actions justify-end">
-                        {/* <button className="btn">Buy Now</button> */}
-                        <PrimaryButton onClick={() => {
-                          setEditPoint(data.point)
-                          setImgDelete('');
-                          setEditIsEssay(false);
-                          setTempEditChoice([
-                            {
-                              choice: data.choice[0],
-                            },
-                            {
-                              choice: data.choice[1],
-                            },
-                            {
-                              choice: data.choice[2],
-                            },
-                            {
-                              choice: data.choice[3],
-                            },
-                          ])
-                          const choicess = data.choice;
-                          setIdEdit(data.id);
-                          setEditQuestion(data.question);
-                          setEditChoice(choicess);
-                          setEditActualAnswer(data.actual_answer);
-                          setEditSubject(data.subject);
-                          document.getElementById('edit_data' + data.id.toString()).showModal()
-                        }
-                        }>Edit</PrimaryButton> <PrimaryButton onClick={() => confirmDelete(data.id)} >Delete</PrimaryButton>
-                      </div>
-    
-                      <dialog id={"edit_data" + data.id} className="modal">
-                        <div className="modal-box">
-                          <h3 className="font-bold text-lg">Edit data soal</h3>
-    
-                          <form onSubmit={editSoal}>
-    
-                          {imageEdit ?
-                            <div className='flex justify-center'>
-                              <img src={blobUrlEdit()} alt="Gambar" className='max-h-60' />
-                            </div>
-                            : 
-                            <div className='flex justify-center'>
-                            <img src={'/storage/'+data.image+imgDelete} className='max-h-60' />
-                            </div>
+            <section className="mt-20">
+
+              {exam.map((data, i) => {
+                if (!data.is_essay) {
+                  return (
+                    <div className="card w-4/4 my-3  bg-secondary text-primary-content" key={i}>
+                      <div className="card-body">
+                        {/* <h2 className="card-title">Soal nomor 1</h2> */}
+                        {data.image && <img src={'/storage/' + data.image} className='justify-start max-w-2xl'></img>}
+                        <p>{i + 1}. {data.question} {'(' + data.point + ' points)'}</p>
+                        <ul>
+                          <li className='font-bold'>A. {data.choice[0]}</li>
+                          <li className='font-bold'>B. {data.choice[1]}</li>
+                          <li className='font-bold'>C. {data.choice[2]}</li>
+                          <li className='font-bold'>D. {data.choice[3]}</li>
+                        </ul>
+                        <div className="card-actions justify-start">
+                          {/* <button className="btn">Buy Now</button> */}
+                          <h1>Jawaban : {data.actual_answer}</h1>
+                        </div>
+
+                        <div className="card-actions justify-end">
+                          {/* <button className="btn">Buy Now</button> */}
+                          <PrimaryButton onClick={() => {
+                            setEditPoint(data.point)
+                            setImgDelete('');
+                            setEditIsEssay(false);
+                            setTempEditChoice([
+                              {
+                                choice: data.choice[0],
+                              },
+                              {
+                                choice: data.choice[1],
+                              },
+                              {
+                                choice: data.choice[2],
+                              },
+                              {
+                                choice: data.choice[3],
+                              },
+                            ])
+                            const choicess = data.choice;
+                            setIdEdit(data.id);
+                            setEditQuestion(data.question);
+                            setEditChoice(choicess);
+                            setEditActualAnswer(data.actual_answer);
+                            setEditSubject(data.subject);
+                            document.getElementById('edit_data' + data.id.toString()).showModal()
                           }
-                          {/* {data.image && <img src={'/storage/'+data.image} className='max-h-32'></img>} */}
-                            <label className="label">
-                              <span className="label-text font-bold">Gambar</span>
-                            </label>
-                            <input type="file" className="bg-white file-input file-input-bordered file-input-primary w-full max-w-xs" onChange={e => setEditImage(e.target.files[0])} />
-                            <a className='mx-3 btn btn-primary' onClick={() => {setEditImage(null)
-                            setImgDelete('a')
-                            setIsDeleteImg(true)
-                            }}><IoTrashSharp></IoTrashSharp></a>
-    
-                            <label className="label">
-                              <span className="label-text font-bold">Pertanyaan</span>
-                            </label>
-                            <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={questionEdit} onChange={(question) => setEditQuestion(question.target.value)} />
-    
-                            <label className="label">
-                              <span className="label-text font-bold">Subject</span>
-                            </label>
-                            <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={subjectEdit} onChange={(subject) => setEditSubject(subject.target.value)} />
-    
-                            <label className="label">
-                              <span className="label-text font-bold">Point</span>
-                            </label>
-                            <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={pointEdit} onChange={(point) => setEditPoint(point.target.value)} onKeyPress={(event) => {
-                              if (!/[0-9]/.test(event.key)) {
-                                event.preventDefault();
+                          }>Edit</PrimaryButton> <PrimaryButton onClick={() => confirmDelete(data.id)} >Delete</PrimaryButton>
+                        </div>
+
+                        <dialog id={"edit_data" + data.id} className="modal">
+                          <div className="modal-box">
+                            <h3 className="font-bold text-lg">Edit data soal</h3>
+
+                            <form onSubmit={editSoal}>
+
+                              {imageEdit ?
+                                <div className='flex justify-center'>
+                                  <img src={blobUrlEdit()} alt="Gambar" className='max-h-60' />
+                                </div>
+                                :
+                                <div className='flex justify-center'>
+                                  <img src={'/storage/' + data.image + imgDelete} className='max-h-60' />
+                                </div>
                               }
-                            }} />
-    
-                            <label className="label">
-                              <span className="label-text font-bold">Pilihan jawaban A</span>
-                            </label>
-                            <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={choiceEdit[0]} onChange={updateStateEditChoice(0)} />
-    
-                            <label className="label">
-                              <span className="label-text font-bold">Pilihan jawaban B</span>
-                            </label>
-                            <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={choiceEdit[1]} onChange={updateStateEditChoice(1)} />
-    
-                            <label className="label">
-                              <span className="label-text font-bold">Pilihan jawaban C</span>
-                            </label>
-                            <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={choiceEdit[2]} onChange={updateStateEditChoice(2)} />
-    
-                            <label className="label">
-                              <span className="label-text font-bold">Pilihan jawaban D</span>
-                            </label>
-                            <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={choiceEdit[3]} onChange={updateStateEditChoice(3)} />
-    
-                            <label className="label">
-                              <span className="label-text font-bold">Jawaban soal</span>
-                            </label>
-                            <select className="bg-white select select-primary w-full max-w-xs" onChange={(answer) => setEditActualAnswer(answer.target.value)}>
-                              {choiceEdit.map((choice, i) => {
-                                  if(i == data.choice.indexOf(data.actual_answer)) {
+                              {/* {data.image && <img src={'/storage/'+data.image} className='max-h-32'></img>} */}
+                              <label className="label">
+                                <span className="label-text font-bold">Gambar</span>
+                              </label>
+                              <input type="file" className="bg-white file-input file-input-bordered file-input-primary w-full max-w-xs" onChange={e => setEditImage(e.target.files[0])} />
+                              <a className='mx-3 btn btn-primary' onClick={() => {
+                                setEditImage(null)
+                                setImgDelete('a')
+                                setIsDeleteImg(true)
+                              }}><IoTrashSharp></IoTrashSharp></a>
+
+                              <label className="label">
+                                <span className="label-text font-bold">Pertanyaan</span>
+                              </label>
+                              <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={questionEdit} onChange={(question) => setEditQuestion(question.target.value)} />
+
+                              <label className="label">
+                                <span className="label-text font-bold">Subject</span>
+                              </label>
+                              <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={subjectEdit} onChange={(subject) => setEditSubject(subject.target.value)} />
+
+                              <label className="label">
+                                <span className="label-text font-bold">Point</span>
+                              </label>
+                              <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={pointEdit} onChange={(point) => setEditPoint(point.target.value)} onKeyPress={(event) => {
+                                if (!/[0-9]/.test(event.key)) {
+                                  event.preventDefault();
+                                }
+                              }} />
+
+                              <label className="label">
+                                <span className="label-text font-bold">Pilihan jawaban A</span>
+                              </label>
+                              <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={choiceEdit[0]} onChange={updateStateEditChoice(0)} />
+
+                              <label className="label">
+                                <span className="label-text font-bold">Pilihan jawaban B</span>
+                              </label>
+                              <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={choiceEdit[1]} onChange={updateStateEditChoice(1)} />
+
+                              <label className="label">
+                                <span className="label-text font-bold">Pilihan jawaban C</span>
+                              </label>
+                              <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={choiceEdit[2]} onChange={updateStateEditChoice(2)} />
+
+                              <label className="label">
+                                <span className="label-text font-bold">Pilihan jawaban D</span>
+                              </label>
+                              <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={choiceEdit[3]} onChange={updateStateEditChoice(3)} />
+
+                              <label className="label">
+                                <span className="label-text font-bold">Jawaban soal</span>
+                              </label>
+                              <select className="bg-white select select-primary w-full max-w-xs" onChange={(answer) => setEditActualAnswer(answer.target.value)}>
+                                {choiceEdit.map((choice, i) => {
+                                  if (i == data.choice.indexOf(data.actual_answer)) {
                                     return (<option key={i} selected>{choice}</option>)
                                   } else {
                                     return (<option key={i}>{choice}</option>)
                                   }
                                 }
-                              )}
-                            </select>
-    
-                            <div className='flex justify-between'>
-                              <button type="submit" className="btn btn-secondary mt-6">Save</button>
-    
-                              {flash.message?.substr(0, data.id.toString().length) == data.id.toString() && showSuccess ?
-                                <div className="alert alert-success mx-4 mt-5">
-                                  <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                  <span>Soal berhasil diedit</span>
-                                </div> :
-                                ""
-                              }
-                              <div className="modal-action">
-                                <form method="dialog">
-                                  {/* if there is a button in form, it will close the modal */}
-                                  <button className="btn btn-primary" onClick={() => {
-                                    setEditPoint(data.point);
-                                    setIsDeleteImg(false)
-                                    setImgDelete('');
-                                    setEditImage(null);
-                                    setShowSuccess(false);
-                                    setEditQuestion(data.question);
-                                    setEditChoice(data.choice);
-                                    setEditActualAnswer(data.actual_answer);
-                                    setEditSubject(data.subject);
-                                    console.log(examState);
-                                    console.log(flash.message)
-                                  }}>Cancel</button>
-                                </form>
+                                )}
+                              </select>
+
+                              <div className='flex justify-between'>
+                                <button type="submit" className="btn btn-secondary mt-6">Save</button>
+
+                                {flash.message?.substr(0, data.id.toString().length) == data.id.toString() && showSuccess ?
+                                  <div className="alert alert-success mx-4 mt-5">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                    <span>Soal berhasil diedit</span>
+                                  </div> :
+                                  ""
+                                }
+                                <div className="modal-action">
+                                  <form method="dialog">
+                                    {/* if there is a button in form, it will close the modal */}
+                                    <button className="btn btn-primary" onClick={() => {
+                                      setEditPoint(data.point);
+                                      setIsDeleteImg(false)
+                                      setImgDelete('');
+                                      setEditImage(null);
+                                      setShowSuccess(false);
+                                      setEditQuestion(data.question);
+                                      setEditChoice(data.choice);
+                                      setEditActualAnswer(data.actual_answer);
+                                      setEditSubject(data.subject);
+                                      console.log(examState);
+                                      console.log(flash.message)
+                                    }}>Cancel</button>
+                                  </form>
+                                </div>
                               </div>
-                            </div>
-    
-                          </form>
-    
-                        </div>
-                      </dialog>
+
+                            </form>
+
+                          </div>
+                        </dialog>
+                      </div>
                     </div>
-                  </div>
                   )
                 } else {
-                  return(
+                  return (
                     <div className="card w-4/4 my-3 bg-secondary text-primary-content" key={i}>
-                    <div className="card-body">
-                      {/* <h2 className="card-title">Soal nomor 1</h2> */}
-                      {data.image && <img src={'/storage/'+data.image} className='justify-start max-w-2xl'></img>}
-                      <p>{i + 1}. {data.question} {'('+data.point+' points)'}</p>
-                      <div className="card-actions justify-start">
-                        {/* <button className="btn">Buy Now</button> */}
-                        <h1>Jawaban : Essay</h1>
-                      </div>
-    
-                      <div className="card-actions justify-end">
-                        {/* <button className="btn">Buy Now</button> */}
-                        <PrimaryButton onClick={() => {
-                          setEditPoint(data.point);
-                          setEditActualAnswer("Jawaban essay");
-                          setEditIsEssay(true);
-                          setIdEdit(data.id);
-                          setEditQuestion(data.question);
-                          setEditChoice(["soal essay"]);
-                          setEditSubject(data.subject);
-                          document.getElementById('edit_data' + data.id.toString()).showModal()
-                        }
-                        }>Edit</PrimaryButton> <PrimaryButton onClick={() => {confirmDelete(data.id)}} >Delete</PrimaryButton>
-                      </div>
-    
-                      <dialog id={"edit_data" + data.id} className="modal">
-                        <div className="modal-box">
-                          <h3 className="font-bold text-lg">Edit data soal</h3>
-    
-                          <form onSubmit={editSoal}>
-                            {imageEdit ?
-                            <div className='flex justify-center'>
-                              <img src={blobUrlEdit()} alt="Gambar" className='max-h-60' />
-                            </div>
-                            : 
-                            <div className='flex justify-center'>
-                            <img src={'/storage/'+data.image+imgDelete} className='max-h-60' />
-                            </div>
-                            }
-                            <label className="label">
-                              <span className="label-text font-bold">Gambar</span>
-                            </label>
-                            <input type="file" className="bg-white file-input file-input-bordered file-input-primary w-full max-w-xs" onChange={e => setEditImage(e.target.files[0])} />
-                            <a className='btn btn-primary mx-3' onClick={() => {setEditImage(null)
-                            setImgDelete('a')
-                            setIsDeleteImg(true)
-                            }}><IoTrashSharp></IoTrashSharp></a>
-    
-                            <label className="label">
-                              <span className="label-text font-bold">Pertanyaan</span>
-                            </label>
-                            <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={questionEdit} onChange={(question) => setEditQuestion(question.target.value)} />
-    
-                            <label className="label">
-                              <span className="label-text font-bold">Subject</span>
-                            </label>
-                            <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={subjectEdit} onChange={(subject) => setEditSubject(subject.target.value)} />
-
-                            <label className="label">
-                              <span className="label-text font-bold">Point</span>
-                            </label>
-                            <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={pointEdit} onChange={(point) => setEditPoint(point.target.value)} onKeyPress={(event) => {
-                              if (!/[0-9]/.test(event.key)) {
-                                event.preventDefault();
-                              }
-                            }} />
-    
-                            <div className='flex justify-between'>
-                              <button type="submit" className="btn btn-secondary mt-6">Save</button>
-    
-                              {flash.message?.substr(0, data.id.toString().length) == data.id.toString() && showSuccess ?
-                                <div className="alert alert-success mx-4 mt-5">
-                                  <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                  <span>Soal berhasil diedit</span>
-                                </div> :
-                                ""
-                              }
-                              <div className="modal-action">
-                                <form method="dialog">
-                                  {/* if there is a button in form, it will close the modal */}
-                                  <button className="btn btn-primary" onClick={() => {
-                                    setEditPoint(data.point);
-                                    setIsDeleteImg(false)
-                                    setEditImage(null);
-                                    setShowSuccess(false);
-                                    setImgDelete('');
-                                  }}>Cancel</button>
-                                </form>
-                              </div>
-                            </div>
-    
-                          </form>
-    
+                      <div className="card-body">
+                        {/* <h2 className="card-title">Soal nomor 1</h2> */}
+                        {data.image && <img src={'/storage/' + data.image} className='justify-start max-w-2xl'></img>}
+                        <p>{i + 1}. {data.question} {'(' + data.point + ' points)'}</p>
+                        <div className="card-actions justify-start">
+                          {/* <button className="btn">Buy Now</button> */}
+                          <h1>Jawaban : Essay</h1>
                         </div>
-                      </dialog>
+
+                        <div className="card-actions justify-end">
+                          {/* <button className="btn">Buy Now</button> */}
+                          <PrimaryButton onClick={() => {
+                            setEditPoint(data.point);
+                            setEditActualAnswer("Jawaban essay");
+                            setEditIsEssay(true);
+                            setIdEdit(data.id);
+                            setEditQuestion(data.question);
+                            setEditChoice(["soal essay"]);
+                            setEditSubject(data.subject);
+                            document.getElementById('edit_data' + data.id.toString()).showModal()
+                          }
+                          }>Edit</PrimaryButton> <PrimaryButton onClick={() => { confirmDelete(data.id) }} >Delete</PrimaryButton>
+                        </div>
+
+                        <dialog id={"edit_data" + data.id} className="modal">
+                          <div className="modal-box">
+                            <h3 className="font-bold text-lg">Edit data soal</h3>
+
+                            <form onSubmit={editSoal}>
+                              {imageEdit ?
+                                <div className='flex justify-center'>
+                                  <img src={blobUrlEdit()} alt="Gambar" className='max-h-60' />
+                                </div>
+                                :
+                                <div className='flex justify-center'>
+                                  <img src={'/storage/' + data.image + imgDelete} className='max-h-60' />
+                                </div>
+                              }
+                              <label className="label">
+                                <span className="label-text font-bold">Gambar</span>
+                              </label>
+                              <input type="file" className="bg-white file-input file-input-bordered file-input-primary w-full max-w-xs" onChange={e => setEditImage(e.target.files[0])} />
+                              <a className='btn btn-primary mx-3' onClick={() => {
+                                setEditImage(null)
+                                setImgDelete('a')
+                                setIsDeleteImg(true)
+                              }}><IoTrashSharp></IoTrashSharp></a>
+
+                              <label className="label">
+                                <span className="label-text font-bold">Pertanyaan</span>
+                              </label>
+                              <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={questionEdit} onChange={(question) => setEditQuestion(question.target.value)} />
+
+                              <label className="label">
+                                <span className="label-text font-bold">Subject</span>
+                              </label>
+                              <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={subjectEdit} onChange={(subject) => setEditSubject(subject.target.value)} />
+
+                              <label className="label">
+                                <span className="label-text font-bold">Point</span>
+                              </label>
+                              <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={pointEdit} onChange={(point) => setEditPoint(point.target.value)} onKeyPress={(event) => {
+                                if (!/[0-9]/.test(event.key)) {
+                                  event.preventDefault();
+                                }
+                              }} />
+
+                              <div className='flex justify-between'>
+                                <button type="submit" className="btn btn-secondary mt-6">Save</button>
+
+                                {flash.message?.substr(0, data.id.toString().length) == data.id.toString() && showSuccess ?
+                                  <div className="alert alert-success mx-4 mt-5">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                    <span>Soal berhasil diedit</span>
+                                  </div> :
+                                  ""
+                                }
+                                <div className="modal-action">
+                                  <form method="dialog">
+                                    {/* if there is a button in form, it will close the modal */}
+                                    <button className="btn btn-primary" onClick={() => {
+                                      setEditPoint(data.point);
+                                      setIsDeleteImg(false)
+                                      setEditImage(null);
+                                      setShowSuccess(false);
+                                      setImgDelete('');
+                                    }}>Cancel</button>
+                                  </form>
+                                </div>
+                              </div>
+
+                            </form>
+
+                          </div>
+                        </dialog>
+                      </div>
                     </div>
-                  </div>
                   )
                 }
               }
-            )}
+              )}
+
+            </section>
 
 
 

@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Exam;
+use App\Models\Overview;
+use App\Models\Answer;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use \Datetime;
 use DateInterval;
+use Illuminate\Support\Facades\Auth;
 
 class ExamController extends Controller
 {
@@ -28,9 +31,12 @@ class ExamController extends Controller
     public function all()
     {
         $exams = Exam::all()->groupBy('subject');
+        $answered = Answer::where('student_id', Auth::user()->id)->get();
+        // $overview_ = $overview->makeHidden(['mark', 'final_mark', 'is_correct', 'average_mark']);
         return Inertia::render('StudentHome', [
             'title' => "Exam",
             'exams' => $exams,
+            'submitted' => $answered,
             // 'status' => session('status'),
         ]);
     }

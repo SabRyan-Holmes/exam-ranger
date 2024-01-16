@@ -209,7 +209,7 @@ const ExamPage = ({ auth, exam, title, subject, timestampForTimer }) => {
                     </div>
 
                     <div className="justify-center items-center flex mt-10">
-                        <div className=" w-28 h-28 radial-progress text-primary font-extrabold  border-4 border-orange-300 text-lg " style={{ "--value": (active + 1) / exam.length * 100, "--size": "12rem", "--thickness": "5px" }} role="progressbar">{amountAnswered} /{exam.length} <span className='text-sm'>
+                        <div className=" w-28 h-28 radial-progress text-primary font-extrabold  border-4 border-orange-300 text-lg " style={{ "--value": (amountAnswered) / exam.length * 100, "--size": "12rem", "--thickness": "5px" }} role="progressbar">{amountAnswered} /{exam.length} <span className='text-sm'>
                             Terjawab</span></div>
                         {/* <label htmlFor="my_modal_7">
                                 Kumpul Jawaban

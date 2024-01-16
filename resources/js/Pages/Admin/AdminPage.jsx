@@ -6,16 +6,16 @@ import { FaCheck } from "react-icons/fa";
 import { IconContext } from "react-icons";
 import { FaXmark } from "react-icons/fa6";
 
-export default function AdminPage(props) {
+export default function AdminPage({ title, auth, user, subject, doneSubmitted, notYet }) {
   console.log(`isi route  : ${route}`)
   return (
     <div className='h-full'>
-      <Head title={props.title} />
+      <Head title={title} />
 
       <div className="drawer lg:drawer-open h-full">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content flex flex-col bg-neutral h-full">
-          <Navbar user={props.auth.user} />
+          <Navbar user={auth.user} />
           <div className='mx-6 mt-6 h-full'>
 
             {/* content */}
@@ -30,7 +30,7 @@ export default function AdminPage(props) {
                 </svg></div>
                 <div class="px-4 text-gray-700">
                   <h3 class="text-sm tracking-wider">Total Peserta</h3>
-                  <p class="text-3xl">9</p>
+                  <p class="text-3xl">{user}</p>
                 </div>
               </div>
               <div class="flex items-center bg-white border rounded-sm overflow-hidden shadow">
@@ -41,8 +41,8 @@ export default function AdminPage(props) {
                   </path>
                 </svg></div>
                 <div class="px-4 text-gray-700">
-                  <h3 class="text-sm tracking-wider">Total Soal</h3>
-                  <p class="text-3xl">50</p>
+                  <h3 class="text-sm tracking-wider">Total Materi Ujian</h3>
+                  <p class="text-3xl">{subject}</p>
                 </div>
               </div>
               <div class="flex items-center bg-white border rounded-sm overflow-hidden shadow">
@@ -57,7 +57,7 @@ export default function AdminPage(props) {
                 </div>
                 <div class="px-4 text-gray-700">
                   <h3 class="text-sm tracking-wider">Peserta yang sudah selesai</h3>
-                  <p class="text-3xl">3</p>
+                  <p class="text-3xl">{doneSubmitted}</p>
                 </div>
               </div>
               <div class="flex items-center bg-white border rounded-sm overflow-hidden shadow">
@@ -70,7 +70,7 @@ export default function AdminPage(props) {
                 </div>
                 <div class="px-4 text-gray-700">
                   <h3 class="text-sm tracking-wider">Peserta yang belum selesai</h3>
-                  <p class="text-3xl">6</p>
+                  <p class="text-3xl">{notYet}</p>
                 </div>
               </div>
             </div>
