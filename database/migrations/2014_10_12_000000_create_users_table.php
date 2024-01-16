@@ -16,11 +16,11 @@ return new class extends Migration
             $table->string('name');
             $table->string('nim')->unique();
             $table->boolean('is_admin')->default(false);
-            $table->string('email')->unique();
+            $table->string('email')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->integer('phone')->nullable();
             $table->string('profil_pic')->nullable();
-            $table->json('answer')->nullable();
+            // $table->json('answer_id')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

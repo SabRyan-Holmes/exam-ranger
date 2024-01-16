@@ -23,7 +23,7 @@ const Navbar = ({user}) => {
                 </label>
             </div>
           <div className="navbar-start">
-            <Link href="/" method="GET" as="button"><a className="btn btn-ghost normal-case text-xl">Dashboard admin</a></Link>
+            <Link href="/dashboard" method="GET" as="button"><a className="btn btn-ghost normal-case text-xl">Dashboard admin</a></Link>
           </div>
           <div className="navbar-end">
                     <div className="dropdown dropdown-end">
@@ -34,6 +34,7 @@ const Navbar = ({user}) => {
                       </label>
                       <ul tabIndex={0} className="mt-3 p-2 shadow menu menu-sm dropdown-content bg-neutral rounded-box w-52 z-[50] relative text-black">
                           <>
+                        <li><Link href="/home">Homepage</Link></li>
                         <li><Link href={route('profile.edit')}>Edit Profile</Link></li>
                         <li><Link href={route('logout')} method="post" as="button">Logout</Link></li>
                           </>

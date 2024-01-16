@@ -18,6 +18,7 @@ return new class extends Migration
             $table->dateTime('exam_started');
             $table->dateTime('exam_ended');
             $table->integer('exam_duration'); //in minutes
+            $table->integer('point')->default(2);
             $table->string('question')->unique();
             $table->json('choice');
             $table->string('image')->nullable();

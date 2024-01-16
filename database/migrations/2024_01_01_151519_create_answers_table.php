@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('answers', function (Blueprint $table) {
             $table->id();
-            $table->string('answer');
+            $table->json('answer');
             $table->foreignId('student_id');
-            $table->foreignId('exam_id');
+            $table->string('exam_subject');
             $table->timestamps();
         });
     }

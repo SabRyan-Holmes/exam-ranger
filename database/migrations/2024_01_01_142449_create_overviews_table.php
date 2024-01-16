@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('overviews', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->foreignId('student_id');
-            $table->foreignId('exam_id');
+            $table->foreignId('answer_id');
+            $table->string('subject');
             $table->boolean('is_correct');
             $table->double('mark')->nullable();
             $table->double('average_mark')->nullable();
             $table->double('final_mark')->nullable();
+            $table->timestamps();
         });
     }
 

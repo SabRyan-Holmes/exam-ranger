@@ -3,7 +3,7 @@ export default function PrimaryButton({ className = '', disabled, children, ...p
         <button
             {...props}
             className={
-                `bg-orange-500 inline-flex btn glass scale-75 items-center px-4 py-2 h-5  border border-transparent rounded-md font-semibold text-lg  text-white hover:bg-primary focus:bg-orange-600 active:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 ${disabled && 'opacity-25'
+                `bg-orange-500 inline-flex scale-[0.78] btn glass items-center px-4 py-2 h-5  border border-transparent rounded-md font-semibold text-lg  text-white hover:bg-primary focus:bg-orange-600 active:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 ${disabled && 'opacity-25'
                 } ` + className
             }
             disabled={disabled}

@@ -1,14 +1,26 @@
 import PrimaryButton from '@/Components/PrimaryButton';
+import PopUpRule from '@/Components/PopUpRule';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { data } from 'autoprefixer';
+<<<<<<< HEAD
 import { useState } from 'react';
+=======
+import { useState, useRef } from 'react';
+>>>>>>> 8752b647a80fcf38fcfcc73a27706928e9518e6d
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import styled from 'styled-components';
+import moment from "moment/min/moment-with-locales";
+import no_data from "@/../assets/no_data.svg";
 
 
+<<<<<<< HEAD
 export default function StudentHome({ auth, exams }) {
+=======
+export default function StudentHome({ auth, exams, submitted }) {
+    const anchor = useRef('subject')
+>>>>>>> 8752b647a80fcf38fcfcc73a27706928e9518e6d
     const [date, setDate] = useState(new Date());
     console.log("isi data" + exams)
     const onChange = () => {
@@ -34,13 +46,19 @@ export default function StudentHome({ auth, exams }) {
 
     // let dataArr = Array.from(exams)
     let arrExams = Object.keys(exams)
+<<<<<<< HEAD
     console.log(arrExams)
+=======
+    moment.locale('id')
+
+    const [openModal, setOpenModal] = useState(false);
+>>>>>>> 8752b647a80fcf38fcfcc73a27706928e9518e6d
     return (
         <AuthenticatedLayout
-            user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Student</h2>}
+            user={auth.user} data={arrExams}
         >
             <Head title="Home" />
+<<<<<<< HEAD
             <div className="mx-16 my-10 bg-card bg-cover overflow-hidden card shadow-xl pb-12">
                 <div className="card-body flex items-center justify-center ">
                     <p className="">Hi, {auth.user.name} !</p>
@@ -104,19 +122,131 @@ export default function StudentHome({ auth, exams }) {
 
 
                 </div>
+=======
+            <section className='flex justify-center   '>
+                <div className='w-full max-w-screen-lg ml-9   my-7'>
+                    <div className="w-full  rounded-2xl mb-10 bg-card bg-contain  shadow-xl  ">
+                        <div className=" card-body flex items-center justify-center ">
+                            <p className="">Hi, {auth.user.name} !</p>
+                            <h2 className="text-3xl font-semibold">Selamat Datang di Ujian Kompetisi Anatomi</h2>
+                            <div className="card-actions">
+                                <PrimaryButton onClick={() => {
+                                    setOpenModal(true);
+                                }}>
+                                    Cara Melaksanakan
 
-                <div className="mx-16">
-                    <h1 className="mb-6 font-bold">Konten Soal Kompetisi</h1>
+                                </PrimaryButton>
+                                <PrimaryButton>
+                                    Mulai Mengerjakan
+                                </PrimaryButton>
+                                {openModal && <PopUpRule openModal={openModal} setOpenModal={setOpenModal} anchor={anchor} />}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id={anchor} className="flex justify-start gap-8 ">
+                        {/* Soal Kompetisi */}
+                        <div className="flex flex-col ">
+                            <div className="flex justify-between">
+                                <h1 className="mb-6 font-bold">Soal Kompetisi</h1>
+                                <h1 className="mb-6 font-bold text-primary">{arrExams.length ? 'Lihat Semua' : ''}</h1>
+                            </div>
+                            {arrExams.map((subject, i) => {
+                                console.log(exams[subject]);
+                                console.log(exams[subject][0].question);
+                                return (
+                                    <Link href={route('exam.show', { subject })} >
+                                        <div className="mb-2 border-card  card w-fit shadow-md hover:bg-primary/30 ">
+                                            <div className="m-6 rounded-md   ">
+                                                <div className="card-actions  items-center ">
+                                                    <strong className="mr-1">{subject}</strong>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className=" w-8 h-8 stroke-primary">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                                                    </svg>
+
+                                                    <div className="mr-4">
+                                                        <p className="font-bold text-lg -mb-2">{exams[subject].length} Soal </p>
+                                                        <p className="font-light text-slate-500">Essay & Pilihan Ganda </p>
+                                                    </div>
+
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                                                        stroke="currentColor" className="w-8 h-8 stroke-primary">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                                    </svg>
+
+                                                    <div className="">
+                                                        <p className="font-bold text-lg -mb-1">{exams[subject][0].exam_duration} Menit </p>
+                                                        <p className="font-light text-slate-500">10:00 - & 11-00 WIB </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </Link>
+
+                                )
+                            })};
+                        </div>
+
+                        <div className='grow'>
+                            <div className="flex justify-between  ">
+                                <h1 className="mb-6 font-bold">Riwayat Pengerjaan</h1>
+                                <h1 className="mb-6 font-bold text-primary">{submitted.length ? 'Lihat Semua' : ''}</h1>
+                            </div>
+                            {submitted.length ? submitted.map((data, i) => {
+                                let answered = 0
+                                data.answer.map((answer) => {
+                                    if (answer != null && answer != '') {
+                                        answered++;
+                                    }
+                                })
+                                let jumlah_soal = data.answer.length;
+
+                                let value = (answered / jumlah_soal) * 100
+
+                                console.log('value soal terjawab : ')
+                                console.log(value)
+                                return (
+                                    <div className="mb-2 card w-full shadow-md  hover:scale-110 border-card">
+                                        <div className="m-6 my-4 rounded-md   ">
+                                            <div className="card-actions justify-between items-center ">
+                                                <div className="radial-progress text-primary text-sm" style={{ "--value": value, "--size": "3rem", "--thickness": "2px" }} role="progressbar">{Math.round(value)} %</div>
+                                                <div className="mr-16 ">
+                                                    <strong >{data.exam_subject}  </strong>
+                                                    <p className="text-sm">{answered} dari {jumlah_soal} Terjawab</p>
+                                                    <small className="block"> {moment(data.updated_at).fromNow()}</small>
+                                                </div>
+                                                <p>{moment(data.updated_at).format('L')}</p>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                )
+                            })
+                                :
+                                <div className="my-auto">
+                                    <img className='w-40 h-32 mx-auto pt-7 mt-3' src={no_data} alt="no data" srcset="" />
+                                    <p className='text-center mt-3 text-sm text-slate-600'>Belum ada Riwayat Selesai Ujian</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+>>>>>>> 8752b647a80fcf38fcfcc73a27706928e9518e6d
+
+
+
+                </div>
+                <div className="border-r mx-7" />
+                <div className=" my-7 mr-5">
+                    <h1 className="mb-4 font-bold">Tanggal Ujian</h1>
                     <CalendarContainer>
                         <Calendar onChange={onChange} value={date} />
                     </CalendarContainer>
                 </div>
-            </div>
 
 
 
 
-
+            </section>
         </AuthenticatedLayout>
     );
 }

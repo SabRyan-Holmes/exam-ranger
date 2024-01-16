@@ -19,10 +19,17 @@ class ExamFactory extends Factory
         $choice = fake()->words(4);
         // $subjects = ['subjects_1', 'subjects_2']
         return [
+<<<<<<< HEAD
             // 'subject' => fake()->randomElement(['subjects_1', 'subjects_2']),
             'exam_started' => fake()->dateTimeThisYear(),
             'exam_ended' => fake()->dateTimeThisYear(),
             'exam_duration' => fake()->randomElement([90, 120]),
+=======
+            
+            // 'exam_started' => fake()->dateTimeThisYear(),
+            // 'exam_ended' => fake()->dateTimeThisYear(),
+            // 'exam_duration' => fake()->randomElement([90, 120]),
+>>>>>>> 8752b647a80fcf38fcfcc73a27706928e9518e6d
             'question' => fake()->sentence(20),
             'choice' => $choice,
             // 'image' => fake()->(),
