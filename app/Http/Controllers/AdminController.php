@@ -82,11 +82,6 @@ class AdminController extends Controller
                 'actual_answer' => "required|max:70",
                 "choice" => "required|array|min:1",
                 "point" => "required|integer"
-
-                // 'subject' => "required",
-                // "exam_started" => "required",
-                // "exam_ended" => "required",
-                // "exam_duration" => "required",
            ]);
         } else {
             $validatedData = $request->validate([
@@ -97,19 +92,12 @@ class AdminController extends Controller
                 "choice" => "required|array|min:1",
                 'choice.*' => "required|string|distinct|min:1",
                 "point" => "required"
-                
-                // 'subject' => "required",
-                // "exam_started" => "required",
-                // "exam_ended" => "required",
-                // "exam_duration" => "required",
            ]);
         }
        if($request->image != null) {
            $validatedData['image'] = $request->file('image')->store('exam-images');
        };
         Exam::create($validatedData);
-        // return Redirect::route('admin.soal')->with('message', 'Berhasil Menambahkan Soal');
-        // return back()->with('message', 'Berhasil Menambahkan Soal');
         return back()->with('message', 'suksesinput'.strval(rand()));
     }
 
@@ -130,8 +118,6 @@ class AdminController extends Controller
         ]);
 
         event(new Registered($user));
-
-        
         return back()->with('message', 'Berhasil Menambahkan Peserta');
     }
 
@@ -262,12 +248,7 @@ class AdminController extends Controller
     public function show_subject(Request $request)
     {
         // dd($request->subject);
-        $exams = Exam::all()->groupBy('subject');
-        
-        // Logika Hitung Otomatis Point
-        
-
-
+        $exams = Exam::all()->groupBy('subject_id');
         return Inertia::render('Admin/AnsweredSubject', [
             'title' => "Materi Soal ",
             'answeredSubject' => $request->subject,
@@ -277,15 +258,15 @@ class AdminController extends Controller
     }
 
     // Update or Insert
-    public function upsert_subject(Request $request) {
-        // dd($request);
+    public function update_subject(Request $request) {
+        // dd($request->id);
+        // Rules
         $validated = $request->validate([
-            'id' => 'required|integer',
             'name' => 'required|string|max:20|unique:subjects,name,' .$request->id,
             'exam_duration' => 'required|integer|max:1000',
             'exam_started' => 'required|date',
             'exam_ended' => 'required|date',
-            'image' => 'nullable',
+            'image' => 'nullable|image|file|max:8000',
             'is_available' => 'nullable',
         ]);
         
@@ -295,29 +276,33 @@ class AdminController extends Controller
             $validated['image'] = $request->file('image')->storeAs('subject-img', $imageName);
         }
         
-        // Simpan jawaban
-        $subject = Subject::updateOrCreate(
-            [ 
-                // 'id' => $validated['id']
-                'name' => $validated['name'],
-
-            ],
-            [ 
-            'id' => $validated['id'],
-
-            // 'name' => $validated['name'],
-            'exam_duration' => $validated['exam_duration'],
-            'exam_started' => $validated['exam_started'],
-            'exam_ended' => $validated['exam_ended'],
-            'image' => $validated['image'],
-            'is_available' => true,
-            ]    
-        );
-
+        // Simpan Update
+        Subject::where('id', $request->id)
+        ->update($validated);
+        return back()->with('message', 'Berhasil Mengedit Materi Ujian');
         
+    }
 
-        dd($subject->wasRecentlyCreated);
-        return back()->with('message', ($subject->wasRecentlyCreated ? 'Berhasil Menambahkan Materi Ujian' : 'Berhasil Mengedit'));
+    // Create
+    public function store_subject(Request $request) {
+        // dd($request);
+        $validated = $request->validate([
+            'name' => 'required|string|max:20|unique:subjects,name,' .$request->id,
+            'exam_duration' => 'required|integer|max:1000',
+            'exam_started' => 'required|date',
+            'exam_ended' => 'required|date',
+            'image' => 'nullable|image|file|max:8000',
+        ]);
+        
+        // Logic Image Nanti
+        if ($request->file('image')) {
+            $imageName = $request->name . '.' . $request->file('image')->getClientOriginalExtension();
+            $validated['image'] = $request->file('image')->storeAs('subject-img', $imageName);
+        }
+        
+        // Simpan jawaban
+        $subject = Subject::create($validated);
+        return back()->with('message', 'Berhasil Menambahkan Materi Ujian Baru');
         
     }
 

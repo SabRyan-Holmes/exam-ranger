@@ -27,7 +27,7 @@ const AdminDrawer = () => {
           Dashboard
         </NavLinkDashboard>
 
-        <NavLinkDashboard href={route('admin.soal-tipe')} active={route().current('admin.soal-tipe')}><FaNotesMedical />
+        <NavLinkDashboard href={route('admin.subject')} active={route().current('admin.subject')}><FaNotesMedical />
           Soal
         </NavLinkDashboard>
 

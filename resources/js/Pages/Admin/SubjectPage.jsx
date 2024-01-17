@@ -33,8 +33,8 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
 
   function submit(e) {
     e.preventDefault()
-    post(route('admin.upsert-subject', data, {
-      _method: 'POST',
+    patch(route('admin.update-subject', data, {
+      _method: 'PATCH',
       preserveScroll: true,
       onSuccess: () => {
         reset('id', 'name', 'exam_duration', 'exam_ended', 'exam_started', 'image', 'is_available', 'oldImage');
@@ -43,7 +43,20 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
     }));
   }
 
-  const { data, setData, post, processing, errors, reset, recentlySuccessful } = useForm({
+  function submitCreate(e) {
+    e.preventDefault()
+    post(route('admin.create-subject', data, {
+      _method: 'POST',
+      preserveScroll: true,
+      onSuccess: () => {
+        reset('id', 'name', 'exam_duration', 'exam_ended', 'exam_started', 'image', 'is_available', 'oldImage');
+        clearErrors();
+        clear
+      }
+    }));
+  }
+
+  const { data, setData, post, patch, processing, errors, reset, recentlySuccessful } = useForm({
     id: '',
     name: '',
     exam_duration: '',
@@ -101,7 +114,8 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
 
   function openDialog(subject) {
     if (subject != null) {
-      reset()
+      console.log('isi subject')
+      console.log(subject)
       setIsEdit(true)
       setData({
         id: subject.id,
@@ -176,9 +190,11 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
                     <th>Nama Materi Ujian</th>
                     <th>Banyak Soal</th>
                     <th>Durasi</th>
+                    <th>Tanggal Ujian Dimulai</th>
+                    <th>Tanggal Ujian Berakhir</th>
                     <th>Tanggal Dibuat</th>
                     <th>Terakhir Diupdate</th>
-                    <th className='pl-28'>Aksi</th>
+                    <th className='pl-16'>Aksi</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -208,17 +224,25 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
                           <>{subject.exam_duration} Menit</>
                         </td>
 
-                        <td>
-                          {moment(subject.created_at).fromNow()}
+                        <td className="text-xs ">
+                          <p className="mx-2">{moment(subject.exam_started).format('LLL')}</p>
                         </td>
+
+                        <td className="text-xs">
+                          <p className="mx-2">{moment(subject.exam_ended).format('LLL')}</p>
+                        </td>
+
                         <td>
-                          {moment(subject.updated_at).fromNow()}
+                          {moment(subject.created_at).format('L')}
+                        </td>
+                        <td className='text-xs'>
+                          {moment(subject.updated_at).fromNow('')}
                         </td>
 
                         <td className="flex justify-start">
                           {/* Button View */}
                           <Link >
-                            <button className='bg-slate-500/80 px-8 scale-75 btn glass'>
+                            <button className='bg-slate-500/80 px-8 -ml-10 scale-[0.6] btn glass'>
                               <FiEye className='scale-[2.4] stroke-yellow-500'
                               >
                               </FiEye>
@@ -226,7 +250,7 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
                           </Link>
 
                           {/* Button Edit */}
-                          <button onClick={() => { openDialog(subject) }} className='bg-slate-500/80  scale-75 btn glass'>
+                          <button onClick={() => { openDialog(subject) }} className='bg-slate-500/80  scale-[0.6] -ml-5 btn glass'>
                             <IconContext.Provider
                               value={{ color: '#16a34a', size: '50px' }}
                             >
@@ -238,7 +262,7 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
                           {/* Dialog Edit Start */}
                           <dialog id="upsert" className="modal mx-auto">
                             <div className="modal-box bg-base-100/90">
-                              <form onSubmit={submit} method='patch'>
+                              <form onSubmit={(isEdit ? submit : submitCreate)} method={isEdit ? 'patch' : 'post'}>
                                 <div>
                                   <h2 className="text-3xl font-bold text-primary">{isEdit ? 'Edit ' : 'Tambah '} Peserta</h2>
                                   <p className="my-2 text-base">Masukkan data peserta</p>
@@ -354,7 +378,7 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
                           {/* Dialog Edit End */}
 
                           {/* Button Delete */}
-                          <button className='transition-all bg-slate-500/80 text- scale-75 btn glass '>
+                          <button className='transition-all bg-slate-500/80 -ml-5 scale-[0.6] btn glass '>
                             <IconContext.Provider className=""
                               value={{ color: '#ef4444', size: '50px' }}
                             >
@@ -376,9 +400,11 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
                     <th>Nama Materi Ujian</th>
                     <th>Banyak Soal</th>
                     <th>Durasi</th>
+                    <th>Tanggal Ujian Dimulai</th>
+                    <th>Tanggal Ujian Berakhir</th>
                     <th>Tanggal Dibuat</th>
                     <th>Terakhir Diupdate</th>
-                    <th className='pl-28'>Aksi</th>
+                    <th className='pl-16'>Aksi</th>
                   </tr>
                 </tfoot>
 
