@@ -14,6 +14,8 @@ const ExamPage = ({ auth, exam, title, subject, timestampForTimer }) => {
     // Logic Timer
 
     console.log('isi timestamp' + timestampForTimer)
+    console.log("data user")
+    console.log(auth.user.name)
 
     // Submit Data to Answer db
 
@@ -65,8 +67,8 @@ const ExamPage = ({ auth, exam, title, subject, timestampForTimer }) => {
     const [amountAnswered, setAmountAnswered] = useState(0)
 
     useEffect(() => {
-        if (localStorage.getItem("answer" + subject) != null) {
-            setAnswer(localStorage.getItem("answer" + subject).toString().split(","))
+        if (localStorage.getItem("answer" + subject + auth.user.name) != null) {
+            setAnswer(localStorage.getItem("answer" + subject + auth.user.name).toString().split(","))
         }
         var aaa = 0
         answer.map((data) => {
@@ -84,9 +86,9 @@ const ExamPage = ({ auth, exam, title, subject, timestampForTimer }) => {
     const updateStateEditAnswer = (index) => (e) => {
         const trueAnswer = answer.toString().split(",")
         trueAnswer[index] = e.target.value
-        localStorage.setItem("answer" + subject, trueAnswer)
+        localStorage.setItem("answer" + subject + auth.user.name, trueAnswer)
         answered[index] = true
-        localStorage.setItem("answered" + subject, answered)
+        localStorage.setItem("answered" + subject + auth.user.name, answered)
         setAnswer(trueAnswer)
     };
 
@@ -102,8 +104,8 @@ const ExamPage = ({ auth, exam, title, subject, timestampForTimer }) => {
             setSumAnswered()
         }
         answered[active] = true
-        localStorage.setItem("answer" + subject, answer)
-        localStorage.setItem("answered" + subject, answered)
+        localStorage.setItem("answer" + subject + auth.user.name, answer)
+        localStorage.setItem("answered" + subject + auth.user.name, answered)
         length = answer.filter(d => d?.length > 0).length;
         console.log(`isi yang banyak soal yg udah dijawab : ${length}`)
         setAmountAnswered(length)
@@ -133,7 +135,7 @@ const ExamPage = ({ auth, exam, title, subject, timestampForTimer }) => {
                         </svg>
                         <div>
                             <p>Sisa waktu</p>
-                            <CountdownTimer countdownTimestampMs={timestampForTimer} subject={subject} />
+                            <CountdownTimer countdownTimestampMs={timestampForTimer} subject={subject} auth={auth}/>
                         </div>
                     </div>
 

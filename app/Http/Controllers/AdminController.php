@@ -143,6 +143,10 @@ class AdminController extends Controller
         //
     }
 
+    public function editSubject(SoalUpdateRequest $request) {
+        dd($request);
+    }
+
     /**
      * Show the form for editing the specified resource.
      */

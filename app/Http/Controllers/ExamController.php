@@ -11,6 +11,8 @@ use Inertia\Inertia;
 use \Datetime;
 use DateInterval;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\LoggedInRequest;
+use App\Models\User;
 
 class ExamController extends Controller
 {
@@ -120,5 +122,10 @@ class ExamController extends Controller
     public function destroy(Exam $exam)
     {
         //
+    }
+
+    public function updateDoingExam(LoggedInRequest $request) {
+        User::where('id', $request->id)
+            ->update($request);
     }
 }

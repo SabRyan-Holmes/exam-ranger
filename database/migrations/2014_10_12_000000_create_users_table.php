@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('profil_pic')->nullable();
             // $table->json('answer_id')->nullable();
             $table->string('password');
+            $table->boolean('is_doing_exam')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });
