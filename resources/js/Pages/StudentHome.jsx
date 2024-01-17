@@ -3,7 +3,7 @@ import PopUpRule from '@/Components/PopUpRule';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { data } from 'autoprefixer';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import styled from 'styled-components';
@@ -11,7 +11,7 @@ import moment from "moment/min/moment-with-locales";
 import no_data from "@/../assets/no_data.svg";
 
 
-export default function StudentHome({ auth, subjectExam, submitted }) {
+export default function StudentHome({ auth, subjectExam, submitted, flash }) {
     const anchor = useRef('subject')
     const [date, setDate] = useState(new Date());
     console.log("isi data" + subjectExam)
@@ -19,6 +19,12 @@ export default function StudentHome({ auth, subjectExam, submitted }) {
         setDate(date);
     }
     console.log('tanggal sekarang : ' + date)
+
+    useEffect(() => {
+        if (flash.message?.substr(0, 12) == 'sudahselesai') {
+            document.getElementById('modal_sudah_selesai').showModal()
+        }
+    }, [flash.message]);
 
     const CalendarContainer = styled.div`
     /* ~~~ container styles ~~~ */
@@ -162,6 +168,20 @@ export default function StudentHome({ auth, subjectExam, submitted }) {
                     </CalendarContainer>
                 </div>
 
+                {/* You can open the modal using document.getElementById('ID').showModal() method */}
+                {/* <button className="btn" onClick={()=>document.getElementById('modal_sudah_selesai').showModal()}>open modal</button> */}
+                <dialog id="modal_sudah_selesai" className="modal">
+                <div className="modal-box w-11/12 max-w-5xl">
+                    <h3 className="font-bold text-lg">Akses ditolak!</h3>
+                    <p className="py-4">Materi yang sudah dikumpul tidak bisa dikerjakan ulang</p>
+                    <div className="modal-action">
+                    <form method="dialog">
+                        {/* if there is a button, it will close the modal */}
+                        <button className="btn">Close</button>
+                    </form>
+                    </div>
+                </div>
+                </dialog>
 
 
 

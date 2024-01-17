@@ -29,9 +29,8 @@ Route::get('/', function () {
 })->middleware(['isAlreadyLoggedIn']);
 
 
-Route::middleware('auth', 'verified')->group(function () {
+Route::middleware('auth', 'verified', 'isDoingExamCheck')->group(function () {
     Route::get('/home', [ExamController::class, 'all'])->name('home');
-    Route::post('/exam/update-doing-exam', [ExamController::class, 'updateDoingExam']);
 });
 
 Route::middleware('auth', 'verified')->group(function () {

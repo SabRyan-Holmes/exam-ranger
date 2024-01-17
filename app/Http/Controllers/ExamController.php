@@ -68,6 +68,15 @@ class ExamController extends Controller
     public function show(Request $request)
     {
         $exam = Exam::where('subject_id', $request->id)->get();
+        $answered = Answer::where('student_id', Auth::user()->id)->get()->toArray();
+        foreach ($answered as $answer) {
+            if($answer['subject_id'] == $request->id) {
+                return back()->with('message', 'sudahselesai'.strval(rand()));
+            }
+        }
+        $user = User::where('id', Auth::user()->id);
+        $user->update(['is_doing_exam' => true]);
+        // $user->update(['which_exam_started' => $exam->]);
         
         function menitKeTimestamp($menit) {
             // Membuat objek DateTime untuk hari ini

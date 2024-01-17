@@ -7,6 +7,8 @@ use App\Models\Exam;
 use App\Models\Overview;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use Inertia\Inertia;
 use Session;
 
@@ -33,6 +35,8 @@ class AnswerController extends Controller
      */
     public function store(Request $request)
     {
+        $user = User::where('id', Auth::user()->id);
+        $user->update(['is_doing_exam' => false]);
         $validatedData = $request->validate([
             'answer' => 'required|array|max:255',
             'student_id' => 'required',
