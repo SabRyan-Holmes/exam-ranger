@@ -22,9 +22,9 @@ const Footer = ({ subject }) => {
                         <h3 className='font-semibold text-2xl text-white/70 mb-8'>Kompetisi
                             <ul className='pt-2 text-white/70'>
                                 {
-                                    subject ? subject.map((name) => {
+                                    subject ? subject.map((data) => {
                                         return <li>
-                                            <a href="#" className='inline-block text-base hover:text-primary  '>{name}</a>
+                                            <a href="#" className='inline-block text-base hover:text-primary  '>{data.name}</a>
                                         </li>
                                     })
                                         :

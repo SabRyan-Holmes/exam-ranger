@@ -22,6 +22,8 @@ export default function Authenticated({ user, header, children, data }) {
                                 </Link>
                             </div>
 
+
+
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink href={route('home')} active={route().current('home')}>
                                     Home
@@ -39,11 +41,11 @@ export default function Authenticated({ user, header, children, data }) {
                                                 type="button"
                                                 className="flex  items-center px-4 py-1 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500  hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
                                             >
-                                                <div class="flex items-center">
+                                                <div class="flex items-center justify-start ">
                                                     <img src={user.profil_pic ? user.profil_pic : pp} className="w-9 h-9 mx-3 rounded-xl" />
-                                                    <div class="">
-                                                        <strong className="font-extrabold text-">{user.name}</strong>
-                                                        <p className="font-medium">{user.nim}</p>
+                                                    <div class="text-left mr-4">
+                                                        <p className="font-extrabold text-">{user.name}</p>
+                                                        <p className="font-medium shrink-0 ">{user.nim}</p>
                                                     </div>
                                                 </div>
 

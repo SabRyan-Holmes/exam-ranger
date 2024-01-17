@@ -41,7 +41,7 @@ export default function StudentHome({ auth, subjectExam, submitted }) {
     const [openModal, setOpenModal] = useState(false);
     return (
         <AuthenticatedLayout
-            user={auth.user} data={['tes', '23e2']}
+            user={auth.user} data={subjectExam}
         >
             <Head title="Home" />
             <section className='flex justify-center   '>
