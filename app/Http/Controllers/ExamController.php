@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Exam;
 use App\Models\Overview;
 use App\Models\Answer;
+use App\Models\Subject;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use \Datetime;
@@ -20,11 +21,7 @@ class ExamController extends Controller
     {
         $exam = Exam::where('subject', $request->subject)->get();
         // dd($exam);
-<<<<<<< HEAD
-        return Inertia::render('ExamPage', [
-=======
         return Inertia::render('Exam/ExamPage', [
->>>>>>> 8752b647a80fcf38fcfcc73a27706928e9518e6d
             'title' => "Exam",
             'subject' =>  $request->subject,
             'exam' => $exam,
@@ -34,19 +31,13 @@ class ExamController extends Controller
 
     public function all()
     {
-        $exams = Exam::all()->groupBy('subject');
-<<<<<<< HEAD
-        return Inertia::render('StudentHome', [
-            'title' => "Exam",
-            'exams' => $exams,
-=======
+        $exams = Subject::where('is_available', true)->get();
         $answered = Answer::where('student_id', Auth::user()->id)->get();
         // $overview_ = $overview->makeHidden(['mark', 'final_mark', 'is_correct', 'average_mark']);
         return Inertia::render('StudentHome', [
             'title' => "Exam",
-            'exams' => $exams,
+            'subjectExam' => $exams,
             'submitted' => $answered,
->>>>>>> 8752b647a80fcf38fcfcc73a27706928e9518e6d
             // 'status' => session('status'),
         ]);
     }
@@ -74,8 +65,7 @@ class ExamController extends Controller
      */
     public function show(Request $request)
     {
-        $exam = Exam::where('subject', $request->subject)->get();
-
+        $exam = Exam::where('subject', $request->name)->get();
         
         function menitKeTimestamp($menit) {
             // Membuat objek DateTime untuk hari ini
@@ -95,13 +85,13 @@ class ExamController extends Controller
         }
         
         // Contoh penggunaan fungsi
-        $menit = $exam[0]->exam_duration;
+        $menit = $request->exam_duration;
         $timestampMs = menitKeTimestamp($menit);
         // dd($timestampMs);
 
         return Inertia::render('Exam/ExamPage', [
             'title' => "Exam",
-            'subject' =>  $request->subject,
+            'subject' =>  $request->name,
             'exam' => $exam,
             'timestampForTimer' => $timestampMs
             // 'status' => session('status'),

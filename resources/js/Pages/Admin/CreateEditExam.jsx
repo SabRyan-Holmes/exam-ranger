@@ -17,7 +17,7 @@ import TextInput from '@/Components/TextInput';
 import InputError from '@/Components/InputError';
 import moment from "moment/min/moment-with-locales";
 
-export default function AdminPageSoal({ auth, flash, title, exam, subject }) {
+export default function CreateEditExam({ auth, flash, title, exam, subject, subject_id }) {
   const [showSuccess, setShowSuccess] = useState(false)
   useEffect(() => {
     if (flash.message?.substr(0, 11) != null) {
@@ -27,7 +27,7 @@ export default function AdminPageSoal({ auth, flash, title, exam, subject }) {
 
   const [examState, setEditExamState] = useState(exam);
   const [isDeleteImg, setIsDeleteImg] = useState(false);
-  const [pointEdit, setEditPoint] = useState(2);
+  const [pointEdit, setEditPoint] = useState('');
   const [questionEdit, setEditQuestion] = useState(null);
   const [id, setIdEdit] = useState(null);
   const [choiceEdit, setEditChoice] = useState(['', '', '', '']);
@@ -35,7 +35,7 @@ export default function AdminPageSoal({ auth, flash, title, exam, subject }) {
   const [isEssayEdit, setEditIsEssay] = useState(false);
   const [actualAnswerEdit, setEditActualAnswer] = useState(null);
   const [indexAns, setEditIndexAns] = useState(null);
-  const [subjectEdit, setEditSubject] = useState(null);
+  const [subjectEdit, setEditSubject] = useState(subject_id);
 
   const [question, setQuestion] = useState('');
   const [choice, setChoice] = useState(["soal essay"]);
@@ -49,16 +49,18 @@ export default function AdminPageSoal({ auth, flash, title, exam, subject }) {
   const [subjects, setSubject] = useState(subject);
 
   const { data, setData, post, processing, errors } = useForm({
+    subject_id: subject_id,
     question: null,
     choice: ['', '', '', ''],
     image: null,
     is_essay: false,
     actual_answer: null,
-    exam_started: "2024-01-03 10:42:17",
-    exam_ended: "2024-01-03 11:42:17",
-    exam_duration: "90",
-    point: 2,
-    subject: subjects
+    point: '',
+
+    // subject: subjects,
+    // exam_started: "2024-01-03 10:42:17",
+    // exam_ended: "2024-01-03 11:42:17",
+    // exam_duration: "90",
   })
 
   const confirmDelete = (i) => {
@@ -66,6 +68,7 @@ export default function AdminPageSoal({ auth, flash, title, exam, subject }) {
     const data = {
       id
     }
+
     Swal.fire({
       title: 'Anda yakin?',
       text: "Soal yang sudah dihapus tidak bisa dikembalikan lagi",
@@ -194,22 +197,21 @@ export default function AdminPageSoal({ auth, flash, title, exam, subject }) {
       id, imageEdit, questionEdit, subjectEdit, choiceEdit, actualAnswerEdit, isDeleteImg, pointEdit
     }
 
-    router.post('/dashboard/soal/edit-soal', edit)
+    router.post('/dashboard/soal/update-soal', edit)
   }
 
   function submitEssay(e) {
     e.preventDefault()
 
     const edit = {
-      question, choice, image, is_essay, actual_answer, exam_started, exam_ended, exam_duration, point, subjects
+      subject_id, question, choice, image, is_essay, actual_answer, point,
+      // exam_started, exam_ended, exam_duration, subjects
     }
 
     router.post('/dashboard/soal/add-soal', edit)
   }
 
-  const duration = exam[0].exam_duration
-  const startDate = exam[0].exam_started
-  const endDate = exam[0].exam_ended
+
 
   return (
     <div className='h-full'>
@@ -236,75 +238,106 @@ export default function AdminPageSoal({ auth, flash, title, exam, subject }) {
                   <h3 className="font-bold text-lg">Masukkan data soal</h3>
 
                   <form onSubmit={submit}>
+                    {/* Gambar Soal */}
+                    <div className="">
+                      {data.image ?
+                        <div className='flex justify-center'>
+                          <img src={blobUrl()} alt="Gambar" className='h-60' />
+                        </div>
+                        : ""}
+                      <InputLabel htmlFor="image" value="Gambar Soal" className="my-2" />
+                      <input type="file" className="bg-white file-input file-input-bordered file-input-primary w-full max-w-xs" onChange={e => setData('image', e.target.files[0])} />
+                      <InputError message={errors.image} className="mt-2" />
+                    </div>
 
-                    {data.image ?
-                      <div className='flex justify-center'>
-                        <img src={blobUrl()} alt="Gambar" className='h-60' />
-                      </div>
-                      : ""}
+                    {/* Question */}
+                    <div className="mt-2">
+                      <InputLabel htmlFor="question" value="Pertanyaan" />
+                      <TextInput
+                        type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={data.question} onChange={e => setData('question', e.target.value)}
+                      />
 
-                    <label className="label">
-                      <span className="label-text font-bold">Gambar</span>
-                    </label>
-                    <input type="file" className="bg-white file-input file-input-bordered file-input-primary w-full max-w-xs" onChange={e => setData('image', e.target.files[0])} />
-                    {errors.image && <div className='text-red-600'>{errors.image}</div>}
+                      <InputError message={errors.question} className="mt-2" />
+                    </div>
 
-                    <label className="label">
-                      <span className="label-text font-bold">Pertanyaan</span>
-                    </label>
-                    <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={data.question} onChange={e => setData('question', e.target.value)} />
-                    {errors.question && <div className='text-red-600'>{errors.question}</div>}
-
-                    <label className="label">
+                    {/* <label className="label">
                       <span className="label-text font-bold">Subject</span>
                     </label>
                     <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={data.subject} onChange={e => setData('subject', e.target.value)} />
-                    {errors.subject && <div className='text-red-600'>{errors.subject}</div>}
+                    {errors.subject && <div className='text-red-600'>{errors.subject}</div>} */}
 
-                    <label className="label">
-                      <span className="label-text font-bold">Point</span>
-                    </label>
-                    <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={data.point} onChange={e => setData('point', e.target.value)} onKeyPress={(event) => {
-                      if (!/[0-9]/.test(event.key)) {
-                        event.preventDefault();
-                      }
-                    }} />
-                    {errors.point && <div className='text-red-600'>{errors.point}</div>}
+                    <div className="mt-2">
+                      <InputLabel htmlFor="point" value="Point (Masukkan angka antara 1-9" />
+                      <TextInput
+                        type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={data.point} onChange={e => setData('point', e.target.value)} onKeyPress={(event) => {
+                          if (!/[0-9]/.test(event.key)) {
+                            event.preventDefault();
+                          }
+                        }}
+                      />
 
-                    <label className="label">
-                      <span className="label-text font-bold">Pilihan jawaban A</span>
-                    </label>
-                    <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={data.choice[0]} onChange={updateStateChoice(0)} />
-                    {errors["choice.0"] && <div className='text-red-600'>{errors["choice.0"].slice(-6) == "value." ? "Jawaban A mempunyai duplikat yang sama" : "Pilihan jawaban A harus diisi"}</div>}
+                      <InputError message={errors.point} className="mt-2" />
+                    </div>
 
-                    <label className="label">
-                      <span className="label-text font-bold">Pilihan jawaban B</span>
-                    </label>
-                    <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={data.choice[1]} onChange={updateStateChoice(1)} />
-                    {errors["choice.1"] && <div className='text-red-600'>{errors["choice.1"].slice(-6) == "value." ? "Jawaban B mempunyai duplikat yang sama" : "Pilihan jawaban B harus diisi"}</div>}
 
-                    <label className="label">
-                      <span className="label-text font-bold">Pilihan jawaban C</span>
-                    </label>
-                    <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={data.choice[2]} onChange={updateStateChoice(2)} />
-                    {errors["choice.2"] && <div className='text-red-600'>{errors["choice.2"].slice(-6) == "value." ? "Jawaban C mempunyai duplikat yang sama" : "Pilihan jawaban C harus diisi"}</div>}
+                    {/* A Choice */}
+                    <div className="mt-2">
+                      <InputLabel htmlFor="choice[0]" value="Pilihan jawaban A" />
+                      <TextInput
+                        id="choice[0]"
+                        type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={data.choice[0]} onChange={updateStateChoice(0)}
+                      />
 
-                    <label className="label">
-                      <span className="label-text font-bold">Pilihan jawaban D</span>
-                    </label>
-                    <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={data.choice[3]} onChange={updateStateChoice(3)} />
-                    {errors["choice.3"] && <div className='text-red-600'>{errors["choice.3"].slice(-6) == "value." ? "Jawaban D mempunyai duplikat yang sama" : "Pilihan jawaban D harus diisi"}</div>}
+                      {errors["choice.0"] && <div className='text-red-600'>{errors["choice.0"].slice(-6) == "value." ? "Jawaban A mempunyai duplikat yang sama" : "Pilihan jawaban A harus diisi"}</div>}
+                    </div>
 
-                    <label className="label">
-                      <span className="label-text font-bold">Jawaban soal</span>
-                    </label>
-                    <select className="bg-white select select-primary w-full max-w-xs" onChange={e => setData('actual_answer', e.target.value)}>
-                      <option value="" disabled selected>Pilih jawaban untuk soal</option>
-                      {data.choice.map((data, i) =>
-                        <option key={i}>{data}</option>
-                      )}
-                    </select>
-                    {errors.actual_answer && <div className='text-red-600'>{errors.actual_answer}</div>}
+                    {/* Choice B */}
+                    <div className="mt-2">
+                      <InputLabel htmlFor="choice[1]" value="Pilihan jawaban B" />
+                      <TextInput
+                        id="choice[1]" type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={data.choice[1]} onChange={updateStateChoice(1)}
+                      />
+
+                      {errors["choice.1"] && <div className='text-red-600'>{errors["choice.1"].slice(-6) == "value." ? "Jawaban B mempunyai duplikat yang sama" : "Pilihan jawaban B harus diisi"}</div>}
+                    </div>
+
+                    {/* Choice C */}
+                    <div className="mt-2">
+                      <InputLabel htmlFor="choice[2]" value="Pilihan jawaban C" />
+                      <TextInput
+                        id="choice[2]" type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={data.choice[2]} onChange={updateStateChoice(2)}
+                      />
+
+                      {errors["choice.2"] && <div className='text-red-600'>{errors["choice.2"].slice(-6) == "value." ? "Jawaban C mempunyai duplikat yang sama" : "Pilihan jawaban C harus diisi"}</div>}
+                    </div>
+
+                    {/* Choice D */}
+                    <div className="mt-2">
+                      <InputLabel htmlFor="choice[3]" value="Pilihan jawaban D" />
+                      <TextInput
+                        id="choice[3]" type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={data.choice[3]} onChange={updateStateChoice(3)}
+                      />
+
+                      {errors["choice.3"] && <div className='text-red-600'>{errors["choice.3"].slice(-6) == "value." ? "Jawaban D mempunyai duplikat yang sama" : "Pilihan jawaban D harus diisi"}</div>}
+                    </div>
+
+
+                    {/* Jawaban Soal */}
+                    <div className="mt-2">
+                      <InputLabel htmlFor="actual_answer" value="Jawaban soal" />
+                      <select className="bg-white select select-primary w-full max-w-xs"
+                        id='actual_answer' onChange={e => setData('actual_answer', e.target.value)}>
+                        <option value="" disabled selected>Pilih jawaban untuk soal</option>
+                        {data.choice.map((data, i) =>
+                          <option key={i}>{data}</option>
+                        )}
+                      </select>
+                      <InputError message={errors.actual_answer} className="mt-2" />
+
+                    </div>
+
+
+
 
 
                     <div className='flex justify-between'>
@@ -335,40 +368,50 @@ export default function AdminPageSoal({ auth, flash, title, exam, subject }) {
                   <h3 className="font-bold text-lg">Masukkan data soal</h3>
 
                   <form onSubmit={submitEssay}>
+                    <div className="">
+                      {image ?
+                        <div className='flex justify-center'>
+                          <img src={blobUrlEssay()} alt="Gambar" className='h-60' />
+                        </div>
+                        : ""}
 
-                    {image ?
-                      <div className='flex justify-center'>
-                        <img src={blobUrlEssay()} alt="Gambar" className='h-60' />
-                      </div>
-                      : ""}
+                      <InputLabel htmlFor="image" value="Gambar Soal" className="my-2" />
+                      <input id="image" type="file" className="bg-white file-input file-input-bordered file-input-primary w-full max-w-xs" onChange={e => setImage(e.target.files[0])} />
+                      <InputError message={errors.image} className="mt-2" />
+                    </div>
 
-                    <label className="label">
-                      <span className="label-text font-bold">Gambar</span>
-                    </label>
-                    <input type="file" className="bg-white file-input file-input-bordered file-input-primary w-full max-w-xs" onChange={e => setImage(e.target.files[0])} />
-                    {errors.image && <div className='text-red-600'>{errors.image}</div>}
+                    {/* Question */}
+                    <div className="mt-2">
+                      <InputLabel htmlFor="question" value="Pertanyaan" />
+                      <TextInput id="question" type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={question} onChange={e => setQuestion(e.target.value)} />
+                      <InputError message={errors.question} className="mt-2" />
+                    </div>
 
-                    <label className="label">
-                      <span className="label-text font-bold">Pertanyaan</span>
-                    </label>
-                    <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={question} onChange={e => setQuestion(e.target.value)} />
-                    {errors.question && <div className='text-red-600'>{errors.question}</div>}
+                    {/* Jawaban Soal */}
+                    <div className="mt-2">
+                      <InputLabel htmlFor="actual_answer" value="Jawaban soal" />
+                      <TextInput id="question" type="text" className="bg-white mb-2 input input-bordered input-primary w-full" onChange={e => setActualAnswer(e.target.value)} />
+                      <InputError message={errors.actual_answer} className="mt-2" />
 
-                    <label className="label">
+                    </div>
+                    {/* <label className="label">
                       <span className="label-text font-bold">Subject</span>
                     </label>
                     <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={subject} onChange={e => setSubject(e.target.value)} />
                     {errors.subject && <div className='text-red-600'>{errors.subject}</div>}
+ */}
+                    <div className="mt-2">
+                      <InputLabel htmlFor="point" value="Point (Masukkan angka antara 1-9)" />
 
-                    <label className="label">
-                      <span className="label-text font-bold">Point</span>
-                    </label>
-                    <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={point} onChange={e => setPoint(e.target.value)} onKeyPress={(event) => {
-                      if (!/[0-9]/.test(event.key)) {
-                        event.preventDefault();
-                      }
-                    }} />
-                    {errors.point && <div className='text-red-600'>{errors.point}</div>}
+                      <TextInput id="point" type="text" className="bg-white mb-2 input input-bordered input-primary w-full" onChange={e => setPoint(e.target.value)} onKeyPress={(event) => {
+                        if (!/[0-9]/.test(event.key)) {
+                          event.preventDefault();
+                        }
+                      }} />
+                      <InputError message={errors.point} className="mt-2" />
+
+                    </div>
+
 
                     <div className='flex justify-between'>
                       <button type="submit" className="btn btn-secondary mt-6" disabled={processing}>Submit</button>
@@ -394,77 +437,11 @@ export default function AdminPageSoal({ auth, flash, title, exam, subject }) {
               </dialog>
 
             </div>
-            {/* Subject Name */}
-            <div className="mt-4 w-1/3">
-              <InputLabel htmlFor="subject" value="Nama Materi Soal" />
-              <TextInput
-                id="subject"
-                type="text"
-                name="subject"
-                defaultValue={subject}
-                className="mt-1 block w-full "
-                onChange={(e) => setData('subject', e.target.value)}
-              />
 
-              <InputError message={errors.subject} className="mt-2" />
-            </div>
 
-            {/* Subject Duration */}
-            <div className="mt-4 w-1/3">
-              <InputLabel htmlFor="exam_duration" value="Durasi Ujian Soal" />
-              <TextInput
-                id="exam_duration"
-                type="text"
-                defaultValue={duration}
-                name="exam_duration"
-                className="mt-1 block w-full "
-                onChange={(e) => setData('exam_duration', e.target.value)}
-              />
 
-              <InputError message={errors.exam_duration} className="mt-2" />
-            </div>
-
-            <div className="mt-4 w-1/3">
-              <InputLabel htmlFor="tanggal_mulai" value="Tanggal Mulai Ujian" />
-              <TextInput
-                id="tanggal_mulai"
-                name="tanggal_mulai"
-                type="date"
-                // ini harus diconvert dulu nanti biar tampil
-                defaultValue={startDate}
-                className="my-2 block w-full bg-base"
-                onChange={(e) => setData('tanggal_mulai', e.target.value)}
-                placeholder="Masukkan Tanggal Mulai Lomba"
-
-              />
-              <InputError className="my-2" message={errors.tanggal_mulai} />
-            </div>
-
-            <div className="mt-4 w-1/3">
-              <InputLabel htmlFor="tanggal_berakhir" value="Tanggal Mulai Ujian" />
-              <TextInput
-                id="tanggal_berakhir"
-                name="tanggal_berakhir"
-                type="date"
-                // ini harus diconvert dulu nanti biar tampil
-                defaultValue={endDate}
-                className="my-2 block w-full bg-base"
-                onChange={(e) => setData('tanggal_berakhir', e.target.value)}
-                placeholder="Masukkan Tanggal Mulai Lomba"
-
-              />
-              <InputError className="my-2" message={errors.tanggal_berakhir} />
-            </div>
-
-            <button type='submit' disabled={processing}
-              // href="#my_modal_8"
-              className="my-13 btn-glass">Simpan
-              {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                <path strokeLinecap="round" strokeLinejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
-              </svg> */}
-            </button>
             {/* content */}
-            <section className="mt-20">
+            <section className="mt-12">
 
               {exam.map((data, i) => {
                 if (!data.is_essay) {
@@ -475,14 +452,14 @@ export default function AdminPageSoal({ auth, flash, title, exam, subject }) {
                         {data.image && <img src={'/storage/' + data.image} className='justify-start max-w-2xl'></img>}
                         <p>{i + 1}. {data.question} {'(' + data.point + ' points)'}</p>
                         <ul>
-                          <li className='font-bold'>A. {data.choice[0]}</li>
-                          <li className='font-bold'>B. {data.choice[1]}</li>
-                          <li className='font-bold'>C. {data.choice[2]}</li>
-                          <li className='font-bold'>D. {data.choice[3]}</li>
+                          <li className='font-medium'>A. {data.choice[0]}</li>
+                          <li className='font-medium'>B. {data.choice[1]}</li>
+                          <li className='font-medium'>C. {data.choice[2]}</li>
+                          <li className='font-medium'>D. {data.choice[3]}</li>
                         </ul>
                         <div className="card-actions justify-start">
                           {/* <button className="btn">Buy Now</button> */}
-                          <h1>Jawaban : {data.actual_answer}</h1>
+                          <h1>Jawaban : <strong> {data.actual_answer}</strong></h1>
                         </div>
 
                         <div className="card-actions justify-end">
@@ -521,79 +498,105 @@ export default function AdminPageSoal({ auth, flash, title, exam, subject }) {
                             <h3 className="font-bold text-lg">Edit data soal</h3>
 
                             <form onSubmit={editSoal}>
-
-                              {imageEdit ?
-                                <div className='flex justify-center'>
-                                  <img src={blobUrlEdit()} alt="Gambar" className='max-h-60' />
-                                </div>
-                                :
-                                <div className='flex justify-center'>
-                                  <img src={'/storage/' + data.image + imgDelete} className='max-h-60' />
-                                </div>
-                              }
-                              {/* {data.image && <img src={'/storage/'+data.image} className='max-h-32'></img>} */}
-                              <label className="label">
-                                <span className="label-text font-bold">Gambar</span>
-                              </label>
-                              <input type="file" className="bg-white file-input file-input-bordered file-input-primary w-full max-w-xs" onChange={e => setEditImage(e.target.files[0])} />
-                              <a className='mx-3 btn btn-primary' onClick={() => {
-                                setEditImage(null)
-                                setImgDelete('a')
-                                setIsDeleteImg(true)
-                              }}><IoTrashSharp></IoTrashSharp></a>
-
-                              <label className="label">
-                                <span className="label-text font-bold">Pertanyaan</span>
-                              </label>
-                              <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={questionEdit} onChange={(question) => setEditQuestion(question.target.value)} />
-
-                              <label className="label">
-                                <span className="label-text font-bold">Subject</span>
-                              </label>
-                              <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={subjectEdit} onChange={(subject) => setEditSubject(subject.target.value)} />
-
-                              <label className="label">
-                                <span className="label-text font-bold">Point</span>
-                              </label>
-                              <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={pointEdit} onChange={(point) => setEditPoint(point.target.value)} onKeyPress={(event) => {
-                                if (!/[0-9]/.test(event.key)) {
-                                  event.preventDefault();
+                              {/* Gambar Soal */}
+                              <div className="">
+                                {imageEdit ?
+                                  <div className='flex justify-center'>
+                                    <img src={blobUrlEdit()} alt="Gambar" className='max-h-60' />
+                                  </div>
+                                  :
+                                  <div className='flex justify-center'>
+                                    <img src={'/storage/exam-images' + data.image + imgDelete} className='max-h-60' />
+                                  </div>
                                 }
-                              }} />
 
-                              <label className="label">
-                                <span className="label-text font-bold">Pilihan jawaban A</span>
-                              </label>
-                              <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={choiceEdit[0]} onChange={updateStateEditChoice(0)} />
 
-                              <label className="label">
-                                <span className="label-text font-bold">Pilihan jawaban B</span>
-                              </label>
-                              <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={choiceEdit[1]} onChange={updateStateEditChoice(1)} />
+                                <InputLabel htmlFor="image" value="Gambar Soal" className="my-2" />
+                                <input id='image' type="file" className="bg-white file-input file-input-bordered file-input-primary w-full max-w-xs" onChange={e => setEditImage(e.target.files[0])} />
+                                <a className='mx-3 btn btn-primary' onClick={() => {
+                                  setEditImage(null)
+                                  setImgDelete('a')
+                                  setIsDeleteImg(true)
+                                }}><IoTrashSharp /></a>
+                              </div>
 
-                              <label className="label">
-                                <span className="label-text font-bold">Pilihan jawaban C</span>
-                              </label>
-                              <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={choiceEdit[2]} onChange={updateStateEditChoice(2)} />
+                              {/* Question */}
+                              <div className="mt-2">
+                                <InputLabel htmlFor="question" value="Pertanyaan" />
+                                <TextInput
+                                  id="question" type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={questionEdit} onChange={(question) => setEditQuestion(question.target.value)}
+                                />
+                              </div>
 
-                              <label className="label">
-                                <span className="label-text font-bold">Pilihan jawaban D</span>
-                              </label>
-                              <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={choiceEdit[3]} onChange={updateStateEditChoice(3)} />
+                              <div className="mt-2">
+                                <InputLabel htmlFor="point" value="Point (Masukkan angka antara 1-9)" />
 
-                              <label className="label">
-                                <span className="label-text font-bold">Jawaban soal</span>
-                              </label>
-                              <select className="bg-white select select-primary w-full max-w-xs" onChange={(answer) => setEditActualAnswer(answer.target.value)}>
-                                {choiceEdit.map((choice, i) => {
-                                  if (i == data.choice.indexOf(data.actual_answer)) {
-                                    return (<option key={i} selected>{choice}</option>)
-                                  } else {
-                                    return (<option key={i}>{choice}</option>)
+                                <TextInput id="point" type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={pointEdit} onChange={(point) => setEditPoint(point.target.value)} onKeyPress={(event) => {
+                                  if (!/[0-9]/.test(event.key)) {
+                                    event.preventDefault();
                                   }
-                                }
-                                )}
-                              </select>
+                                }} />
+                              </div>
+
+                              {/* A Choice */}
+                              <div className="mt-2">
+                                <InputLabel htmlFor="choice[0]" value="Pilihan jawaban A" />
+                                <TextInput
+                                  id="choice[0]"
+                                  type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={choiceEdit[0]} onChange={updateStateEditChoice(0)}
+                                />
+
+                              </div>
+
+
+                              {/* Choice B */}
+                              <div className="mt-2">
+                                <InputLabel htmlFor="choice[1]" value="Pilihan jawaban B" />
+                                <TextInput
+                                  id="choice[1]" type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={choiceEdit[1]} onChange={updateStateEditChoice(1)}
+                                />
+                              </div>
+
+                              {/* Choice C */}
+                              <div className="mt-2">
+                                <InputLabel htmlFor="choice[2]" value="Pilihan jawaban C" />
+                                <TextInput
+                                  id="choice[2]" type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={choiceEdit[2]} onChange={updateStateEditChoice(2)}
+                                />
+
+                                {errors["choice.2"] && <div className='text-red-600'>{errors["choice.2"].slice(-6) == "value." ? "Jawaban C mempunyai duplikat yang sama" : "Pilihan jawaban C harus diisi"}</div>}
+                              </div>
+
+                              {/* Choice D */}
+                              <div className="mt-2">
+                                <InputLabel htmlFor="choice[3]" value="Pilihan jawaban D" />
+                                <TextInput
+                                  id="choice[3]" type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={choiceEdit[3]} onChange={updateStateEditChoice(3)}
+                                />
+
+                                {errors["choice.3"] && <div className='text-red-600'>{errors["choice.3"].slice(-6) == "value." ? "Jawaban D mempunyai duplikat yang sama" : "Pilihan jawaban D harus diisi"}</div>}
+                              </div>
+
+
+                              {/* Jawaban Soal */}
+                              <div className="mt-2">
+                                <InputLabel htmlFor="actual_answer" value="Jawaban soal" />
+                                <select className="bg-white select select-primary w-full max-w-xs"
+                                  id='actual_answer' onChange={(answer) => setEditActualAnswer(answer.target.value)}>
+                                  {choiceEdit.map((choice, i) => {
+                                    if (i == data.choice.indexOf(data.actual_answer)) {
+                                      return (<option key={i} selected>{choice}</option>)
+                                    } else {
+                                      return (<option key={i}>{choice}</option>)
+                                    }
+                                  }
+                                  )}
+                                </select>
+                                <InputError message={errors.actual_answer} className="mt-2" />
+
+                              </div>
+
+
 
                               <div className='flex justify-between'>
                                 <button type="submit" className="btn btn-secondary mt-6">Save</button>
@@ -641,14 +644,14 @@ export default function AdminPageSoal({ auth, flash, title, exam, subject }) {
                         <p>{i + 1}. {data.question} {'(' + data.point + ' points)'}</p>
                         <div className="card-actions justify-start">
                           {/* <button className="btn">Buy Now</button> */}
-                          <h1>Jawaban : Essay</h1>
+                          <h1>Jawaban : <strong>{data.actual_answer}</strong></h1>
                         </div>
 
                         <div className="card-actions justify-end">
                           {/* <button className="btn">Buy Now</button> */}
                           <PrimaryButton onClick={() => {
                             setEditPoint(data.point);
-                            setEditActualAnswer("Jawaban essay");
+                            setEditActualAnswer(data.actual_answer);
                             setEditIsEssay(true);
                             setIdEdit(data.id);
                             setEditQuestion(data.question);
@@ -664,43 +667,55 @@ export default function AdminPageSoal({ auth, flash, title, exam, subject }) {
                             <h3 className="font-bold text-lg">Edit data soal</h3>
 
                             <form onSubmit={editSoal}>
-                              {imageEdit ?
-                                <div className='flex justify-center'>
-                                  <img src={blobUrlEdit()} alt="Gambar" className='max-h-60' />
-                                </div>
-                                :
-                                <div className='flex justify-center'>
-                                  <img src={'/storage/' + data.image + imgDelete} className='max-h-60' />
-                                </div>
-                              }
-                              <label className="label">
-                                <span className="label-text font-bold">Gambar</span>
-                              </label>
-                              <input type="file" className="bg-white file-input file-input-bordered file-input-primary w-full max-w-xs" onChange={e => setEditImage(e.target.files[0])} />
-                              <a className='btn btn-primary mx-3' onClick={() => {
-                                setEditImage(null)
-                                setImgDelete('a')
-                                setIsDeleteImg(true)
-                              }}><IoTrashSharp></IoTrashSharp></a>
+                              {/* Gambar Soal */}
+                              <div className="">
+                                {imageEdit ?
+                                  <div className='flex justify-center'>
+                                    <img src={blobUrlEdit()} alt="Gambar" className='max-h-60' />
+                                  </div>
+                                  :
+                                  <div className='flex justify-center'>
+                                    <img src={'/storage/exam-images/' + data.image + imgDelete} className='max-h-60' />
+                                  </div>
+                                }
+                                <InputLabel htmlFor="imageEdit" value="Gambar Soal" className="my-2" />
+                                <input id="imageEdit" type="file" className="bg-white file-input file-input-bordered file-input-primary w-full max-w-xs" onChange={e => setEditImage(e.target.files[0])} />
+                                <a className='btn btn-primary mx-3' onClick={() => {
+                                  setEditImage(null)
+                                  setImgDelete('a')
+                                  setIsDeleteImg(true)
+                                }}><IoTrashSharp /></a>
+                              </div>
 
-                              <label className="label">
-                                <span className="label-text font-bold">Pertanyaan</span>
-                              </label>
-                              <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={questionEdit} onChange={(question) => setEditQuestion(question.target.value)} />
+                              {/* Question */}
+                              <div className="mt-2">
 
-                              <label className="label">
+                                <InputLabel htmlFor="question" value="Pertanyaan" />
+                                <TextInput type="text" className="bg-white mb-2 input input-bordered input-primary w-full" defaultValue={questionEdit} onChange={(question) => setEditQuestion(question.target.value)} />
+                              </div>
+
+                              {/* Subject Name dk dibutuhin lagi */}
+                              {/* <label className="label">
                                 <span className="label-text font-bold">Subject</span>
                               </label>
-                              <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={subjectEdit} onChange={(subject) => setEditSubject(subject.target.value)} />
+                              <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={subjectEdit} onChange={(subject) => setEditSubject(subject.target.value)} /> */}
 
-                              <label className="label">
-                                <span className="label-text font-bold">Point</span>
-                              </label>
-                              <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={pointEdit} onChange={(point) => setEditPoint(point.target.value)} onKeyPress={(event) => {
-                                if (!/[0-9]/.test(event.key)) {
-                                  event.preventDefault();
-                                }
-                              }} />
+                              <div className="mt-2">
+                                <InputLabel htmlFor="point" value="Point (Masukkan angka antara 1-9)" />
+                                <TextInput type="text" className="bg-white mb-2 input input-bordered input-primary w-full" defaultValue={pointEdit} onChange={(point) => setEditPoint(point.target.value)} onKeyPress={(event) => {
+                                  if (!/[0-9]/.test(event.key)) {
+                                    event.preventDefault();
+                                  }
+                                }} />
+                              </div>
+
+                              <div className="mt-2">
+                                <InputLabel htmlFor="actual_answer" value="Jawaban soal" />
+                                <TextInput id="actual_answer" type="text" className="bg-white mb-2 input input-bordered input-primary w-full" defaultValue={actualAnswerEdit}
+                                />
+                                <InputError message={errors.actual_answer} className="mt-2" />
+
+                              </div>
 
                               <div className='flex justify-between'>
                                 <button type="submit" className="btn btn-secondary mt-6">Save</button>
@@ -738,9 +753,6 @@ export default function AdminPageSoal({ auth, flash, title, exam, subject }) {
               )}
 
             </section>
-
-
-
 
             {/* end of content               */}
           </div>

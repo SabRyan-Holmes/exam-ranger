@@ -14,17 +14,19 @@ return new class extends Migration
         Schema::create('exams', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('subject');
-            $table->dateTime('exam_started');
-            $table->dateTime('exam_ended');
-            $table->integer('exam_duration'); //in minutes
+            $table->foreignId('subject_id');
             $table->integer('point')->default(2);
             $table->string('question')->unique();
             $table->json('choice');
             $table->string('image')->nullable();
             $table->boolean('is_essay')->default(false);
-            $table->boolean('is_active')->default(false);
             $table->string('actual_answer');
+
+            // $table->string('subject');
+            // $table->dateTime('exam_started');
+            // $table->boolean('is_available')->default(true);
+            // $table->dateTime('exam_ended');
+            // $table->integer('exam_duration');
             
         });
     }

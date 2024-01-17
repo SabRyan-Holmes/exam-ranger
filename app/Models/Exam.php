@@ -19,18 +19,19 @@ class Exam extends Model
         'choice' => 'array'
     ];
 
-    // public function isEnded() {
-    //     if ($this->exam_ended > )
+    public function subject(): HasOne 
+    {
+        return $this->hasOne(Subject::class);
+    }
+
+    // public function getCorrectAnswerPoints()
+    // {
+    // return $this->point;
     // }
 
-    public function getCorrectAnswerPoints()
-    {
-    return $this->point;
-    }
-
-    public function scopeNonEssay($query)
-    {
-    return $query->where('is_essay', false);
-    }
+    // public function scopeNonEssay($query)
+    // {
+    // return $query->where('is_essay', false);
+    // }
     
 }

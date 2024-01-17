@@ -43,11 +43,12 @@ Route::prefix('dashboard')->middleware(['auth', 'verified', 'isAdmin'])->name('a
     Route::get('', [AdminController::class, 'index'])->name('dashboard');
     
     // CRUD Exam
-    Route::get('/soal', [AdminController::class, 'soal'])->name('soal');
+    Route::get('/soal', [AdminController::class, 'soal'])->name('soal-show');
     Route::post('/soal/delete-soal', [AdminController::class, 'destroy'])->name('soal-delete');
-    Route::get('/soal-ujian', [AdminController::class, 'tipeSoal'])->name('soal-tipe');
+    Route::get('/soal-ujian', [AdminController::class, 'all_subject'])->name('soal-tipe');
+    Route::post('/soal-ujian', [AdminController::class, 'upsert_subject'])->name('upsert-subject');
     Route::post('/soal/add-soal', [AdminController::class, 'store'])->name('create-soal');
-    Route::post('/soal/edit-soal', [AdminController::class, 'edit'])->name('edit-soal');
+    Route::post('/soal/update-soal', [AdminController::class, 'update'])->name('update-soal');
     
     // CRUD Peserta
     Route::get('/peserta', [AdminController::class, 'peserta'])->name('peserta');

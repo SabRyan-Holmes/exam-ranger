@@ -6,6 +6,7 @@ use App\Models\Exam;
 use App\Models\User;
 use App\Models\Overview;
 use App\Models\Answer;
+use App\Models\Subject;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Http\Requests\SoalUpdateRequest;
@@ -26,9 +27,9 @@ class AdminController extends Controller
     public function index()
     {
         $user = User::where('is_admin', false)->count();
-        $subject = Exam::all()->groupBy('subject')->count();
+        $subject = Subject::all()->count();
         $done = Overview::all()->groupBy('student_id')->count();
-        return Inertia::render('Admin/AdminPage', [
+        return Inertia::render('Admin/Dashboard', [
             'title' => "Administrator",
             'user' => $user,
             'subject' => $subject,
@@ -40,13 +41,12 @@ class AdminController extends Controller
     }
 
     public function soal(Request $request) {
-
-        $exam = Exam::where('subject', $request->subject)->get();
-        // ddd($request->subject);
-        return Inertia::render('Admin/AdminPageSoal', [
+        $exams = Exam::where('subject_id', $request->get('id'))->get();
+        return Inertia::render('Admin/CreateEditExam', [
             'title' => "Soal",
-            'exam' => $exam,
-            'subject' => $request->subject,
+            'exam' => $exams,
+            'subject' => $request->get('name'),
+            'subject_id' => $request->get('id'),
 
             // 'status' => session('status'),
         ]);
@@ -54,7 +54,7 @@ class AdminController extends Controller
 
     public function peserta() {
         $user = User::where('is_admin', false)->get();
-        return Inertia::render('Admin/AdminPagePeserta', [
+        return Inertia::render('Admin/ParticipantPage', [
             'title' => "Daftar Peserta",
             'user' => $user,
             // 'status' => session('status'),
@@ -75,35 +75,41 @@ class AdminController extends Controller
     public function store(SoalUpdateRequest $request)
     {
         if($request->isEssay) {
-            $validatedData = $request->validate([
-                'question' => "required",
-                'is_essay' => "required",
-                'actual_answer' => "required",
-                'subject' => "required",
+            $validaata = $request->validate([
+                'subject_id' => "required|integer",
+                'question' => "required|max:170",
+                'is_essay' => "required|boolean",
+                'actual_answer' => "required|max:70",
                 "choice" => "required|array|min:1",
-                "exam_started" => "required",
-                "exam_ended" => "required",
-                "exam_duration" => "required",
-                "point" => "required"
+                "point" => "required|integer"
+
+                // 'subject' => "required",
+                // "exam_started" => "required",
+                // "exam_ended" => "required",
+                // "exam_duration" => "required",
            ]);
         } else {
             $validatedData = $request->validate([
+                'subject_id' => "required|integer",
                 'question' => "required",
                 'is_essay' => "required",
                 'actual_answer' => "required",
-                'subject' => "required",
                 "choice" => "required|array|min:1",
                 'choice.*' => "required|string|distinct|min:1",
-                "exam_started" => "required",
-                "exam_ended" => "required",
-                "exam_duration" => "required",
                 "point" => "required"
+                
+                // 'subject' => "required",
+                // "exam_started" => "required",
+                // "exam_ended" => "required",
+                // "exam_duration" => "required",
            ]);
         }
        if($request->image != null) {
            $validatedData['image'] = $request->file('image')->store('exam-images');
        };
         Exam::create($validatedData);
+        // return Redirect::route('admin.soal')->with('message', 'Berhasil Menambahkan Soal');
+        // return back()->with('message', 'Berhasil Menambahkan Soal');
         return back()->with('message', 'suksesinput'.strval(rand()));
     }
 
@@ -140,18 +146,26 @@ class AdminController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(SoalUpdateRequest $request)
+    public function edit()
+    {
+       
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(SoalUpdateRequest $request)
     {
         $request->validate([
             'questionEdit' => "required",
             'actualAnswerEdit' => "required",
-            'subjectEdit' => "required",
+            'subjectEdit' => "required|integer",
             "choiceEdit" => "required|array|min:1",
             'choiceEdit.*' => "required|string|distinct|min:1",
             'pointEdit' => "required",
        ]);
        $data = Exam::find($request->id);
-       $data->subject = $request->subjectEdit;
+       $data->subject_id = $request->subjectEdit;
        $data->question = $request->questionEdit;
        $data->choice = $request->choiceEdit;
        $data->actual_answer = $request->actualAnswerEdit;
@@ -168,22 +182,15 @@ class AdminController extends Controller
        return back()->with('message', strval($request->id).strval(rand()));
     }
 
-    public function tipeSoal()
+    
+    public function all_subject()
     {
-        $exams = Exam::all()->groupBy('subject');
-        return Inertia::render('Admin/AdminPageSoalTipe', [
+        $subject = Subject::all();
+        return Inertia::render('Admin/SubjectPage', [
             'title' => "Materi Soal",
-            'exams' => $exams,
+            'subjects' => $subject,
             // 'status' => session('status'),
         ]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
     }
 
     /**
@@ -264,5 +271,52 @@ class AdminController extends Controller
             // 'status' => session('status'),
         ]);
     }
+
+    // Update or Insert
+    public function upsert_subject(Request $request) {
+        // dd($request);
+        $validated = $request->validate([
+            'id' => 'required|integer',
+            'name' => 'required|string|max:20|unique:subjects,name,' .$request->id,
+            'exam_duration' => 'required|integer|max:1000',
+            'exam_started' => 'required|date',
+            'exam_ended' => 'required|date',
+            'image' => 'nullable',
+            'is_available' => 'nullable',
+        ]);
+        
+        // Logic Image Nanti
+        if ($request->file('image')) {
+            $imageName = $request->name . '.' . $request->file('image')->getClientOriginalExtension();
+            $validated['image'] = $request->file('image')->storeAs('subject-img', $imageName);
+        }
+        
+        // Simpan jawaban
+        $subject = Subject::updateOrCreate(
+            [ 
+                // 'id' => $validated['id']
+                'name' => $validated['name'],
+
+            ],
+            [ 
+            'id' => $validated['id'],
+
+            // 'name' => $validated['name'],
+            'exam_duration' => $validated['exam_duration'],
+            'exam_started' => $validated['exam_started'],
+            'exam_ended' => $validated['exam_ended'],
+            'image' => $validated['image'],
+            'is_available' => true,
+            ]    
+        );
+
+        
+
+        dd($subject->wasRecentlyCreated);
+        return back()->with('message', ($subject->wasRecentlyCreated ? 'Berhasil Menambahkan Materi Ujian' : 'Berhasil Mengedit'));
+        
+    }
+
+
 
 }

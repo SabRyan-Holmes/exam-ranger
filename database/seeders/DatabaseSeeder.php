@@ -8,6 +8,7 @@ use Database\Seeders\ExamSeeder;
 use Database\Seeders\OverviewSeeder;
 use Database\Seeders\StudentSeeder;
 use Database\Seeders\AnswerSeeder;
+use Database\Seeders\SubjectSeeder;
 use App\Models\User;
 
 class DatabaseSeeder extends Seeder
@@ -29,9 +30,10 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             StudentSeeder::class,
-            ExamSeeder::class,
             OverviewSeeder::class,
-            AnswerSeeder::class
+            AnswerSeeder::class,
+            SubjectSeeder::class,
+            ExamSeeder::class,
         ]);
     }
 }
