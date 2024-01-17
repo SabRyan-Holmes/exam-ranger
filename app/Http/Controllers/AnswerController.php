@@ -33,7 +33,6 @@ class AnswerController extends Controller
      */
     public function store(Request $request)
     {
-
         $validatedData = $request->validate([
             'answer' => 'required|array|max:255',
             'student_id' => 'required',
@@ -42,15 +41,19 @@ class AnswerController extends Controller
         
         // Simpan jawaban
         $answer = Answer::updateOrCreate(
-            ['student_id' => $validatedData['student_id'], 'exam_subject' => $validatedData['exam_subject']],
+            [
+                'subject_id' => $request->subject_id, 
+                'exam_subject' => $validatedData['exam_subject'],
+                'student_id' => $validatedData['student_id'], 'exam_subject' => $validatedData['exam_subject']
+            ],
             [ 'answer' => $validatedData['answer']]    
         );
         
         // Ambil jawaban yang sesuai dengan urutan
         $studentAnswers = $validatedData['answer'];
         
-        // Ambil semua data exam berdasarkan subject
-        $exams = Exam::where('subject', $validatedData['exam_subject'])->get();
+        // Ambil semua data exam berdasarkan subject_id
+        $exams = Exam::where('subject_id', $request->subject_id)->get();
 
         // Loop melalui setiap exam
         foreach ($exams as $exam) {
@@ -91,7 +94,8 @@ class AnswerController extends Controller
             'mark' => $totalPoints,
             'average_mark' => $totalPoints,
             'final_mark' => $totalPoints,
-            'subject' => $validatedData['exam_subject']
+            'subject' => $validatedData['exam_subject'],
+            'subject_id' => $request->subject_id
         ]);
         $overview->save();
         

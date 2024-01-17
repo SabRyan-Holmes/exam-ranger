@@ -8,7 +8,7 @@ import InputError from '@/Components/InputError';
 import CountdownTimer from '@/Components/CountdownTimer';
 
 
-const ExamPage = ({ auth, exam, title, subject, timestampForTimer }) => {
+const ExamPage = ({ auth, exam, title, subject, subjectId, timestampForTimer }) => {
     const [active, setActive] = useState(0)
 
     // Logic Timer
@@ -16,6 +16,8 @@ const ExamPage = ({ auth, exam, title, subject, timestampForTimer }) => {
     console.log('isi timestamp' + timestampForTimer)
     console.log("data user")
     console.log(auth.user.name)
+    console.log("isi subjectId")
+    console.log(subjectId)
 
     // Submit Data to Answer db
 
@@ -37,6 +39,7 @@ const ExamPage = ({ auth, exam, title, subject, timestampForTimer }) => {
         answer: null,
         student_id: auth.user.id,
         exam_subject: subject,
+        subject_id: subjectId,
     });
 
     const datachoice = [
@@ -135,7 +138,7 @@ const ExamPage = ({ auth, exam, title, subject, timestampForTimer }) => {
                         </svg>
                         <div>
                             <p>Sisa waktu</p>
-                            <CountdownTimer countdownTimestampMs={timestampForTimer} subject={subject} auth={auth}/>
+                            <CountdownTimer countdownTimestampMs={timestampForTimer} subject={subject} auth={auth} />
                         </div>
                     </div>
 

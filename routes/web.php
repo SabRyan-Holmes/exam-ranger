@@ -54,19 +54,19 @@ Route::prefix('dashboard')->middleware(['auth', 'verified', 'isAdmin'])->name('a
     
     // CRUD Exam
     Route::get('/soal', [AdminController::class, 'soal'])->name('soal-show');
-    Route::post('/soal/add-soal', [AdminController::class, 'store'])->name('create-soal');
-    Route::post('/soal/update-soal', [AdminController::class, 'update'])->name('update-soal');
-    Route::post('/soal/delete-soal', [AdminController::class, 'destroy'])->name('soal-delete');
+    Route::post('/soal/add-soal', [AdminController::class, 'store_soal'])->name('create-soal');
+    Route::post('/soal/update-soal', [AdminController::class, 'update_soal'])->name('update-soal');
+    Route::post('/soal/delete-soal', [AdminController::class, 'destroy_soal'])->name('soal-delete');
     
     // CRUD Peserta
-    Route::get('/peserta', [AdminController::class, 'peserta'])->name('peserta');
+    Route::get('/peserta', [AdminController::class, 'all_peserta'])->name('peserta');
     Route::post('/peserta', [AdminController::class, 'store_peserta'])->name('create-peserta');
     Route::patch('/peserta', [AdminController::class, 'update_peserta'])->name('update-peserta');
     Route::delete('/peserta', [AdminController::class, 'destroy_peserta'])->name('delete-peserta');
 
     // CRUD Overview
     Route::get('/overview', [AdminController::class, 'overview'])->name('overview');
-    Route::get('/overview/subject', [AdminController::class, 'show_subject'])->name('show-subject');
+    Route::get('/overview/subject', [AdminController::class, 'overview_subject'])->name('show-subject');
     Route::post('/overview', [AdminController::class, 'store_overview'])->name('create-overview');
     Route::patch('/overview', [AdminController::class, 'update_overview'])->name('update-overview');
     Route::delete('/overview', [AdminController::class, 'destroy_overview'])->name('delete-overview');

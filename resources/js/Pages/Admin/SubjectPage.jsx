@@ -232,7 +232,7 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
                           <p className="mx-2">{moment(subject.exam_ended).format('LLL')}</p>
                         </td>
 
-                        <td>
+                        <td className="text-xs">
                           {moment(subject.created_at).format('L')}
                         </td>
                         <td className='text-xs'>

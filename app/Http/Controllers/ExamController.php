@@ -94,6 +94,7 @@ class ExamController extends Controller
         return Inertia::render('Exam/ExamPage', [
             'title' => "Exam",
             'subject' =>  $request->name,
+            'subjectId' => $request->id,
             'exam' => $exam,
             'timestampForTimer' => $timestampMs
             // 'status' => session('status'),

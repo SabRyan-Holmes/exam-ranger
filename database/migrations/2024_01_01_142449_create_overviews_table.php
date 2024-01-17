@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('student_id');
             $table->foreignId('answer_id');
+            $table->foreignId('subject_id');
             $table->string('subject');
             $table->boolean('is_correct');
             $table->double('mark')->nullable();
