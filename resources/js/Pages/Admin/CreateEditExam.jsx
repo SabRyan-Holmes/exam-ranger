@@ -19,6 +19,7 @@ import moment from "moment/min/moment-with-locales";
 
 export default function CreateEditExam({ auth, flash, title, exam, subject, subject_id }) {
   const [showSuccess, setShowSuccess] = useState(false)
+  console.log(subject_id)
   useEffect(() => {
     if (flash.message?.substr(0, 11) != null) {
       setShowSuccess(true)
@@ -35,7 +36,6 @@ export default function CreateEditExam({ auth, flash, title, exam, subject, subj
   const [isEssayEdit, setEditIsEssay] = useState(false);
   const [actualAnswerEdit, setEditActualAnswer] = useState(null);
   const [indexAns, setEditIndexAns] = useState(null);
-  const [subjectEdit, setEditSubject] = useState(subject_id);
 
   const [question, setQuestion] = useState('');
   const [choice, setChoice] = useState(["soal essay"]);
@@ -192,7 +192,7 @@ export default function CreateEditExam({ auth, flash, title, exam, subject, subj
 
   function editSoal(e) {
     e.preventDefault()
-
+    const subjectEdit = subject_id
     const edit = {
       id, imageEdit, questionEdit, subjectEdit, choiceEdit, actualAnswerEdit, isDeleteImg, pointEdit
     }
@@ -487,7 +487,6 @@ export default function CreateEditExam({ auth, flash, title, exam, subject, subj
                             setEditQuestion(data.question);
                             setEditChoice(choicess);
                             setEditActualAnswer(data.actual_answer);
-                            setEditSubject(data.subject);
                             document.getElementById('edit_data' + data.id.toString()).showModal()
                           }
                           }>Edit</PrimaryButton> <PrimaryButton onClick={() => confirmDelete(data.id)} >Delete</PrimaryButton>
@@ -620,7 +619,6 @@ export default function CreateEditExam({ auth, flash, title, exam, subject, subj
                                       setEditQuestion(data.question);
                                       setEditChoice(data.choice);
                                       setEditActualAnswer(data.actual_answer);
-                                      setEditSubject(data.subject);
                                       console.log(examState);
                                       console.log(flash.message)
                                     }}>Cancel</button>
@@ -656,7 +654,6 @@ export default function CreateEditExam({ auth, flash, title, exam, subject, subj
                             setIdEdit(data.id);
                             setEditQuestion(data.question);
                             setEditChoice(["soal essay"]);
-                            setEditSubject(data.subject);
                             document.getElementById('edit_data' + data.id.toString()).showModal()
                           }
                           }>Edit</PrimaryButton> <PrimaryButton onClick={() => { confirmDelete(data.id) }} >Delete</PrimaryButton>
@@ -693,12 +690,6 @@ export default function CreateEditExam({ auth, flash, title, exam, subject, subj
                                 <InputLabel htmlFor="question" value="Pertanyaan" />
                                 <TextInput type="text" className="bg-white mb-2 input input-bordered input-primary w-full" defaultValue={questionEdit} onChange={(question) => setEditQuestion(question.target.value)} />
                               </div>
-
-                              {/* Subject Name dk dibutuhin lagi */}
-                              {/* <label className="label">
-                                <span className="label-text font-bold">Subject</span>
-                              </label>
-                              <input type="text" className="bg-white mb-2 input input-bordered input-primary w-full" value={subjectEdit} onChange={(subject) => setEditSubject(subject.target.value)} /> */}
 
                               <div className="mt-2">
                                 <InputLabel htmlFor="point" value="Point (Masukkan angka antara 1-9)" />
