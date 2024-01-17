@@ -67,7 +67,7 @@ class ExamController extends Controller
      */
     public function show(Request $request)
     {
-        $exam = Exam::where('subject', $request->name)->get();
+        $exam = Exam::where('subject_id', $request->id)->get();
         
         function menitKeTimestamp($menit) {
             // Membuat objek DateTime untuk hari ini
