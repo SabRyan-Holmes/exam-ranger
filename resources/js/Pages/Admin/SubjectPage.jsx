@@ -93,7 +93,7 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
       confirmButtonText: 'Ya, saya yakin!'
     }).then((result) => {
       if (result.isConfirmed) {
-        router.delete(route('admin.delete-peserta', { id: id }), { preserveScroll: true })
+        router.delete(route('admin.delete-subject', { id: id }), { preserveScroll: true })
       }
     })
   }
@@ -164,6 +164,11 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
 
   console.log('isi isEdit ' + isEdit)
   console.log('isi name ' + data.name)
+
+  setTimeout(function () {
+    $('#successMessage').fadeOut('fast').remove();
+  }, 30000); // <-- time in milliseconds
+
   return (
     <div className='h-full'>
       <Head title={title} />
@@ -346,7 +351,7 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
                                 <div className="mt-4">
                                   <Link href={route('admin.soal-show', { id: data.id, name: data.name })} data={{ id: data.id, name: data.name }}>
                                     <PrimaryButton className="-ml-2">
-                                      Edit Soal
+                                      {isEdit ? (subject.exam.length ? 'Edit Soal' : 'Tambah Soal') : 'Tambah Soal'}
                                     </PrimaryButton>
                                   </Link>
                                 </div>
@@ -377,7 +382,7 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
                           {/* Dialog Edit End */}
 
                           {/* Button Delete */}
-                          <button className='transition-all bg-slate-500/80 -ml-5 scale-[0.6] btn glass '>
+                          <button onClick={() => confirmDelete(subject.id)} className='transition-all bg-slate-500/80 -ml-5 scale-[0.6] btn glass '>
                             <IconContext.Provider className=""
                               value={{ color: '#ef4444', size: '50px' }}
                             >
@@ -409,6 +414,13 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
 
               </table>
             </div>
+
+            {flash.message &&
+              <div id="successMessage" className="alert bg-primary/60 mx-auto mt-5" >
+                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <span>{flash.message}</span>
+              </div>
+            }
 
             {/* Dialog */}
 

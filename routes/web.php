@@ -50,6 +50,7 @@ Route::prefix('dashboard')->middleware(['auth', 'verified', 'isAdmin'])->name('a
     Route::get('/materi-ujian', [AdminController::class, 'all_subject'])->name('subject');
     Route::post('/materi-ujian', [AdminController::class, 'store_subject'])->name('create-subject');
     Route::patch('/materi-ujian', [AdminController::class, 'update_subject'])->name('update-subject');
+    Route::delete('/materi-ujian', [AdminController::class, 'destroy_subject'])->name('delete-subject');
     
     
     // CRUD Exam
