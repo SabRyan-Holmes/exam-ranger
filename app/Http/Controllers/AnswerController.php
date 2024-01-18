@@ -37,6 +37,7 @@ class AnswerController extends Controller
     {
         $user = User::where('id', Auth::user()->id);
         $user->update(['is_doing_exam' => false]);
+        $user->update(['exam_currently_doing' => null]);
         $validatedData = $request->validate([
             'answer' => 'required|array|max:255',
             'student_id' => 'required',

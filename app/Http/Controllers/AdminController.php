@@ -72,7 +72,7 @@ class AdminController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(SoalUpdateRequest $request)
+    public function store_soal(SoalUpdateRequest $request)
     {
         if($request->isEssay) {
             $validaata = $request->validate([

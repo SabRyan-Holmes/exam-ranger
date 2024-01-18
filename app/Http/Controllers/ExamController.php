@@ -67,7 +67,7 @@ class ExamController extends Controller
      */
     public function show(Request $request)
     {
-        $exam = Exam::where('subject_id', $request->id)->get();
+        $exam = Exam::where('subject_id', $request->id)->get()->toArray();
         $answered = Answer::where('student_id', Auth::user()->id)->get()->toArray();
         foreach ($answered as $answer) {
             if($answer['subject_id'] == $request->id) {
@@ -76,7 +76,7 @@ class ExamController extends Controller
         }
         $user = User::where('id', Auth::user()->id);
         $user->update(['is_doing_exam' => true]);
-        // $user->update(['which_exam_started' => $exam->]);
+        $user->update(['exam_currently_doing' => $exam[0]["subject_id"]]);
         
         function menitKeTimestamp($menit) {
             // Membuat objek DateTime untuk hari ini
@@ -104,6 +104,48 @@ class ExamController extends Controller
             'title' => "Exam",
             'subject' =>  $request->name,
             'subjectId' => $request->id,
+            'exam' => $exam,
+            'timestampForTimer' => $timestampMs
+            // 'status' => session('status'),
+        ]);
+    }
+
+    public function showCurrentWork(Request $request)
+    {
+        $exam = Exam::where('subject_id', Auth::user()->exam_currently_doing)->get()->toArray();
+        $subject = Subject::where('id', Auth::user()->exam_currently_doing)->get()->toArray();
+        $answered = Answer::where('student_id', Auth::user()->id)->get()->toArray();
+
+        $user = User::where('id', Auth::user()->id);
+        $user->update(['is_doing_exam' => true]);
+        $user->update(['exam_currently_doing' => $exam[0]["subject_id"]]);
+        
+        function menitKeTimestamp($menit) {
+            // Membuat objek DateTime untuk hari ini
+            $sekarang = new DateTime();
+        
+            // Menghitung waktu tambahan berdasarkan menit
+            $waktuTambahan = $menit * 60 * 1000;
+            // $waktuTambahan = menitKeTimestamp($menit);
+        
+            // Menambahkan waktu tambahan ke objek DateTime
+            $sekarang->add(new DateInterval('PT' . round($waktuTambahan / 1000) . 'S'));
+        
+            // Mendapatkan timestamp dalam milidetik
+            $timestamp = $sekarang->getTimestamp() * 1000;
+        
+            return $timestamp;
+        }
+        
+        // Contoh penggunaan fungsi
+        $menit = $subject[0]["exam_duration"];
+        $timestampMs = menitKeTimestamp($menit);
+        // dd($timestampMs);
+
+        return Inertia::render('Exam/ExamPage', [
+            'title' => "Exam",
+            'subject' =>  $subject[0]["name"],
+            'subjectId' => Auth::user()->exam_currently_doing,
             'exam' => $exam,
             'timestampForTimer' => $timestampMs
             // 'status' => session('status'),

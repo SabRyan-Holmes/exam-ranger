@@ -8,8 +8,14 @@ import InputError from '@/Components/InputError';
 import CountdownTimer from '@/Components/CountdownTimer';
 
 
-const ExamPage = ({ auth, exam, title, subject, subjectId, timestampForTimer }) => {
+const ExamPage = ({ auth, exam, title, subject, subjectId, timestampForTimer, flash }) => {
     const [active, setActive] = useState(0)
+
+    useEffect(() => {
+        if (flash.message?.substr(0, 12) == 'belumselesai') {
+            document.getElementById('modal_belum_selesai').showModal()
+        }
+    }, [flash.message]);
 
     // Logic Timer
 
@@ -249,6 +255,19 @@ const ExamPage = ({ auth, exam, title, subject, subjectId, timestampForTimer }) 
 
 
                 </div>
+
+                <dialog id="modal_belum_selesai" className="modal">
+                <div className="modal-box w-11/12 max-w-5xl">
+                    <h3 className="font-bold text-lg">Akses ditolak!</h3>
+                    <p className="py-4">Anda tidak bisa mengakses menu yang lain sebelum mengumpul jawaban soal subjek ini</p>
+                    <div className="modal-action">
+                    <form method="dialog">
+                        {/* if there is a button, it will close the modal */}
+                        <button className="btn">Close</button>
+                    </form>
+                    </div>
+                </div>
+                </dialog>
 
             </div>
 

@@ -36,6 +36,7 @@ Route::middleware('auth', 'verified', 'isDoingExamCheck')->group(function () {
 Route::middleware('auth', 'verified')->group(function () {
     Route::post('/exam', [AnswerController::class, 'store'])->name('exam.submit');
     Route::get('/exam', [ExamController::class, 'show'])->name('exam.show');
+    Route::get('/exam-current', [ExamController::class, 'showCurrentWork'])->name('exam.show.current');
     Route::get('/exam/done', [AnswerController::class, 'show'])->name('exam.done');
 });
 
@@ -73,7 +74,7 @@ Route::prefix('dashboard')->middleware(['auth', 'verified', 'isAdmin'])->name('a
 });
 
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth', 'isDoingExamCheck')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

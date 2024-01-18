@@ -14,7 +14,7 @@ import no_data from "@/../assets/no_data.svg";
 export default function StudentHome({ auth, subjectExam, submitted, flash }) {
     const anchor = useRef('subject')
     const [date, setDate] = useState(new Date());
-    console.log("isi data" + subjectExam)
+    console.log(subjectExam)
     const onChange = () => {
         setDate(date);
     }
