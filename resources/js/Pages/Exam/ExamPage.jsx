@@ -144,7 +144,7 @@ const ExamPage = ({ auth, exam, title, subject, subjectId, timestampForTimer, fl
                         </svg>
                         <div>
                             <p>Sisa waktu</p>
-                            <CountdownTimer countdownTimestampMs={timestampForTimer} subject={subject} auth={auth} />
+                            <CountdownTimer countdownTimestampMs={timestampForTimer} subject={subject} auth={auth} handleSubmit={handleSubmit} />
                         </div>
                     </div>
 

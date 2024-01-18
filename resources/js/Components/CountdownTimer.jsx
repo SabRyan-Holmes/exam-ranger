@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { getRemainingTimeUntilMsTimestamp } from '@/Utils/CountdownTimerUtils';
 
 
-const CountdownTimer = ({ countdownTimestampMs, subject, auth }) => {
+const CountdownTimer = ({ countdownTimestampMs, subject, auth, handleSubmit }) => {
     const [remainingTime, setRemainingTime] = useState({
         seconds: '00',
         minutes: '00',
@@ -33,8 +33,19 @@ const CountdownTimer = ({ countdownTimestampMs, subject, auth }) => {
     function updateRemainingTime(countdown) {        
         if(localStorage.getItem("timestamp"+subject+auth.user.name) == null) {
             setRemainingTime(getRemainingTimeUntilMsTimestamp(countdown));
+            if(                
+                getRemainingTimeUntilMsTimestamp(countdown).seconds == 0 && getRemainingTimeUntilMsTimestamp(countdown).minutes == 0 && getRemainingTimeUntilMsTimestamp(countdown).hours == 0 && getRemainingTimeUntilMsTimestamp(countdown).days == 0 
+                ) {
+                    handleSubmit()
+                }
         } else {
             setRemainingTime(getRemainingTimeUntilMsTimestamp(timestampForLocalPerma));
+            if(                
+                getRemainingTimeUntilMsTimestamp(timestampForLocalPerma).seconds == 0 && getRemainingTimeUntilMsTimestamp(timestampForLocalPerma).minutes == 0 && getRemainingTimeUntilMsTimestamp(timestampForLocalPerma).hours == 0 && getRemainingTimeUntilMsTimestamp(timestampForLocalPerma).days == 0 
+                ) {
+                    handleSubmit()
+                }
+
         }
         tempCountdown = tempCountdown - 250
         localStorage.setItem("timestamp" + subject + auth.user.name, tempCountdown)
