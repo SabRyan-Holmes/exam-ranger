@@ -15,7 +15,6 @@ class SubjectSeeder extends Seeder
     {
         Subject::create([
             'name' => "Subject_1",
-            'slug' => "subject-1",
             'exam_started' => "2024-01-04 08:00:00",
             'exam_ended' => "2024-01-15 23:00:00",
             'exam_duration' => 120,
@@ -24,7 +23,6 @@ class SubjectSeeder extends Seeder
 
         Subject::create([
             'name' => "Subject_2",
-            'slug' => "subject-2",
             'exam_started' => "2024-01-06 08:00:00",
             'exam_ended' => "2024-01-16 23:00:00",
             'exam_duration' => 90,
@@ -33,7 +31,6 @@ class SubjectSeeder extends Seeder
 
         Subject::create([
             'name' => "Subject_3",
-            'slug' => "subject-3",
             'exam_started' => "2024-01-09 08:00:00",
             'exam_ended' => "2024-01-17 23:00:00",
             'exam_duration' => 120,

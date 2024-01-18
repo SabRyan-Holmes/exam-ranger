@@ -14,7 +14,7 @@ import { router } from '@inertiajs/react';
 import subjectImage from '@/../assets/subject_image.jpg';
 import { FiEye } from "react-icons/fi";
 import moment from "moment/min/moment-with-locales";
-import { FaUserEdit } from "react-icons/fa";
+import { FaRegEdit } from "react-icons/fa";
 import { IoTrashSharp } from "react-icons/io5";
 import TextInput from '@/Components/TextInput';
 import InputLabel from '@/Components/InputLabel';
@@ -93,7 +93,7 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
       confirmButtonText: 'Ya, saya yakin!'
     }).then((result) => {
       if (result.isConfirmed) {
-        router.delete(route('admin.delete-peserta', { id: id }), { preserveScroll: true })
+        router.delete(route('admin.delete-subject', { id: id }), { preserveScroll: true })
       }
     })
   }
@@ -164,6 +164,11 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
 
   console.log('isi isEdit ' + isEdit)
   console.log('isi name ' + data.name)
+
+  setTimeout(function () {
+    $('#successMessage').fadeOut('fast').remove();
+  }, 30000); // <-- time in milliseconds
+
   return (
     <div className='h-full'>
       <Head title={title} />
@@ -178,7 +183,6 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
             <div className='flex justify-between'>
               <h1 className='font-bold'>Daftar Subject Ujian</h1>
               <PrimaryButton onClick={() => { openDialog(null) }} >Tambah Materi Ujian
-
               </PrimaryButton>
             </div>
 
@@ -236,7 +240,7 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
                           {moment(subject.created_at).format('L')}
                         </td>
                         <td className='text-xs'>
-                          {moment(subject.updated_at).fromNow('')}
+                          {moment(subject.updated_at).fromNow()}
                         </td>
 
                         <td className="flex justify-start">
@@ -254,7 +258,7 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
                             <IconContext.Provider
                               value={{ color: '#16a34a', size: '50px' }}
                             >
-                              <FaUserEdit className='max-h-7' />
+                              <FaRegEdit className='max-h-7' />
                             </IconContext.Provider>
                           </button>
 
@@ -347,7 +351,7 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
                                 <div className="mt-4">
                                   <Link href={route('admin.soal-show', { id: data.id, name: data.name })} data={{ id: data.id, name: data.name }}>
                                     <PrimaryButton className="-ml-2">
-                                      Edit Soal
+                                      {isEdit ? (subject.exam.length ? 'Edit Soal' : 'Tambah Soal') : 'Tambah Soal'}
                                     </PrimaryButton>
                                   </Link>
                                 </div>
@@ -378,7 +382,7 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
                           {/* Dialog Edit End */}
 
                           {/* Button Delete */}
-                          <button className='transition-all bg-slate-500/80 -ml-5 scale-[0.6] btn glass '>
+                          <button onClick={() => confirmDelete(subject.id)} className='transition-all bg-slate-500/80 -ml-5 scale-[0.6] btn glass '>
                             <IconContext.Provider className=""
                               value={{ color: '#ef4444', size: '50px' }}
                             >
@@ -410,6 +414,19 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
 
               </table>
             </div>
+            {flash.message &&
+              <div className="alert bg-primary/60 mx-auto mt-5">
+                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <span>{flash.message}</span>
+              </div>
+            }
+
+            {flash.message &&
+              <div id="successMessage" className="alert bg-primary/60 mx-auto mt-5" >
+                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <span>{flash.message}</span>
+              </div>
+            }
 
             {/* Dialog */}
 

@@ -391,71 +391,7 @@ export default function AdminPagePeserta({ auth, user, flash, title }) {
 
                   )}
 
-                  <tr>
-                    <td>
-                      <div className="flex items-center gap-3">
-                        <div className="avatar">
-                          <div className="mask mask-squircle w-12 h-12">
-                            <img src={profile} alt="Avatar Tailwind CSS Component" />
-                          </div>
-                        </div>
-                        <div>
-                          <div className="font-bold">Hart Hagerty</div>
-                          <div className="text-sm opacity-50">United States</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      09021282126114
-                      <br />
-                      <span className="badge badge-ghost badge-sm">fiqrijambi@gmail.com</span>
-                    </td>
-                    <td>Sudah selesai</td>
-                    <td className='flex'>
 
-                      <button onClick={() => { openEditDialog(data.id, data.name, data.nim, data.email) }} className='bg-slate-500/80 px-8 scale-75 btn glass'>
-                        <FiEye className='scale-[2.4] stroke-yellow-500'
-                        // value={{ color: '#16a34a', size: '50px' }}
-                        >
-                          {/* <FaUserEdit className='max-h-7' /> */}
-                        </FiEye>
-                      </button>
-
-                      {/* Button Edit */}
-                      <button onClick={() => { openEditDialog(data.id, data.name, data.nim, data.email) }} className='bg-slate-500/80  scale-75 btn glass'>
-                        <IconContext.Provider
-                          value={{ color: '#16a34a', size: '50px' }}
-                        >
-                          <FaUserEdit className='max-h-7' />
-                        </IconContext.Provider>
-                      </button>
-                      <button onClick={() => confirmDelete(data.id)} className='transition-all bg-slate-500/80 text- scale-75 btn glass '>
-                        <IconContext.Provider className=""
-                          value={{ color: '#ef4444', size: '50px' }}
-                        >
-                          <IoTrashSharp className='max-h-7' />
-                        </IconContext.Provider>
-
-                      </button>
-                    </td>
-
-                    {/* <td><PrimaryButton className='scale-75'>
-
-                      <IconContext.Provider
-                        value={{ color: 'white', size: '50px' }}
-                      >
-                        <FaUserEdit className='max-h-7' />
-                      </IconContext.Provider>
-                    </PrimaryButton>
-                      <PrimaryButton className='scale-75'>
-                        <IconContext.Provider
-                          value={{ color: 'white', size: '50px' }}
-                        >
-                          <IoTrashSharp className='max-h-7' />
-                        </IconContext.Provider>
-                      </PrimaryButton>
-                    </td> */}
-                  </tr>
 
 
                 </tbody>
