@@ -100,6 +100,11 @@ class AdminController extends Controller
     }
 
  
+    public function destroy_subject(Request $request)
+    {
+        Subject::destroy($request->id);
+        return back()->with('message', 'Materi Ujian Berhasil Dihapus');
+    }
 
     public function soal(Request $request) {
         $exams = Exam::where('subject_id', $request->get('id'))->get();
