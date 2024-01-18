@@ -36,41 +36,42 @@ class AnswerController extends Controller
     public function store(Request $request)
     {
         $user = User::where('id', Auth::user()->id);
-        $user->update(['is_doing_exam' => false]);
-        $user->update(['exam_currently_doing' => null]);
+        
         $validatedData = $request->validate([
             'answer' => 'required|array|max:255',
-            'student_id' => 'required',
-            'exam_subject' => 'required|max:20',
+            'participant_id' => 'required',
         ]);
         
         // Simpan jawaban
         $answer = Answer::updateOrCreate(
             [
                 'subject_id' => $request->subject_id, 
-                'exam_subject' => $validatedData['exam_subject'],
-                'student_id' => $validatedData['student_id'], 'exam_subject' => $validatedData['exam_subject']
+                'participant_id' => $validatedData['participant_id'], 
             ],
             [ 'answer' => $validatedData['answer']]    
         );
         
         // Ambil jawaban yang sesuai dengan urutan
-        $studentAnswers = $validatedData['answer'];
+        $AllstudentAnswers = $validatedData['answer'];
         
         // Ambil semua data exam berdasarkan subject_id
         $exams = Exam::where('subject_id', $request->subject_id)->get();
 
         // Loop melalui setiap exam
-        foreach ($exams as $exam) {
-            // Tambah ke array
-            $actualAnswers[] = $exam->actual_answer;
-            $points[] = $exam->point;
+        foreach ($exams as $key=>$exam) {
+            // Tambah ke array (ambil yg pilgan saja)
+            if($exam->is_essay == false) {
+                $actualAnswers[] = $exam->actual_answer;
+                $studentAnswers[] = $AllstudentAnswers[$key];
+                $points[] = $exam->point;
+            }
         }
         
         // Zip & Urutkan
         $pairedData = collect($studentAnswers)
             ->zip($actualAnswers, $points);
         
+        // ddd($pairedData);
         // Hitung jawaban yang benar dan jumlahkan poinnya
         $correctAnswers = $pairedData
             ->filter(function ($pair) {
@@ -91,19 +92,17 @@ class AnswerController extends Controller
         // Masukkan ke tabel Overview Sementara
         
         // Simpan informasi di tabel Overview
-        $overview = new Overview([
-            'student_id' => $validatedData['student_id'],
+        Overview::create([
+            'participant_id' => $validatedData['participant_id'],
             'answer_id' => $answer->id,
+            'subject_id' => $request->subject_id,
             // Nanti diubah jadi banyak yang total benar be
-            'is_correct' => $correctAnswered,
-            'mark' => $totalPoints,
-            'average_mark' => $totalPoints,
-            'final_mark' => $totalPoints,
-            'subject' => $validatedData['exam_subject'],
-            'subject_id' => $request->subject_id
+            'multiple_choice_correct' => $correctAnswered,
+            'temporary_mark' => $totalPoints,
         ]);
-        $overview->save();
         
+        $user->update(['is_doing_exam' => false]);
+        $user->update(['exam_currently_doing' => null]);
         return Redirect::route('home');
 
     }

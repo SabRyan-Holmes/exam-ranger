@@ -21,13 +21,6 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->boolean('is_essay')->default(false);
             $table->string('actual_answer');
-
-            // $table->string('subject');
-            // $table->dateTime('exam_started');
-            // $table->boolean('is_available')->default(true);
-            // $table->dateTime('exam_ended');
-            // $table->integer('exam_duration');
-            
         });
     }
 

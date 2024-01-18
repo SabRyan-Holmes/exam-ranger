@@ -28,10 +28,6 @@ class Answer extends Model
         return $this->belongsTo(User::class);
     }
 
-    // public function exam_subject()
-    // {
-    //     return $this->hasOne(Exam::class, 'exam_subject');
-    // }
 
     public function scopeNonEssay($query)
     {

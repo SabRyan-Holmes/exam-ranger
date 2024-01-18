@@ -13,7 +13,7 @@ class Overview extends Model
 
     public function participant()
     {
-        return $this->belongsTo(User::class, 'student_id');
+        return $this->belongsTo(User::class, 'participant_id');
     }
 
 

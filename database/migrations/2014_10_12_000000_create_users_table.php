@@ -20,7 +20,6 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->integer('phone')->nullable();
             $table->string('profil_pic')->nullable();
-            // $table->json('answer_id')->nullable();
             $table->string('password');
             $table->string('exam_currently_doing')->nullable();
             $table->boolean('is_doing_exam')->default(false);

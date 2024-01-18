@@ -28,7 +28,7 @@ class AdminController extends Controller
     {
         $user = User::where('is_admin', false)->count();
         $subject = Subject::all()->count();
-        $done = Overview::all()->groupBy('student_id')->count();
+        $done = Overview::all()->groupBy('participant_id')->count();
         return Inertia::render('Admin/Dashboard', [
             'title' => "Administrator",
             'user' => $user,
@@ -274,7 +274,7 @@ class AdminController extends Controller
     {
         // ddd($request->user_id);
         // Berdasarkan Subject dari Peserta dan overview nilai 
-        $overviews = Overview::where('student_id', $request->user_id )->with('subject','answered')->get();
+        $overviews = Overview::where('participant_id', $request->user_id )->with('subject','answered')->get();
         $participant = User::find($request->user_id);
         return Inertia::render('Admin/AnsweredSubject', [
             'title' => "Materi Soal ",

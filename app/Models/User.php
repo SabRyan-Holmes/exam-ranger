@@ -47,7 +47,7 @@ class User extends Authenticatable
 
     public function answered()
     {
-        return $this->hasMany(Answer::class, 'student_id');
+        return $this->hasMany(Answer::class, 'participant_id');
     }
 
     public function overview()

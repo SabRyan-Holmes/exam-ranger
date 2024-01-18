@@ -34,7 +34,7 @@ class ExamController extends Controller
     public function all()
     {
         $exams = Subject::where('is_available', true)->get();
-        $answered = Answer::where('student_id', Auth::user()->id)->get();
+        $answered = Answer::where('participant_id', Auth::user()->id)->get();
         // $overview_ = $overview->makeHidden(['mark', 'final_mark', 'is_correct', 'average_mark']);
         return Inertia::render('StudentHome', [
             'title' => "Exam",
@@ -67,8 +67,11 @@ class ExamController extends Controller
      */
     public function show(Request $request)
     {
-        $exam = Exam::where('subject_id', $request->id)->get()->toArray();
-        $answered = Answer::where('student_id', Auth::user()->id)->get()->toArray();
+        // $examHidden = Exam::where('subject_id', $request->id)->makeHidden(['actual_answer'])->get()->toArray();
+        
+        $exam = Exam::where('subject_id', $request->id)->get()->makeHidden(['actual_answer'])->toArray();
+
+        $answered = Answer::where('participant_id', Auth::user()->id)->get()->toArray();
         foreach ($answered as $answer) {
             if($answer['subject_id'] == $request->id) {
                 return back()->with('message', 'sudahselesai'.strval(rand()));
@@ -112,13 +115,13 @@ class ExamController extends Controller
 
     public function showCurrentWork(Request $request)
     {
-        $exam = Exam::where('subject_id', Auth::user()->exam_currently_doing)->get()->toArray();
+        $exam = Exam::where('subject_id', Auth::user()->exam_currently_doing)->get()->makeHidden(['actual_answer'])->toArray();
         $subject = Subject::where('id', Auth::user()->exam_currently_doing)->get()->toArray();
-        $answered = Answer::where('student_id', Auth::user()->id)->get()->toArray();
+        $answered = Answer::where('participant_id', Auth::user()->id)->get()->toArray();
 
         $user = User::where('id', Auth::user()->id);
         $user->update(['is_doing_exam' => true]);
-        $user->update(['exam_currently_doing' => $exam[0]["subject_id"]]);
+        $user->update(['exam_currently_doing' => Auth::user()->exam_currently_doing]);
         
         function menitKeTimestamp($menit) {
             // Membuat objek DateTime untuk hari ini

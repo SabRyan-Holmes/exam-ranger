@@ -43,7 +43,7 @@ const ExamPage = ({ auth, exam, title, subject, subjectId, timestampForTimer, fl
 
     const { data, post, processing, recentlySuccessful } = useForm({
         answer: null,
-        student_id: auth.user.id,
+        participant_id: auth.user.id,
         exam_subject: subject,
         subject_id: subjectId,
     });
@@ -125,9 +125,6 @@ const ExamPage = ({ auth, exam, title, subject, subjectId, timestampForTimer, fl
     function handleSubmit() {
         data.answer = answer
         post(route('exam.submit', { data }));
-        console.log(`isi data ke database ${data}`)
-        console.log("done ???")
-
     }
 
     return (
@@ -257,16 +254,16 @@ const ExamPage = ({ auth, exam, title, subject, subjectId, timestampForTimer, fl
                 </div>
 
                 <dialog id="modal_belum_selesai" className="modal">
-                <div className="modal-box w-11/12 max-w-5xl">
-                    <h3 className="font-bold text-lg">Akses ditolak!</h3>
-                    <p className="py-4">Anda tidak bisa mengakses menu yang lain sebelum mengumpul jawaban soal subjek ini</p>
-                    <div className="modal-action">
-                    <form method="dialog">
-                        {/* if there is a button, it will close the modal */}
-                        <button className="btn">Close</button>
-                    </form>
+                    <div className="modal-box w-11/12 max-w-5xl">
+                        <h3 className="font-bold text-lg">Akses ditolak!</h3>
+                        <p className="py-4">Anda tidak bisa mengakses menu yang lain sebelum mengumpul jawaban soal subjek ini</p>
+                        <div className="modal-action">
+                            <form method="dialog">
+                                {/* if there is a button, it will close the modal */}
+                                <button className="btn">Close</button>
+                            </form>
+                        </div>
                     </div>
-                </div>
                 </dialog>
 
             </div>

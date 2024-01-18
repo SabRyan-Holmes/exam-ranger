@@ -14,10 +14,8 @@ return new class extends Migration
         Schema::create('answers', function (Blueprint $table) {
             $table->id();
             $table->json('answer');
-            $table->json('is_essay')->nullable();
-            $table->foreignId('student_id');
+            $table->foreignId('participant_id');
             $table->foreignId('subject_id');
-            $table->string('exam_subject');
             $table->timestamps();
         });
     }
