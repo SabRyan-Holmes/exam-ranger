@@ -40,6 +40,67 @@ class AdminController extends Controller
         ]);
     }
 
+    public function all_subject()
+    {
+        $subject = Subject::all();
+        return Inertia::render('Admin/SubjectPage', [
+            'title' => "Materi Soal",
+            'subjects' => $subject,
+            // 'status' => session('status'),
+        ]);
+    }
+
+       // Create
+       public function store_subject(Request $request) {
+        // dd($request);
+        $validated = $request->validate([
+            'name' => 'required|string|max:20|unique:subjects,name,' .$request->id,
+            'exam_duration' => 'required|integer|max:1000',
+            'exam_started' => 'required|date',
+            'exam_ended' => 'required|date',
+            'image' => 'nullable|image|file|max:8000',
+        ]);
+        
+        // Logic Image Nanti
+        if ($request->file('image')) {
+            $imageName = $request->name . '.' . $request->file('image')->getClientOriginalExtension();
+            $validated['image'] = $request->file('image')->storeAs('subject-img', $imageName);
+        }
+        
+        // Simpan jawaban
+        $subject = Subject::create($validated);
+        return back()->with('message', 'Berhasil Menambahkan Materi Ujian Baru');
+        
+    }
+
+     // Update 
+     public function update_subject(Request $request) {
+        // dd($request->id);
+        // Rules
+        $validated = $request->validate([
+            'name' => 'required|string|max:20|unique:subjects,name,' .$request->id,
+            'exam_duration' => 'required|integer|max:1000',
+            'exam_started' => 'required|date',
+            'exam_ended' => 'required|date',
+            'image' => 'nullable|image|file|max:8000',
+            'is_available' => 'nullable',
+        ]);
+        
+        // Logic Image Nanti
+        if ($request->file('image')) {
+            $imageName = $request->name . '.' . $request->file('image')->getClientOriginalExtension();
+            $validated['image'] = $request->file('image')->storeAs('subject-img', $imageName);
+        }
+        
+        // Simpan Update
+        Subject::where('id', $request->id)
+        ->update($validated);
+        return back()->with('message', 'Berhasil Mengedit Materi Ujian');
+        
+    }
+
+ 
+
     public function soal(Request $request) {
         $exams = Exam::where('subject_id', $request->get('id'))->get();
         return Inertia::render('Admin/CreateEditExam', [
@@ -52,26 +113,6 @@ class AdminController extends Controller
         ]);
     }
 
-    public function peserta() {
-        $user = User::where('is_admin', false)->get();
-        return Inertia::render('Admin/ParticipantPage', [
-            'title' => "Daftar Peserta",
-            'user' => $user,
-            // 'status' => session('status'),
-        ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store_soal(SoalUpdateRequest $request)
     {
         if($request->isEssay) {
@@ -101,50 +142,7 @@ class AdminController extends Controller
         return back()->with('message', 'suksesinput'.strval(rand()));
     }
 
-    public function store_peserta(Request $request)
-    {
-        $request->validate([
-            'name' => "required|string|min:2|max:30",
-            'nim' => "required|min:9|max:12|unique:users",
-            'email' => "nullable||string|email:unique|max:40|unique:users",
-            "password" => ['required', 'confirmed', Rules\Password::defaults()],
-       ]);
-
-       $user = User::create([
-        'name' => $request->name,
-        'email' => $request->email,
-        'nim' => $request->nim,
-        'password' => Hash::make($request->password),
-        ]);
-
-        event(new Registered($user));
-        return back()->with('message', 'Berhasil Menambahkan Peserta');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    public function editSubject(SoalUpdateRequest $request) {
-        dd($request);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit()
-    {
-       
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(SoalUpdateRequest $request)
+    public function update_soal(SoalUpdateRequest $request)
     {
         $request->validate([
             'questionEdit' => "required",
@@ -173,20 +171,12 @@ class AdminController extends Controller
     }
 
     
-    public function all_subject()
-    {
-        $subject = Subject::all();
-        return Inertia::render('Admin/SubjectPage', [
-            'title' => "Materi Soal",
-            'subjects' => $subject,
-            // 'status' => session('status'),
-        ]);
-    }
+   
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(SoalUpdateRequest $request)
+    public function destroy_soal(SoalUpdateRequest $request)
     {
         $data = Exam::find($request->id);
         $data->delete();
@@ -194,10 +184,39 @@ class AdminController extends Controller
     }
 
 
-    // public function edit()
-    // {   
-    //     return Inertia::render()
-    // }
+    public function all_peserta() {
+        $user = User::where('is_admin', false)->get();
+        return Inertia::render('Admin/ParticipantPage', [
+            'title' => "Daftar Peserta",
+            'user' => $user,
+            // 'status' => session('status'),
+        ]);
+    }
+
+    public function store_peserta(Request $request)
+    {
+        $request->validate([
+            'name' => "required|string|min:2|max:30",
+            'nim' => "required|min:9|max:12|unique:users",
+            'email' => "nullable||string|email:unique|max:40|unique:users",
+            "password" => ['required', 'confirmed', Rules\Password::defaults()],
+       ]);
+
+       $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'nim' => $request->nim,
+        'password' => Hash::make($request->password),
+        ]);
+
+        event(new Registered($user));
+        return back()->with('message', 'Berhasil Menambahkan Peserta');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+  
 
     public function update_peserta(Request $request): RedirectResponse
     {
@@ -234,7 +253,8 @@ class AdminController extends Controller
     //    Overview
     public function overview()
     {
-        $user = User::where('is_admin', false)->with('subject_with_answered')->get();
+        // Berdasarkan Peserta
+        $user = User::where('is_admin', false)->with('answered')->get();
         // $answer = Answer::get();
         return Inertia::render('Admin/OverviewPage', [
             'title' => "Daftar Peserta",
@@ -245,66 +265,21 @@ class AdminController extends Controller
     }
 
     // Show Answer
-    public function show_subject(Request $request)
+    public function overview_subject(Request $request)
     {
-        // dd($request->subject);
-        $exams = Exam::all()->groupBy('subject_id');
+        // ddd($request->user_id);
+        // Berdasarkan Subject dari Peserta dan overview nilai 
+        $overviews = Overview::where('student_id', $request->user_id )->with('subject','answered')->get();
+        $participant = User::find($request->user_id);
         return Inertia::render('Admin/AnsweredSubject', [
             'title' => "Materi Soal ",
-            'answeredSubject' => $request->subject,
-            
+            'participant' => $participant,
+            'overviews' => $overviews
             // 'status' => session('status'),
         ]);
     }
 
-    // Update or Insert
-    public function update_subject(Request $request) {
-        // dd($request->id);
-        // Rules
-        $validated = $request->validate([
-            'name' => 'required|string|max:20|unique:subjects,name,' .$request->id,
-            'exam_duration' => 'required|integer|max:1000',
-            'exam_started' => 'required|date',
-            'exam_ended' => 'required|date',
-            'image' => 'nullable|image|file|max:8000',
-            'is_available' => 'nullable',
-        ]);
-        
-        // Logic Image Nanti
-        if ($request->file('image')) {
-            $imageName = $request->name . '.' . $request->file('image')->getClientOriginalExtension();
-            $validated['image'] = $request->file('image')->storeAs('subject-img', $imageName);
-        }
-        
-        // Simpan Update
-        Subject::where('id', $request->id)
-        ->update($validated);
-        return back()->with('message', 'Berhasil Mengedit Materi Ujian');
-        
-    }
-
-    // Create
-    public function store_subject(Request $request) {
-        // dd($request);
-        $validated = $request->validate([
-            'name' => 'required|string|max:20|unique:subjects,name,' .$request->id,
-            'exam_duration' => 'required|integer|max:1000',
-            'exam_started' => 'required|date',
-            'exam_ended' => 'required|date',
-            'image' => 'nullable|image|file|max:8000',
-        ]);
-        
-        // Logic Image Nanti
-        if ($request->file('image')) {
-            $imageName = $request->name . '.' . $request->file('image')->getClientOriginalExtension();
-            $validated['image'] = $request->file('image')->storeAs('subject-img', $imageName);
-        }
-        
-        // Simpan jawaban
-        $subject = Subject::create($validated);
-        return back()->with('message', 'Berhasil Menambahkan Materi Ujian Baru');
-        
-    }
+   
 
 
 

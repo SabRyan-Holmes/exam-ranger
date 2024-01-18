@@ -16,7 +16,7 @@ class Answer extends Model
 
     
 
-    protected $with = ['student'];
+    // protected $with = ['student'];
 
     // Choice jadi array
     protected $casts = [

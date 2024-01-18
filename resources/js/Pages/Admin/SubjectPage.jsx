@@ -14,7 +14,7 @@ import { router } from '@inertiajs/react';
 import subjectImage from '@/../assets/subject_image.jpg';
 import { FiEye } from "react-icons/fi";
 import moment from "moment/min/moment-with-locales";
-import { FaUserEdit } from "react-icons/fa";
+import { FaRegEdit } from "react-icons/fa";
 import { IoTrashSharp } from "react-icons/io5";
 import TextInput from '@/Components/TextInput';
 import InputLabel from '@/Components/InputLabel';
@@ -178,7 +178,6 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
             <div className='flex justify-between'>
               <h1 className='font-bold'>Daftar Subject Ujian</h1>
               <PrimaryButton onClick={() => { openDialog(null) }} >Tambah Materi Ujian
-
               </PrimaryButton>
             </div>
 
@@ -236,7 +235,7 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
                           {moment(subject.created_at).format('L')}
                         </td>
                         <td className='text-xs'>
-                          {moment(subject.updated_at).fromNow('')}
+                          {moment(subject.updated_at).fromNow()}
                         </td>
 
                         <td className="flex justify-start">
@@ -254,7 +253,7 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
                             <IconContext.Provider
                               value={{ color: '#16a34a', size: '50px' }}
                             >
-                              <FaUserEdit className='max-h-7' />
+                              <FaRegEdit className='max-h-7' />
                             </IconContext.Provider>
                           </button>
 
