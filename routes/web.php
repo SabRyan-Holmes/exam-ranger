@@ -68,6 +68,9 @@ Route::prefix('dashboard')->middleware(['auth', 'verified', 'isAdmin'])->name('a
     // CRUD Overview
     Route::get('/overview', [AdminController::class, 'overview'])->name('overview');
     Route::get('/overview/subject', [AdminController::class, 'overview_subject'])->name('overview-subject');
+    Route::get('/overview/review-exam', [AdminController::class, 'review_exam'])->name('review-exam');
+
+
     Route::post('/overview', [AdminController::class, 'store_overview'])->name('create-overview');
     Route::patch('/overview', [AdminController::class, 'update_overview'])->name('update-overview');
     Route::delete('/overview', [AdminController::class, 'destroy_overview'])->name('delete-overview');

@@ -9,10 +9,11 @@ class Overview extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
+    protected $with = ['participant'];
 
-    public function student(): HasOne 
+    public function participant()
     {
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class, 'student_id');
     }
 
 

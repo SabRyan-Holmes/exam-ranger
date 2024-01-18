@@ -285,7 +285,23 @@ class AdminController extends Controller
     }
 
    
+    public function review_exam(Request $request) {
+        // dd($request->name);
+        
+        $exams = Exam::where('subject_id', $request->subject_id)->get();
+        $answer = Answer::find($request->answer_id);
+        $overviews = Overview::find($request->overview_id);
+        return Inertia::render('Admin/ReviewExam', [
+            'title' => "Soal",
+            'overview' => $overviews,
+            'answered' => $answer,
+            'exams' => $exams,
+            'subject' => $request->name,
+            'subject_id' => $request->subject_id,
 
+            // 'status' => session('status'),
+        ]);
+    }
 
 
 }
