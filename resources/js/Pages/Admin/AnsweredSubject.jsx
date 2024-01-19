@@ -94,7 +94,7 @@ export default function AnsweredSubject({ auth, title, flash, participant, overv
                                                 </td>
                                                 <td>
 
-                                                    {overview.mark}
+                                                    {overview.temporary_mark}
                                                 </td>
 
                                                 <td>
@@ -104,7 +104,7 @@ export default function AnsweredSubject({ auth, title, flash, participant, overv
                                                     {/* Button View */}
                                                     <Link href={route('admin.review-exam')} data={{
                                                         overview_id: overview.id, answer_id: overview.answer_id,
-                                                        subject_id: overview.subject_id, name: overview.subject.name, participant_id: overview.student_id
+                                                        subject_id: overview.subject_id, name: overview.subject.name, participant_id: overview.participant_id
                                                     }} >
                                                         <PrimaryButton>
                                                             <strong className='text-white'>Lihat Jawaban</strong>

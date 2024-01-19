@@ -121,7 +121,7 @@ class AdminController extends Controller
     public function store_soal(SoalUpdateRequest $request)
     {
         if($request->isEssay) {
-            $validaata = $request->validate([
+            $validatedData = $request->validate([
                 'subject_id' => "required|integer",
                 'question' => "required|max:170",
                 'is_essay' => "required|boolean",
@@ -244,8 +244,6 @@ class AdminController extends Controller
             ->update($validatedData);
 
         return Redirect::route('admin.peserta')->with('message', 'Peserta  Berhasil Diupdate');
-        
-     
     }
 
     public function destroy_peserta(Request $request)
@@ -289,6 +287,8 @@ class AdminController extends Controller
         // dd($request->name);
         
         $exams = Exam::where('subject_id', $request->subject_id)->get();
+        $essay_count = Exam::where('subject_id', $request->subject_id)
+                        ->where('is_essay', true)->count();
         $answer = Answer::find($request->answer_id);
         $overviews = Overview::find($request->overview_id);
         return Inertia::render('Admin/ReviewExam', [
@@ -297,10 +297,27 @@ class AdminController extends Controller
             'answered' => $answer,
             'exams' => $exams,
             'subject' => $request->name,
-            'subject_id' => $request->subject_id,
+            'subjectId' => $request->subject_id,
+            'essayCount' => $essay_count,
 
             // 'status' => session('status'),
         ]);
+    }
+
+    public function update_overview(Request $request) {
+        // ddd($request);
+        $validated = $request->validate([
+            'subject_id' => "required|integer",
+            'participant_id' => "required|integer",
+            'essay_correct' => "required|integer",
+            'essay_mark' => "required",
+            "final_mark" => "required",
+       ]);
+
+        Overview::where('id', $request->id)
+            ->update($validated);
+
+        return back()->with('message', 'Nilai Peserta Berhasil Diupdate');
     }
 
 
