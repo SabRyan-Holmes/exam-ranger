@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AnswerController;
+use App\Http\Controllers\OverviewController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -37,7 +38,7 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::post('/exam', [AnswerController::class, 'store'])->name('exam.submit');
     Route::get('/exam', [ExamController::class, 'show'])->name('exam.show');
     Route::get('/exam-current', [ExamController::class, 'showCurrentWork'])->name('exam.show.current');
-    Route::get('/exam/done', [AnswerController::class, 'show'])->name('exam.done');
+    Route::get('/exam/done', [OverviewController::class, 'auto_correct'])->name('exam.done');
 });
 
 

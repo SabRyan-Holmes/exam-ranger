@@ -36,7 +36,7 @@ class ExamController extends Controller
         $exams = Subject::where('is_available', true)->get();
         $answered = Answer::where('participant_id', Auth::user()->id)->get();
         // $overview_ = $overview->makeHidden(['mark', 'final_mark', 'is_correct', 'average_mark']);
-        return Inertia::render('StudentHome', [
+        return Inertia::render('Home', [
             'title' => "Exam",
             'subjectExam' => $exams,
             'submitted' => $answered,

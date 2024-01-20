@@ -11,7 +11,7 @@ import moment from "moment/min/moment-with-locales";
 import no_data from "@/../assets/no_data.svg";
 
 
-export default function StudentHome({ auth, subjectExam, submitted, flash }) {
+export default function Home({ auth, subjectExam, submitted, flash }) {
     console.log(subjectExam)
     const anchor = useRef('subject')
     const [date, setDate] = useState(new Date());
@@ -87,7 +87,7 @@ export default function StudentHome({ auth, subjectExam, submitted, flash }) {
                                             <div className="m-6 rounded-md   ">
                                                 <div className="card-actions  items-center ">
                                                     <div>
-                                                        {subject.image ? 
+                                                        {subject.image ?
                                                             <img src={"/storage/" + subject.image} alt="" className='max-h-10 mx-auto' />
                                                             :
                                                             ""
@@ -145,7 +145,7 @@ export default function StudentHome({ auth, subjectExam, submitted, flash }) {
                                             <div className="card-actions justify-between items-center ">
                                                 <div className="radial-progress text-primary text-sm" style={{ "--value": value, "--size": "3rem", "--thickness": "2px" }} role="progressbar">{Math.round(value)} %</div>
                                                 <div className="mr-16 ">
-                                                    <strong >{data.exam_subject}  </strong>
+                                                    <strong >{data.subject.name}  </strong>
                                                     <p className="text-sm">{answered} dari {jumlah_soal} Terjawab</p>
                                                     <small className="block"> {moment(data.updated_at).fromNow()}</small>
                                                 </div>

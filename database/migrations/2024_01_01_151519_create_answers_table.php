@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('answers', function (Blueprint $table) {
             $table->id();
             $table->json('answer');
+            $table->json('correction_status')->nullable();
             $table->foreignId('participant_id');
             $table->foreignId('subject_id');
             $table->timestamps();

@@ -14,13 +14,12 @@ class Answer extends Model
         'id',
     ];
 
-    
-
-    // protected $with = ['student'];
+    protected $with = ['subject'];
 
     // Choice jadi array
     protected $casts = [
-        'answer' => 'array'
+        'answer' => 'array',
+        'correction_status' => 'array'
     ];
 
     public function student()
@@ -28,6 +27,10 @@ class Answer extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class);
+    }    
 
     public function scopeNonEssay($query)
     {

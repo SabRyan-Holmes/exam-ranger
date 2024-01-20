@@ -103,19 +103,23 @@ class AnswerController extends Controller
         
         $user->update(['is_doing_exam' => false]);
         $user->update(['exam_currently_doing' => null]);
-        return Redirect::route('home');
+        return Redirect::route('home')->with('message', 'Ujian telah berhasil disubmit!');
+        // return Redirect::route('exam.done')->with(['data' => $answer]);
 
     }
 
-    
+    public function auto_correct() {
+        $data = Session::get('data');
+        ddd($data->answer);
+    }
 
     /**
      * Display the specified resource.
      */
-    public function show(Answer $answer)
+    public function show()
     {
         $data = Session::get('data');
-        // ddd($data);
+        ddd($data);
        
         return Inertia::render('Exam/ExamDone', [
             'title' => "Exam Done",

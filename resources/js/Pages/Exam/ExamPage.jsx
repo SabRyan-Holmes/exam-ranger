@@ -29,6 +29,10 @@ const ExamPage = ({ auth, exam, title, subject, subjectId, timestampForTimer, fl
 
     const [answer, setAnswer] = useState(Array(exam.length).fill(null))
     const [answered, setAnswered] = useState(Array(exam.length).fill(false))
+
+    // Untuk Nanti
+    const [correction, setCorrection] = useState(Array(exam.length).fill(false))
+
     let [alreadyAnswered, setAlreadyAnswered] = useState(0)
 
     function setSumAnswered() {
@@ -39,6 +43,7 @@ const ExamPage = ({ auth, exam, title, subject, subjectId, timestampForTimer, fl
         })
 
     }
+
 
 
     const { data, post, processing, recentlySuccessful } = useForm({
