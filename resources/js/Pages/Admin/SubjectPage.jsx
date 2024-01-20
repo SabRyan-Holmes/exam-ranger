@@ -22,7 +22,7 @@ import InputError from '@/Components/InputError';
 
 
 export default function SubjectPage({ auth, flash, title, subjects }) {
-
+  console.log(subjects)
   const [showSuccess, setShowSuccess] = useState(false)
 
   useEffect(() => {
@@ -33,8 +33,8 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
 
   function submit(e) {
     e.preventDefault()
-    patch(route('admin.update-subject', data, {
-      _method: 'PATCH',
+    post(route('admin.update-subject', data, {
+      _method: 'POST',
       preserveScroll: true,
       onSuccess: () => {
         reset('id', 'name', 'exam_duration', 'exam_ended', 'exam_started', 'image', 'is_available', 'oldImage');
@@ -209,11 +209,15 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
                       <tr key={i}>
                         <td>
                           <div className="flex items-center gap-3">
+                            {subject.image ? 
                             <div className="avatar">
                               <div className="mask mask-squircle w-12 h-12">
-                                <img src={subjectImage} alt="Avatar Tailwind CSS Component" />
+                                <img src={"/storage/" + subject.image} alt="Avatar Tailwind CSS Component" />
                               </div>
                             </div>
+                            :
+                            ""
+                            }
                             <div>
                               <div className="font-bold">{subject.name}</div>
                               <div className="text-sm opacity-50">Kedokteran</div>
@@ -266,7 +270,7 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
                           {/* Dialog Edit Start */}
                           <dialog id="upsert" className="modal mx-auto">
                             <div className="modal-box bg-base-100/90">
-                              <form onSubmit={(isEdit ? submit : submitCreate)} method={isEdit ? 'patch' : 'post'}>
+                              <form onSubmit={(isEdit ? submit : submitCreate)} method={isEdit ? 'post' : 'post'}>
                                 <div>
                                   <h2 className="text-3xl font-bold text-primary">{isEdit ? 'Edit ' : 'Tambah '} Peserta</h2>
                                   <p className="my-2 text-base">Masukkan data peserta</p>
@@ -338,7 +342,7 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
                                   <input type="hidden" name='oldImage' id='oldImage' value={data.oldImage} />
                                   {
                                     data.oldImage ?
-                                      <img src={subjectImage} className=' w-72 h-72 img-preview' />
+                                      <img src={"/storage/" + data.oldImage} className=' w-72 h-72 img-preview' />
                                       : <img className={subject.image ? 'img-preview w-72 h-72' : 'img-preview'} />
                                   }
 
