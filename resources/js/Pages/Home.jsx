@@ -22,6 +22,12 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
     console.log('tanggal sekarang : ' + date)
 
     useEffect(() => {
+        if (flash.message == 'Ujian telah berhasil disubmit!') {
+            localStorage.clear()
+        }
+    })
+
+    useEffect(() => {
         if (flash.message?.substr(0, 12) == 'sudahselesai') {
             document.getElementById('modal_sudah_selesai').showModal()
         }
