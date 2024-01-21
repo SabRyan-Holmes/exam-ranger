@@ -9,6 +9,7 @@ import 'react-calendar/dist/Calendar.css';
 import styled from 'styled-components';
 import moment from "moment/min/moment-with-locales";
 import no_data from "@/../assets/no_data.svg";
+import subject_image from "@/../assets/subject_image.jpg";
 import { LuStethoscope } from "react-icons/lu";
 import { IconContext } from 'react-icons';
 
@@ -104,11 +105,7 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
                                                         {subject.image ?
                                                             <img src={"/storage/" + subject.image} alt="" className='max-h-10 mx-auto' />
                                                             :
-                                                            <IconContext.Provider
-                                                                value={{ color: '#f97316', size: '2rem' }}
-                                                            >
-                                                                <LuStethoscope className='mx-auto'/>
-                                                            </IconContext.Provider>
+                                                            ""
                                                         }
                                                         <strong className="mr-1">{subject.name}</strong>
                                                     </div>

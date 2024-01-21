@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->json('answer');
             $table->json('correction_status')->nullable();
+            $table->json('mark')->nullable();
+            $table->json('is_correct')->nullable();
             $table->foreignId('participant_id');
             $table->foreignId('subject_id');
             $table->timestamps();

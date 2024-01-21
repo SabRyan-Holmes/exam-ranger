@@ -14,7 +14,8 @@ export default {
         extend: {
             fontFamily: {
                 sans: ["Figtree", ...defaultTheme.fontFamily.sans],
-                hemihead: ["Hemi Head"],
+                inder: ["Inder"],
+                kanit: ["Kanit"],
                 signika: ["Signika Negative"],
                 explora: ["Explora"],
             },

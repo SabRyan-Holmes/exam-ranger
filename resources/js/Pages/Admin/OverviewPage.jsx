@@ -3,16 +3,11 @@ import Navbar from '@/Components/Navbar';
 import { Head, useForm, Link, router } from '@inertiajs/react';
 import AdminDrawer from '@/Components/AdminDrawer';
 import PrimaryButton from '@/Components/PrimaryButton';
-import { IoTrashSharp } from "react-icons/io5";
-import { IconContext } from "react-icons";
-import { FaUserEdit } from "react-icons/fa";
-import InputLabel from '@/Components/InputLabel';
-import TextInput from '@/Components/TextInput';
-import InputError from '@/Components/InputError';
 import profile from '@/../assets/profile.png';
 import Swal from 'sweetalert2'
 import { FiEye } from "react-icons/fi";
 import moment from "moment/min/moment-with-locales";
+import no_data from "@/../assets/no_data.svg";
 
 
 
@@ -102,105 +97,115 @@ export default function AdminPagePeserta({ auth, user, flash, title, }) {
                         {/* content */}
 
                         <div className="overflow-x-auto">
-                            <table className="table">
-                                {/* head */}
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Email/NIM</th>
-                                        <th>Status Pengerjaan Tes</th>
-                                        <th>Selesai Dikerjakan</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    {user.map((data, i) => {
-                                        var answered = data.answered
-                                        console.log('isi answered')
-                                        console.log(answered)
-                                        // console.log(answered[0].updated_at)
-                                        // console.log(`isi password dari user ke ${i} == ${data.password}`)
-                                        return (
-                                            <tr key={i}>
-                                                <td>
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="avatar">
-                                                            <div className="mask mask-squircle w-12 h-12">
-                                                                <img src={profile} alt="Avatar Tailwind CSS Component" />
-                                                            </div>
-                                                        </div>
-                                                        <div>
-                                                            <div className="font-bold">{data.name}</div>
-                                                            <div className="text-sm opacity-50">Universitas Jambi</div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    {data.nim}
-                                                    <br />
-                                                    <span className="badge badge-ghost badge-sm">{data.email}</span>
-                                                </td>
-                                                <td>
-                                                    {answered.length ?
-                                                        <>Sudah Selesai</>
-                                                        :
-                                                        <>Belum selesai</>
-                                                    }
-
-                                                </td>
-
-                                                <td>
-                                                    {/* {moment(data.answer.updated_at).locale('id').fromNow()} */}
-                                                    {/* Ngebug hari waktuny dk sesuai, bahkan pake answered[0].updated_at */}
-                                                    {
-                                                        answered.length
-                                                            ?
-                                                            // moment(answered[0].updated_at).format('LLL')
-                                                            moment(answered[0].updated_at).fromNow()
-                                                            :
-                                                            '_'
-                                                    }
-                                                </td>
-                                                <td className="flex justify-start">
-                                                    {/* Button View */}
-                                                    <Link href={route('admin.overview-subject', { answered_subject: answered, user_id: data.id, })} >
-                                                        <PrimaryButton>
-                                                            <strong className='text-white'>Lihat</strong>
-                                                            <FiEye className='scale[2.4] stroke-secondary-500'
-                                                            // value={{ color: '#16a34a', size: '50px' }}
-                                                            >
-                                                                {/* <FaUserEdit className='max-h-7' /> */}
-                                                            </FiEye>
-                                                        </PrimaryButton>
-                                                    </Link>
-
-
-
-
-
-                                                </td>
+                            {
+                                user.length ?
+                                    <table className="table">
+                                        {/* head */}
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Email/NIM</th>
+                                                <th>Status Pengerjaan Tes</th>
+                                                <th>Selesai Dikerjakan</th>
+                                                <th>Aksi</th>
                                             </tr>
-                                        )
-                                    }
+                                        </thead>
+                                        <tbody>
 
-                                    )}
+                                            {user.map((data, i) => {
+                                                var answered = data.answered
+                                                console.log('isi answered')
+                                                console.log(answered)
+                                                // console.log(answered[0].updated_at)
+                                                // console.log(`isi password dari user ke ${i} == ${data.password}`)
+                                                return (
+                                                    <tr key={i}>
+                                                        <td>
+                                                            <div className="flex items-center gap-3">
+                                                                <div className="avatar">
+                                                                    <div className="mask mask-squircle w-12 h-12">
+                                                                        <img src={profile} alt="Avatar Tailwind CSS Component" />
+                                                                    </div>
+                                                                </div>
+                                                                <div>
+                                                                    <div className="font-bold">{data.name}</div>
+                                                                    <div className="text-sm opacity-50">Universitas Jambi</div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            {data.nim}
+                                                            <br />
+                                                            <span className="badge badge-ghost badge-sm">{data.email}</span>
+                                                        </td>
+                                                        <td>
+                                                            {answered.length ?
+                                                                <>Sudah Selesai</>
+                                                                :
+                                                                <>Belum selesai</>
+                                                            }
+
+                                                        </td>
+
+                                                        <td>
+                                                            {/* {moment(data.answer.updated_at).locale('id').fromNow()} */}
+                                                            {/* Ngebug hari waktuny dk sesuai, bahkan pake answered[0].updated_at */}
+                                                            {
+                                                                answered.length
+                                                                    ?
+                                                                    // moment(answered[0].updated_at).format('LLL')
+                                                                    moment(answered[0].updated_at).fromNow()
+                                                                    :
+                                                                    '_'
+                                                            }
+                                                        </td>
+                                                        <td className="flex justify-start">
+                                                            {/* Button View */}
+                                                            <Link href={route('admin.overview-subject', { answered_subject: answered, user_id: data.id, })} >
+                                                                <PrimaryButton>
+                                                                    <strong className='text-white'>Lihat</strong>
+                                                                    <FiEye className='scale[2.4] stroke-secondary-500'
+                                                                    // value={{ color: '#16a34a', size: '50px' }}
+                                                                    >
+                                                                        {/* <FaUserEdit className='max-h-7' /> */}
+                                                                    </FiEye>
+                                                                </PrimaryButton>
+                                                            </Link>
 
 
 
 
-                                </tbody>
-                                {/* foot */}
-                                <tfoot>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Email/NIM</th>
-                                        <th>Status Pengerjaan Tes</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </tfoot>
 
-                            </table>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            }
+
+                                            )}
+
+
+
+
+                                        </tbody>
+                                        {/* foot */}
+                                        <tfoot>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Email/NIM</th>
+                                                <th>Status Pengerjaan Tes</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </tfoot>
+
+                                    </table>
+                                    :
+                                    <div className="my-auto w-full ">
+                                        <img className='w-40 h-32 mx-auto pt-7 mt-3' src={no_data} alt="no data" srcset="" />
+                                        <p className='text-center mt-3 text-sm text-slate-600'>Belum ada Peserta yang ditambahkan. </p>
+                                    </div>
+
+                            }
+
                         </div>
 
                         {/* end of content               */}

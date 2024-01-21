@@ -19,7 +19,9 @@ class Answer extends Model
     // Choice jadi array
     protected $casts = [
         'answer' => 'array',
-        'correction_status' => 'array'
+        'correction_status' => 'array',
+        'mark' => 'array',
+        'is_correct' => 'array'
     ];
 
     public function student()
