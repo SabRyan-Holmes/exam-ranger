@@ -31,6 +31,7 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
     /* ~~~ container styles ~~~ */
     @apply
     max-width: 300px;
+    width: 20rem;
     margin: auto;
     margin-top: 20px;
     background-color: #f97316;
@@ -40,6 +41,11 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
     /* ~~~ active day styles ~~~ */
     .react-calendar__tile--range {
         background-color: #f97316;
+    }
+
+    /* ~~~ calendar size ~~~ */
+    .react-calendar {
+        font-size: 0.75rem;
     }
     `;
 
@@ -52,11 +58,11 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
         >
             <Head title="Home" />
             <section className='flex justify-center   '>
-                <div className='w-full max-w-screen-lg ml-9   my-7'>
-                    <div className="w-full  rounded-2xl mb-10 bg-card bg-contain  shadow-xl  ">
+                <div className='w-full max-w-screen-lg ml-9 my-7'>
+                    <div className="w-full  rounded-2xl mb-10 bg-card bg-cover shadow-xl  ">
                         <div className=" card-body flex items-center justify-center ">
-                            <p className="">Hi, {auth.user.name} !</p>
-                            <h2 className="text-3xl font-semibold">Selamat Datang di Ujian Kompetisi Anatomi</h2>
+                            <p className="text-sm">Hi, {auth.user.name} !</p>
+                            <h2 className="text-2xl font-semibold">Selamat Datang di Ujian Kompetisi Anatomi</h2>
                             <div className="card-actions">
                                 <PrimaryButton onClick={() => {
                                     setOpenModal(true);
@@ -84,7 +90,7 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
                                 return (
                                     <Link href={route('exam.show')} data={{ id: subject.id, name: subject.name, exam_duration: subject.exam_duration }}>
                                         <div className="mb-2 border-card  card w-fit shadow-md hover:bg-primary/30 ">
-                                            <div className="m-6 rounded-md   ">
+                                            <div className="m-6 rounded-md text-xs">
                                                 <div className="card-actions  items-center ">
                                                     <div>
                                                         {subject.image ?
@@ -94,22 +100,22 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
                                                         }
                                                         <strong className="mr-1">{subject.name}</strong>
                                                     </div>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className=" w-8 h-8 stroke-primary">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className=" w-7 h-7 stroke-primary">
                                                         <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                                                     </svg>
 
-                                                    <div className="mr-4">
-                                                        <p className="font-bold text-lg -mb-2">{banyakSoal} Soal </p>
+                                                    <div className="">
+                                                        <p className="font-bold -mb-1">{banyakSoal} Soal </p>
                                                         <p className="font-light text-slate-500">Essay & Pilihan Ganda </p>
                                                     </div>
 
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                                                        stroke="currentColor" className="w-8 h-8 stroke-primary">
+                                                        stroke="currentColor" className="w-7 h-7 stroke-primary">
                                                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                                     </svg>
 
                                                     <div className="">
-                                                        <p className="font-bold text-lg -mb-1">{subject.exam_duration} Menit </p>
+                                                        <p className="font-bold -mb-1">{subject.exam_duration} Menit </p>
                                                         <p className="font-light text-slate-500">10:00 - & 11-00 WIB </p>
                                                     </div>
                                                 </div>
@@ -141,12 +147,12 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
                                 console.log(value)
                                 return (
                                     <div className="mb-2 card w-full shadow-md  hover:scale-110 border-card">
-                                        <div className="m-6 my-4 rounded-md   ">
+                                        <div className="m-6 my-4 rounded-md text-xs">
                                             <div className="card-actions justify-between items-center ">
-                                                <div className="radial-progress text-primary text-sm" style={{ "--value": value, "--size": "3rem", "--thickness": "2px" }} role="progressbar">{Math.round(value)} %</div>
+                                                <div className="radial-progress text-primary" style={{ "--value": value, "--size": "3rem", "--thickness": "2px" }} role="progressbar">{Math.round(value)} %</div>
                                                 <div className="mr-16 ">
                                                     <strong >{data.subject.name}  </strong>
-                                                    <p className="text-sm">{answered} dari {jumlah_soal} Terjawab</p>
+                                                    <p className="">{answered} dari {jumlah_soal} Terjawab</p>
                                                     <small className="block"> {moment(data.updated_at).fromNow()}</small>
                                                 </div>
                                                 <p>{moment(data.updated_at).format('L')}</p>

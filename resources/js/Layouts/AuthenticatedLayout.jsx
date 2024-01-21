@@ -7,7 +7,7 @@ import { Link } from '@inertiajs/react';
 import pp from "./../../assets/profile.png";
 import Footer from '@/Components/Footer';
 
-export default function Authenticated({ user, header, children, data }) {
+export default function Authenticated({ user, header, children, data, isExam }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     return (
@@ -134,7 +134,12 @@ export default function Authenticated({ user, header, children, data }) {
 
             <main>{children}</main>
 
-            <Footer subject={data} />
+            {isExam ? 
+                ""
+                :
+                <Footer subject={data} />
+            }
+            
 
         </div>
     );

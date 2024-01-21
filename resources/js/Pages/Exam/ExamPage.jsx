@@ -133,12 +133,12 @@ const ExamPage = ({ auth, exam, title, subject, subjectId, timestampForTimer, fl
     }
 
     return (
-        <Authenticated user={auth.user}>
+        <Authenticated user={auth.user} isExam={true}>
             <Head title={title} />
             {/* container */}
             <div className="flex mx-auto justify-center ">
 
-                <div className="m-7 mr-4 rounded-lg max-w-5xl w-full pb-6 bg-secondary ">
+                <div className="m-7 mr-4 rounded-lg max-w-3xl w-full pb-6 bg-secondary">
                     {/* Time */}
                     <div className="flex items-center  w-1/2">
                         <svg className="m-7 mr-4 w-12 h-12" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" >
@@ -220,7 +220,7 @@ const ExamPage = ({ auth, exam, title, subject, subjectId, timestampForTimer, fl
                     </div>
 
                     <div className="justify-center items-center flex mt-10">
-                        <div className=" w-28 h-28 radial-progress text-primary font-extrabold  border-4 border-orange-300 text-lg " style={{ "--value": (amountAnswered) / exam.length * 100, "--size": "12rem", "--thickness": "5px" }} role="progressbar">{amountAnswered} /{exam.length} <span className='text-sm'>
+                        <div className=" w-28 h-28 radial-progress text-primary font-extrabold  border-4 border-orange-300 text-lg" style={{ "--value": (amountAnswered) / exam.length * 100, "--size": "12rem", "--thickness": "5px" }} role="progressbar">{amountAnswered} /{exam.length} <span className='text-sm'>
                             Terjawab</span></div>
                         {/* <label htmlFor="my_modal_7">
                                 Kumpul Jawaban
