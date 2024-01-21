@@ -85,7 +85,7 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
     console.log(`is id cuy ${id}`);
     Swal.fire({
       title: 'Anda yakin?',
-      text: "Soal yang sudah dihapus tidak bisa dikembalikan lagi",
+      text: "Subjek yang sudah dihapus tidak bisa dikembalikan lagi",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -249,13 +249,13 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
 
                         <td className="flex justify-start">
                           {/* Button View */}
-                          <Link >
+                          {/* <Link >
                             <button className='bg-slate-500/80 px-8 -ml-10 scale-[0.6] btn glass'>
                               <FiEye className='scale-[2.4] stroke-yellow-500'
                               >
                               </FiEye>
                             </button>
-                          </Link>
+                          </Link> */}
 
                           {/* Button Edit */}
                           <button onClick={() => { openDialog(subject) }} className='bg-slate-500/80  scale-[0.6] -ml-5 btn glass'>
@@ -272,8 +272,8 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
                             <div className="modal-box bg-base-100/90">
                               <form onSubmit={(isEdit ? submit : submitCreate)} method={isEdit ? 'post' : 'post'}>
                                 <div>
-                                  <h2 className="text-3xl font-bold text-primary">{isEdit ? 'Edit ' : 'Tambah '} Peserta</h2>
-                                  <p className="my-2 text-base">Masukkan data peserta</p>
+                                  <h2 className="text-3xl font-bold text-primary">{isEdit ? 'Edit ' : 'Tambah '} Subjek</h2>
+                                  <p className="my-2 text-base">Masukkan data Subjek</p>
                                   <InputLabel htmlFor="name" value="Nama" />
 
                                   {/* Nama */}

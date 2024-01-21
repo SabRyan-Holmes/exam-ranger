@@ -119,12 +119,27 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
 
                         </div>
 
-                        <section className='w-1/2 '>
-                            <div className='flex gap-56 '>
-                                <strong className="text-xl text-primary">Data Peserta :</strong>
-                                <strong className="text-xl text-primary">Overview :</strong>
+                        <section className='w-full'>
+                            <div className='flex gap-44 '>
+                                <div>
+                                    <strong className="text-xl text-primary">Data Peserta :</strong>
+                                    <p className='font-semibold'>Nama : <span className='font-normal'>{participant.name}</span></p>
+                                    <p className='font-semibold'>NIM : <span className='font-normal'>{participant.nim}</span></p>
+                                    <p className='font-semibold'>Email : <span className='font-normal'>{participant.email}</span></p>
+                                    <p className='font-semibold'>No Telepon : <span className='font-normal'>{participant.phone ? participant.phone : '_'}</span></p>
+                                    <p className='font-semibold'>Selesai Dikerjakan : <span className='font-normal'>{moment(answered.updated_at).fromNow()}</span></p>
+                                </div>
+                                <div>
+                                    <strong className="text-xl text-primary">Overview :</strong>
+                                    <p className='font-medium'>Jumlah Pilihan Ganda benar : <span className='font-normal'>{overview.multiple_choice_correct}</span></p>
+                                    <p className='font-medium'>Jumlah Essay benar : <span className='font-normal'>{overview.essay_correct}</span></p>
+                                    <p className='font-medium'>Nilai Sementara : <span className='font-normal'>{overview.temporary_mark}</span></p>
+                                    <p className='font-medium'>Nilai Rata-rata dari Semua Ujian : <span className='font-normal'>{overview.average_mark}</span></p>
+                                    <p className='font-medium'>Nilai Akhir : <span className='font-normal'>{overview.final_mark}</span></p>
+                                </div>
+                            
                             </div>
-                            <div className="flex justify-between">
+                            {/* <div className="flex justify-between">
                                 <div>
                                     <p className='font-semibold'>Nama : <span className='font-normal'>{participant.name}</span></p>
                                     <p className='font-semibold'>NIM : <span className='font-normal'>{participant.nim}</span></p>
@@ -140,7 +155,7 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                     <p className='font-medium'>Nilai Rata-rata dari Semua Ujian : <span className='font-normal'>{overview.average_mark}</span></p>
                                     <p className='font-medium'>Nilai Akhir : <span className='font-normal'>{overview.final_mark}</span></p>
                                 </div>
-                            </div>
+                            </div> */}
 
                         </section>
 

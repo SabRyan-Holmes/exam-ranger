@@ -107,7 +107,7 @@ export default function AnsweredSubject({ auth, title, flash, participant, overv
                                                         subject_id: overview.subject_id, name: overview.subject.name, participant_id: overview.participant_id
                                                     }} >
                                                         <PrimaryButton>
-                                                            <strong className='text-white'>Lihat Jawaban</strong>
+                                                            <strong className='text-white text-xs'>Lihat Jawaban</strong>
 
                                                         </PrimaryButton>
                                                     </Link>

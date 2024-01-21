@@ -151,7 +151,7 @@ const ExamPage = ({ auth, exam, title, subject, subjectId, timestampForTimer, fl
                     </div>
 
                     {/* Question */}
-                    <div className='ml-9 mb-4 w-1/2 '>
+                    <div className='ml-9 mb-4 w-3/4 '>
                         <strong>Pertanyaan {active + 1} dari {exam.length}</strong>
                         <br />
                         <strong className='text-slate-600 '>{exam[active].point} point</strong>
