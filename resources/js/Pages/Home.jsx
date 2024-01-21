@@ -10,7 +10,7 @@ import styled from 'styled-components';
 import moment from "moment/min/moment-with-locales";
 import no_data from "@/../assets/no_data.svg";
 import subject_image from "@/../assets/subject_image.jpg";
-import { CiStethoscope } from "react-icons/ci";
+
 
 export default function Home({ auth, subjectExam, submitted, flash }) {
     console.log(subjectExam)
@@ -125,7 +125,7 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
 
                                                             <div className="">
                                                                 <p className="font-bold -mb-1">{subject.exam_duration} Menit </p>
-                                                                <p className="font-light text-slate-500">10:00 - & 11-00 WIB </p>
+                                                                <p className="font-light text-slate-500">{moment(subject.exam_started).format('LT')} {moment(subject.exam_ended).format('LT')}</p>
                                                             </div>
                                                         </div>
                                                     </div>
