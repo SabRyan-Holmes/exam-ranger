@@ -125,7 +125,7 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
 
                                                             <div className="">
                                                                 <p className="font-bold -mb-1">{subject.exam_duration} Menit </p>
-                                                                <p className="font-light text-slate-500">{moment(subject.exam_started).format('LT')} {moment(subject.exam_ended).format('LT')}</p>
+                                                                <p className="font-light text-slate-500">{moment(subject.exam_started).format('LT')} - {moment(subject.exam_ended).format('LT')} W.I.B</p>
                                                             </div>
                                                         </div>
                                                     </div>

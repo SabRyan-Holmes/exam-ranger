@@ -42,6 +42,8 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
         final_mark: '',
     })
 
+    console.log(errors)
+
     function submit() {
         // Add All Point from ArrayPoint
         let essayMark = 0
@@ -60,14 +62,20 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
         const finalMark = parseFloat(overview.temporary_mark + essayMark)
         console.log('finalMark')
         console.log(finalMark)
-        setData({
-            id: overview.id,
-            subject_id: subjectId,
-            participant_id: participant.id,
-            essay_correct: essayCorrect,
-            essay_mark: essayMark,
-            final_mark: finalMark,
-        })
+        data.id = overview.id,
+        data.subject_id = subjectId,
+        data.participant_id = participant.id,
+        data.essay_correct = essayCorrect
+        data.essay_mark = essayMark
+        data.final_mark = finalMark
+        // setData({
+        //     id: overview.id,
+        //     subject_id: subjectId,
+        //     participant_id: participant.id,
+        //     essay_correct: essayCorrect,
+        //     essay_mark: essayMark,
+        //     final_mark: finalMark,
+        // })
         patch(route('admin.update-overview', data, {
             _method: 'PATCH',
         }));
@@ -139,23 +147,6 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                 </div>
                             
                             </div>
-                            {/* <div className="flex justify-between">
-                                <div>
-                                    <p className='font-semibold'>Nama : <span className='font-normal'>{participant.name}</span></p>
-                                    <p className='font-semibold'>NIM : <span className='font-normal'>{participant.nim}</span></p>
-                                    <p className='font-semibold'>Email : <span className='font-normal'>{participant.email}</span></p>
-                                    <p className='font-semibold'>No Telepon : <span className='font-normal'>{participant.phone ? participant.phone : '_'}</span></p>
-                                    <p className='font-semibold'>Selesai Dikerjakan : <span className='font-normal'>{moment(answered.updated_at).fromNow()}</span></p>
-                                </div>
-
-                                <div>
-                                    <p className='font-medium'>Jumlah Pilihan Ganda benar : <span className='font-normal'>{overview.multiple_choice_correct}</span></p>
-                                    <p className='font-medium'>Jumlah Essay benar : <span className='font-normal'>{overview.essay_correct}</span></p>
-                                    <p className='font-medium'>Nilai Sementara : <span className='font-normal'>{overview.temporary_mark}</span></p>
-                                    <p className='font-medium'>Nilai Rata-rata dari Semua Ujian : <span className='font-normal'>{overview.average_mark}</span></p>
-                                    <p className='font-medium'>Nilai Akhir : <span className='font-normal'>{overview.final_mark}</span></p>
-                                </div>
-                            </div> */}
 
                         </section>
 
