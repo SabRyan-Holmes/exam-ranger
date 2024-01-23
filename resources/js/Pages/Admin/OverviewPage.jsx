@@ -161,7 +161,7 @@ export default function AdminPagePeserta({ auth, user, flash, title, }) {
                                                         </td>
                                                         <td className="flex justify-start">
                                                             {/* Button View */}
-                                                            <Link href={route('admin.overview-subject', { answered_subject: answered, user_id: data.id, })} >
+                                                            <Link href={route('admin.overview-subject', { user_id: data.id, })} >
                                                                 <PrimaryButton>
                                                                     <strong className='text-white'>Lihat</strong>
                                                                     <FiEye className='scale[2.4] stroke-secondary-500'
