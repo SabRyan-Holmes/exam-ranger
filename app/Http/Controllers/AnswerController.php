@@ -37,74 +37,80 @@ class AnswerController extends Controller
     {
         $user = User::where('id', Auth::user()->id);
         
-        $validatedData = $request->validate([
-            'answer' => 'required|array|max:255',
-            'participant_id' => 'required',
+        $validated = $request->validate([
+            'answer' => 'required|array|max:1000',
+            'correction_status' => 'required|array|max:1000',
+            'is_correct' => 'required|array|max:1000',
+            'mark' => 'required|array|max:1000',
         ]);
         
         // Simpan jawaban
         $answer = Answer::updateOrCreate(
             [
                 'subject_id' => $request->subject_id, 
-                'participant_id' => $validatedData['participant_id'], 
+                'participant_id' => $request->participant_id, 
             ],
-            [ 'answer' => $validatedData['answer']]    
+            // [ 'answer' => $validated['answer']]    
+            $validated   
         );
         
-        // Ambil jawaban yang sesuai dengan urutan
-        $AllstudentAnswers = $validatedData['answer'];
+        // ddd($answer);
+        // <============================>
+        // // Ambil jawaban yang sesuai dengan urutan
+        // $AllstudentAnswers = $validated['answer'];
         
-        // Ambil semua data exam berdasarkan subject_id
-        $exams = Exam::where('subject_id', $request->subject_id)->get();
+        // // Ambil semua data exam berdasarkan subject_id
+        // $exams = Exam::where('subject_id', $request->subject_id)->get();
 
-        // Loop melalui setiap exam
-        foreach ($exams as $key=>$exam) {
-            // Tambah ke array (ambil yg pilgan saja)
-            if($exam->is_essay == false) {
-                $actualAnswers[] = $exam->actual_answer;
-                $studentAnswers[] = $AllstudentAnswers[$key];
-                $points[] = $exam->point;
-            }
-        }
+        // // Loop melalui setiap exam
+        // foreach ($exams as $key=>$exam) {
+        //     // Tambah ke array (ambil yg pilgan saja)
+        //     if($exam->is_essay == false) {
+        //         $actualAnswers[] = $exam->actual_answer;
+        //         $studentAnswers[] = $AllstudentAnswers[$key];
+        //         $points[] = $exam->point;
+        //     }
+        // }
         
-        // Zip & Urutkan
-        $pairedData = collect($studentAnswers)
-            ->zip($actualAnswers, $points);
+        // // Zip & Urutkan
+        // $pairedData = collect($studentAnswers)
+        //     ->zip($actualAnswers, $points);
         
-        // ddd($pairedData);
-        // Hitung jawaban yang benar dan jumlahkan poinnya
-        $correctAnswers = $pairedData
-            ->filter(function ($pair) {
-                return $pair[0] == $pair[1];
-            });
+        // // ddd($pairedData);
+        // // Hitung jawaban yang benar dan jumlahkan poinnya
+        // $correctAnswers = $pairedData
+        //     ->filter(function ($pair) {
+        //         return $pair[0] == $pair[1];
+        //     });
         
-        $totalPoints = $correctAnswers
-            ->sum(function ($pair) {
-                return $pair[2]; // Mengambil point dari pair
-            });
+        // $totalPoints = $correctAnswers
+        //     ->sum(function ($pair) {
+        //         return $pair[2]; // Mengambil point dari pair
+        //     });
             
-        $correctAnswered = collect($studentAnswers)
-            ->zip($actualAnswers)
-            ->filter(function ($pair) {
-                return ($pair[0] == $pair[1]);
-            })->count();
+        // $correctAnswered = collect($studentAnswers)
+        //     ->zip($actualAnswers)
+        //     ->filter(function ($pair) {
+        //         return ($pair[0] == $pair[1]);
+        //     })->count();
         
-        // Masukkan ke tabel Overview Sementara
+        // // Masukkan ke tabel Overview Sementara
         
-        // Simpan informasi di tabel Overview
-        Overview::create([
-            'participant_id' => $validatedData['participant_id'],
-            'answer_id' => $answer->id,
-            'subject_id' => $request->subject_id,
-            // Nanti diubah jadi banyak yang total benar be
-            'multiple_choice_correct' => $correctAnswered,
-            'temporary_mark' => $totalPoints,
-        ]);
-        
+        // // Simpan informasi di tabel Overview
+        // Overview::create([
+        //     'participant_id' => $validated['participant_id'],
+        //     'answer_id' => $answer->id,
+        //     'subject_id' => $request->subject_id,
+        //     // Nanti diubah jadi banyak yang total benar be
+        //     'multiple_choice_correct' => $correctAnswered,
+        //     'temporary_mark' => $totalPoints,
+        // ]);
+         // <============================>
+
         $user->update(['is_doing_exam' => false]);
         $user->update(['exam_currently_doing' => null]);
-        return Redirect::route('home')->with('message', 'Ujian telah berhasil disubmit!');
-        // return Redirect::route('exam.done')->with(['data' => $answer]);
+        // return Redirect::route('home')->with('message', 'Ujian telah berhasil disubmit!');
+        return Redirect::route('exam.done')->with(['data' => $answer]);
 
     }
 

@@ -33,6 +33,9 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
     }, [])
     const answer = answered.answer
     const participant = overview.participant
+    const isCorrected = answered.correction_status
+    const isTrue = answered.is_correct
+
     const { data, setData, patch, processing, errors } = useForm({
         id: overview.id,
         subject_id: subjectId,
@@ -63,9 +66,9 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
         console.log('finalMark')
         console.log(finalMark)
         data.id = overview.id,
-        data.subject_id = subjectId,
-        data.participant_id = participant.id,
-        data.essay_correct = essayCorrect
+            data.subject_id = subjectId,
+            data.participant_id = participant.id,
+            data.essay_correct = essayCorrect
         data.essay_mark = essayMark
         data.final_mark = finalMark
         // setData({
@@ -145,7 +148,7 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                     <p className='font-medium'>Nilai Rata-rata dari Semua Ujian : <span className='font-normal'>{overview.average_mark}</span></p>
                                     <p className='font-medium'>Nilai Akhir : <span className='font-normal'>{overview.final_mark}</span></p>
                                 </div>
-                            
+
                             </div>
 
                         </section>
@@ -222,8 +225,8 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                     // console.log("allPointEssay")
                                     // console.log(allPointEssay)
                                     const [pointChange, setPointChange] = useState(data.point)
-                                    const [isCorrected, setIsCorrected] = useState(false)
-                                    const [isTrue, setIsTrue] = useState()
+                                    const [isCorrecteds, setIsCorrected] = useState(false)
+                                    // const [isTrue, setIsTrue] = useState()
                                     return (
                                         <div className="card w-full my-3 bg-secondary h-full max-h-max text-primary-content" key={i}>
                                             <div className="card-body">
@@ -257,22 +260,22 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
 
                                                     <div className="card-actions -mr-4 items-end  ">
 
-                                                        {!isCorrected ?
+                                                        {isCorrected[i] == false ?
                                                             <>
                                                                 <PrimaryButton className='bg-red-600 text-base -mr-7'
                                                                     onClick={() => {
                                                                         handleIncorrect()
-                                                                        setIsCorrected(!isCorrected)
-                                                                        setIsTrue(false)
+                                                                        // setIsCorrected(!isCorrected)
+                                                                        // setIsTrue(false)
                                                                     }}>Tandai Salah <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-7 h-7">
                                                                         <path d="M5.28 4.22a.75.75 0 0 0-1.06 1.06L6.94 8l-2.72 2.72a.75.75 0 1 0 1.06 1.06L8 9.06l2.72 2.72a.75.75 0 1 0 1.06-1.06L9.06 8l2.72-2.72a.75.75 0 0 0-1.06-1.06L8 6.94 5.28 4.22Z" />
                                                                     </svg>
                                                                 </PrimaryButton>
 
                                                                 <PrimaryButton className='bg-green-600' onClick={() => {
-                                                                    handleCorrect(pointChange);
-                                                                    setIsCorrected(!isCorrected)
-                                                                    setIsTrue(true)
+                                                                    handleCorrect(pointChange)
+                                                                    // setIsCorrected(!isCorrected)
+                                                                    // setIsTrue(true)
                                                                 }}>Tandai Benar <svg className='w-7 h-7 stroke-2' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                                                         <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                                                                     </svg>
@@ -281,7 +284,7 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                             :
 
                                                             (
-                                                                isTrue ?
+                                                                isTrue[i] == true ?
                                                                     <PrimaryButton className='bg-green-600'>Benar <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                                                         <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                                                                     </svg>

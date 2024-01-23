@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Overview;
+use App\Models\Answer;
 use App\Models\Exam;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Session;
+use Illuminate\Support\Facades\Redirect;
 
 class OverviewController extends Controller
 {
@@ -16,11 +19,14 @@ class OverviewController extends Controller
     {
         //ambil data dari submit
         $data = Session::get('data');
+        // ddd($data);
 
         // Data peserta
-        $user = User::where('id', $data->participant_id);
-        // Ambil jawaban yang sesuai dengan urutan
+        // Ambil jawaban, correction status, dan nilai yang sesuai dengan urutan
+        $correction_status = $data->correction_status;
         $AllstudentAnswers = $data->answer;
+        $all_mark = $data->mark;
+        $is_correct = $data->is_correct;
         
         // Ambil semua data exam berdasarkan subject_id
         $exams = Exam::where('subject_id', $data->subject_id)->get();
@@ -28,10 +34,17 @@ class OverviewController extends Controller
         // Loop melalui setiap exam
         foreach ($exams as $key=>$exam) {
             // Tambah ke array (ambil yg pilgan saja)
-            if($exam->is_essay == false) {
+            if($exam->is_essay === false) {
                 $actualAnswers[] = $exam->actual_answer;
                 $studentAnswers[] = $AllstudentAnswers[$key];
                 $points[] = $exam->point;
+                $correction_status[$key] = true;
+
+                  // Tambahkan logika untuk memperbarui is_correct jika jawaban benar
+                if ($AllstudentAnswers[$key] == $exam->actual_answer) {
+                    $is_correct[$key] = true;
+                    $all_mark[$key] = $exam->point;
+                }
             }
         }
         
@@ -60,17 +73,27 @@ class OverviewController extends Controller
         // Masukkan ke tabel Overview Sementara
         
         // Simpan informasi di tabel Overview
-        Overview::create([
-            'participant_id' => $validatedData['participant_id'],
-            'answer_id' => $answer->id,
-            'subject_id' => $request->subject_id,
-            // Nanti diubah jadi banyak yang total benar be
-            'multiple_choice_correct' => $correctAnswered,
-            'temporary_mark' => $totalPoints,
+        Overview::updateOrcreate(
+            [
+                'participant_id' => $data->participant_id,
+                'subject_id' => $data->participant_id,      
+            ],
+            [
+                'answer_id' => $data->id,
+                // Nanti diubah jadi banyak yang total benar be
+                'multiple_choice_correct' => $correctAnswered,
+                'temporary_mark' => $totalPoints,
+            ]
+        );
+        
+        Answer::where('id', $data->id)->update([
+
+            'correction_status' => $correction_status,
+            'is_correct' => $is_correct,
+            'mark' => $all_mark,
         ]);
         
-        $user->update(['is_doing_exam' => false]);
-        $user->update(['exam_currently_doing' => null]);
+        return Redirect::route('home')->with('message', 'Ujian telah berhasil disubmit!');
     }
 
     public function index()

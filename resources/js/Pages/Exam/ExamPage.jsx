@@ -1,10 +1,8 @@
 import Authenticated from '@/Layouts/AuthenticatedLayout'
-import React, { useRef, useState, useEffect } from 'react'
-import { Head, Link, usePage, useForm } from '@inertiajs/react';
+import React, { useState, useEffect } from 'react'
+import { Head, useForm } from '@inertiajs/react';
 import PrimaryButton from '@/Components/PrimaryButton';
 import InputLabel from '@/Components/InputLabel';
-import TextInput from '@/Components/TextInput';
-import InputError from '@/Components/InputError';
 import CountdownTimer from '@/Components/CountdownTimer';
 import no_data from "@/../assets/data_processing.svg";
 
@@ -32,7 +30,10 @@ const ExamPage = ({ auth, exam, title, subject, subjectId, timestampForTimer, fl
     const [answered, setAnswered] = useState(Array(exam.length).fill(false))
 
     // Untuk Nanti
-    const [correction, setCorrection] = useState(Array(exam.length).fill(false))
+    // const [correction, setCorrection] = useState(Array(exam.length).fill(false))
+    const correction = Array(exam.length).fill(false)
+    const all_mark = Array(exam.length).fill(null)
+    const isCorrect = Array(exam.length).fill(null)
 
     let [alreadyAnswered, setAlreadyAnswered] = useState(0)
 
@@ -52,6 +53,10 @@ const ExamPage = ({ auth, exam, title, subject, subjectId, timestampForTimer, fl
         participant_id: auth.user.id,
         exam_subject: subject,
         subject_id: subjectId,
+
+        correction_status: correction,
+        mark: all_mark,
+        is_correct: isCorrect,
     });
 
     const datachoice = [

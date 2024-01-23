@@ -2,11 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Inder&display=swap");
-/* @font-face {
-    font-family: "Inder";
-    src: url("/resources/fonts/Inder/Inder-Regular.ttf");
-} */
 body {
     font-family: "Inder", "Signika";
     @apply text-slate-700;
