@@ -10,9 +10,6 @@ import no_data from "@/../assets/no_data.svg";
 
 export default function AnsweredSubject({ auth, title, flash, participant, overviews }) {
     moment.locale('id')
-    console.log("isi participant")
-    console.log(participant)
-
     return (
 
         <div className='h-full'>
@@ -91,7 +88,11 @@ export default function AnsweredSubject({ auth, title, flash, participant, overv
                                                         </td>
 
                                                         <td>
-                                                            {"Essay Belum Dinilai"}
+                                                            {overview.final_mark == null ?
+                                                            "Essay Belum Dinilai"
+                                                            :
+                                                            overview.final_mark
+                                                            }
                                                         </td>
                                                         <td className="flex justify-start">
                                                             {/* Button View */}
