@@ -9,7 +9,7 @@ class Overview extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
-    protected $with = ['participant'];
+    protected $with = ['participant', 'subject', 'answered'];
 
     public function participant()
     {
@@ -19,7 +19,7 @@ class Overview extends Model
 
     public function subject()
     {
-        return $this->belongsTo(Subject::class);
+        return $this->belongsTo(Subject::class, 'subject_id');
     }
 
     public function answered()

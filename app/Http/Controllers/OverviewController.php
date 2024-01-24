@@ -32,11 +32,14 @@ class OverviewController extends Controller
         $exams = Exam::where('subject_id', $data->subject_id)->get();
 
         // Loop melalui setiap exam
+        $actualAnswers = [];
+        $multiple_c_answers = [];
+        $points = [];
         foreach ($exams as $key=>$exam) {
             // Tambah ke array (ambil yg pilgan saja)
-            if($exam->is_essay === false) {
+            if($exam->is_essay == false) {
                 $actualAnswers[] = $exam->actual_answer;
-                $studentAnswers[] = $AllstudentAnswers[$key];
+                $multiple_c_answers[] = $AllstudentAnswers[$key];
                 $points[] = $exam->point;
                 $correction_status[$key] = true;
 
@@ -46,13 +49,18 @@ class OverviewController extends Controller
                     $all_mark[$key] = $exam->point;
                 }
             }
+            // Kalo essay
+            else if($exam->is_essay == true) {
+                // status koreksi jadi false
+                $correction_status[$key] = false;
+            }          
         }
         
         // Zip & Urutkan
-        $pairedData = collect($studentAnswers)
+        $pairedData = collect($multiple_c_answers)
             ->zip($actualAnswers, $points);
         
-        // ddd($pairedData);
+
         // Hitung jawaban yang benar dan jumlahkan poinnya
         $correctAnswers = $pairedData
             ->filter(function ($pair) {
@@ -64,7 +72,7 @@ class OverviewController extends Controller
                 return $pair[2]; // Mengambil point dari pair
             });
             
-        $correctAnswered = collect($studentAnswers)
+        $correctAnswered = collect($multiple_c_answers)
             ->zip($actualAnswers)
             ->filter(function ($pair) {
                 return ($pair[0] == $pair[1]);
@@ -76,7 +84,7 @@ class OverviewController extends Controller
         Overview::updateOrcreate(
             [
                 'participant_id' => $data->participant_id,
-                'subject_id' => $data->participant_id,      
+                'subject_id' => $data->subject_id,      
             ],
             [
                 'answer_id' => $data->id,

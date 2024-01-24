@@ -18,6 +18,10 @@ class Subject extends Model
         return $this->hasMany(Exam::class);
     }
 
+    public function overview()
+    {
+        return $this->hasMany(Overview::class);
+    }
     // public function overview()
     // {
     //     return $this->belongsTo(Overview::class);

@@ -89,9 +89,9 @@ export default function AnsweredSubject({ auth, title, flash, participant, overv
 
                                                         <td>
                                                             {overview.final_mark == null ?
-                                                            "Essay Belum Dinilai"
-                                                            :
-                                                            overview.final_mark
+                                                                "Essay Belum Dinilai"
+                                                                :
+                                                                overview.final_mark
                                                             }
                                                         </td>
                                                         <td className="flex justify-start">

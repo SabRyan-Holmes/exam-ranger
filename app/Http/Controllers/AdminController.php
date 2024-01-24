@@ -272,7 +272,7 @@ class AdminController extends Controller
     {
         // ddd($request->user_id);
         // Berdasarkan Subject dari Peserta dan overview nilai 
-        $overviews = Overview::where('participant_id', $request->user_id )->with('subject','answered')->get();
+        $overviews = Overview::where('participant_id', $request->user_id)->with('subject')->get();
         $participant = User::find($request->user_id);
         return Inertia::render('Admin/AnsweredSubject', [
             'title' => "Materi Soal ",
@@ -314,8 +314,16 @@ class AdminController extends Controller
             "final_mark" => "required",
        ]);
 
+
+
         Overview::where('id', $request->id)
             ->update($validated);
+        Answer::where('id', $request->answer_id)
+            ->update([
+                'correction_status' => $request->correction_status,
+                'is_correct' => $request->is_correct,
+                // Mark nanti
+            ]);
 
         return back()->with('message', 'Nilai Peserta Berhasil Diupdate');
     }
