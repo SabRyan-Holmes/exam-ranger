@@ -305,7 +305,7 @@ class AdminController extends Controller
     }
 
     public function update_overview(Request $request) {
-        // ddd($request);
+        // ddd($request->essay_correct);
         $validated = $request->validate([
             'subject_id' => "required|integer",
             'participant_id' => "required|integer",
@@ -322,6 +322,7 @@ class AdminController extends Controller
             ->update([
                 'correction_status' => $request->correction_status,
                 'is_correct' => $request->is_correct,
+                'mark' => $request->mark,
                 // Mark nanti
             ]);
 

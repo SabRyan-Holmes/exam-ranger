@@ -33,42 +33,7 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
     }, [])
 
 
-    function submit() {
-        // Add All Point from ArrayPoint
-        let essayMark = 0
-        let essayCorrect = 0
-        allPointEssay.map((point) => {
-            essayMark += point
-            if (essayCorrect != 0) {
-                essayCorrect++;
-            }
-        })
 
-        console.log('essayMark')
-        console.log(essayMark)
-        console.log('essayCorrect')
-        console.log(essayCorrect)
-        const finalMark = parseFloat(overview.temporary_mark + essayMark)
-        console.log('finalMark')
-        console.log(finalMark)
-        data.id = overview.id
-        data.subject_id = subjectId
-        data.participant_id = participant.id
-        data.essay_correct = essayCorrect
-        data.essay_mark = essayMark
-        data.final_mark = finalMark
-        // setData({
-        //     id: overview.id,
-        //     subject_id: subjectId,
-        //     participant_id: participant.id,
-        //     essay_correct: essayCorrect,
-        //     essay_mark: essayMark,
-        //     final_mark: finalMark,
-        // })
-        patch(route('admin.update-overview', data, {
-            _method: 'PATCH',
-        }));
-    }
 
     const [allPointEssay, setAllPointEssay] = useState(Array);
     console.log("allPointEssay")
@@ -80,6 +45,7 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
     const participant = overview.participant
     const [isCorrected, setIsCorrected] = useState(answered.correction_status)
     const [isTrue, setIsTrue] = useState(answered.is_correct)
+    const [allMark, setAllMark] = useState(answered.mark)
 
 
     function handleIncorrect() {
@@ -113,8 +79,9 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
 
         // New Update for Answer
         answer_id: answered.id,
-        correction_status: isCorrected,
-        is_correct: isTrue,
+        correction_status: '',
+        is_correct: '',
+        mark: '',
 
 
     })
@@ -125,6 +92,58 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
 
     console.log(errors)
 
+    // Ini harus dibawah
+    function submit() {
+        // Add All Point from ArrayPoint
+        let essayMark = 0
+        let essayCorrect = 0
+        allPointEssay.map((point) => {
+            essayMark += point
+            if (point != 0) {
+                essayCorrect++;
+            }
+        })
+
+        console.log('essayMark :')
+        console.log(essayMark)
+        console.log('essayCorrect :')
+        console.log(essayCorrect)
+        const finalMark = parseFloat(overview.temporary_mark + essayMark)
+        console.log('finalMark')
+        console.log(finalMark)
+        data.id = overview.id
+        data.subject_id = subjectId
+        data.participant_id = participant.id
+        data.essay_correct = essayCorrect
+        data.essay_mark = essayMark
+        data.final_mark = finalMark
+
+        const newStateCorrected = [...isCorrected]
+        data.correction_status = newStateCorrected
+
+        const newStateIsCorrect = [...isTrue]
+        data.is_correct = newStateIsCorrect
+
+        const newStateAllMark = [...allMark]
+        data.mark = newStateAllMark
+
+
+
+
+        // setData({
+        //     id: overview.id,
+        //     subject_id: subjectId,
+        //     participant_id: participant.id,
+        //     essay_correct: essayCorrect,
+        //     essay_mark: essayMark,
+        //     final_mark: finalMark,
+        // })
+        patch(route('admin.update-overview', data, {
+            _method: 'PATCH',
+        }));
+    }
+    console.log("Kategori Sekarang")
+    console.log(kategori)
     return (
         <div className='h-full'>
             <Head title={`${title}  ${subject}`} />
@@ -143,9 +162,9 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                     <details>
                                         <summary className='text-xl  text-primary'>{kategori}</summary>
                                         <ul className="p-2 text-sm w-36 bg-white ml-3">
-                                            <li className='hover:text-primary' default onClick={() => setKategori("Semua")}><a>Semua Soal</a></li>
+                                            <li className='hover:text-primary' default onClick={() => setKategori("Semua Soal")}><a>Semua Soal</a></li>
                                             <li className='hover:text-primary' onClick={() => setKategori("Essay")}><a>Essay</a></li>
-                                            <li className='hover:text-primary' onClick={() => setKategori("Pilihan Ganda")}><a>Pilihan Ganda</a></li>
+                                            <li className='hover:text-primary' onClick={() => setKategori("Pilgan")}><a>Pilihan Ganda</a></li>
                                         </ul>
                                     </details>
                                 </li>
@@ -193,147 +212,244 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
 
                         {/* content */}
                         <section className="mt-7">
+                            {/* ALl Type */}
+                            {
+                                kategori == "Semua Soal" && exams.length &&
+                                exams.map((data, i) => {
 
-                            {exams.map((data, i) => {
-
-                                if (!data.is_essay) {
-                                    return (
-                                        <div className="card w-full my-3 h-max bg-secondary text-primary-content" key={i}>
-                                            <div className="card-body">
-                                                {/* <h2 className="card-title">Soal nomor 1</h2> */}
-                                                {data.image && <img src={'/storage/' + data.image} className='justify-start max-w-2xl' />}
-                                                <p className='w-3/4'>{i + 1}. {data.question} <span className='font-medium text-green-900'> {'(' + data.point + ' points)'}</span></p>
-                                                <ul>
-                                                    <li className='font-medium'>A. {data.choice[0]}</li>
-                                                    <li className='font-medium'>B. {data.choice[1]}</li>
-                                                    <li className='font-medium'>C. {data.choice[2]}</li>
-                                                    <li className='font-medium'>D. {data.choice[3]}</li>
-                                                </ul>
-
-                                                <div className='flex justify-between'>
-                                                    <div className="">
-                                                        {/* <button className="btn">Buy Now</button> */}
-                                                        <h1>Dijawab : <strong >
-                                                            {answer[i] != null ? answer[i] : <span className="text-red-700">
-                                                                Tidak Dijawab
-                                                            </span>}</strong></h1>
-                                                        <p>Jawaban yang benar : <strong className="text-green-800">
-                                                            {data.actual_answer}</strong></p>
-                                                    </div>
-
-                                                    <div className="card-actions justify-end -mr-4">
+                                    if (!data.is_essay) {
+                                        return (
+                                            <div className="card w-full my-3 h-max bg-secondary text-primary-content" key={i}>
+                                                <div className="card-body">
+                                                    {/* <h2 className="card-title">Soal nomor 1</h2> */}
+                                                    {data.image && <img src={'/storage/' + data.image} className='justify-start max-w-2xl' />}
+                                                    <div className='flex justify-between'>
+                                                        <p className='w-3/4'>{i + 1}. {data.question} <span className='font-medium text-green-900'> {'(' + data.point + ' point)'}</span></p>
                                                         {
-                                                            isTrue[i] ? <PrimaryButton className='bg-green-600'>Benar <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                                                            </svg>
-                                                            </PrimaryButton>
+                                                            isTrue[i] ?
+                                                                <h1 className='text-emerald-500 text-lg'>+ {allMark[i]} Point</h1>
                                                                 :
-                                                                <PrimaryButton className='bg-red-500'>Salah <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-7 h-7">
-                                                                    <path d="M5.28 4.22a.75.75 0 0 0-1.06 1.06L6.94 8l-2.72 2.72a.75.75 0 1 0 1.06 1.06L8 9.06l2.72 2.72a.75.75 0 1 0 1.06-1.06L9.06 8l2.72-2.72a.75.75 0 0 0-1.06-1.06L8 6.94 5.28 4.22Z" />
-                                                                </svg>
-                                                                </PrimaryButton>
+                                                                <h1 className='text-warning text-lg'> 0 Point</h1>
                                                         }
+
                                                     </div>
-                                                </div>
-
-
-
-                                            </div>
-                                        </div>
-                                    )
-                                } else {
-                                    const pointArray = []
-                                    for (let point = 0.5; point <= data.point; point += 0.5) {
-                                        pointArray.push(point);
-                                    }
-                                    // console.log(pointArray)
-                                    // const [allPointEssay, setAllPointEssay] = useState(Array(essayCount).fill(null));
-                                    // // data.essay_point = allPointEssay
-                                    // console.log("allPointEssay")
-                                    // console.log(allPointEssay)
-                                    const [pointChange, setPointChange] = useState(data.point)
-                                    // const [isTrue, setIsTrue] = useState()
-                                    return (
-                                        <div className="card w-full my-3 bg-secondary h-full max-h-max text-primary-content" key={i}>
-                                            <div className="card-body">
-                                                {/* <h2 className="card-title">Soal nomor 1</h2> */}
-                                                {data.image && <img src={'/storage/' + data.image} className='justify-start max-w-2xl'></img>}
-                                                <div className='flex justify-between items-start'>
-                                                    <p>{i + 1}. {data.question} <span className='font-medium  text-green-900'> {'(' + data.point + ' points)'}</span></p>
-                                                    <ul className=" menu-horizontal  z-[999] items-center  opacity-100 shrink-0 px-1  ">
-                                                        <li tabIndex={0}>
-                                                            <details>
-                                                                <summary className='text-lg   text-primary'>{pointChange} Points</summary>
-                                                                <ul className="p-2 text-base w-24 text-left bg-white ml-3">
-                                                                    {pointArray.map(point =>
-                                                                        <li className='hover:text-primary' default onClick={() => setPointChange(point)}><a>{point} Point</a></li>
-                                                                    )}
-                                                                </ul>
-                                                            </details>
-                                                        </li>
+                                                    <ul>
+                                                        <li className='font-medium'>A. {data.choice[0]}</li>
+                                                        <li className='font-medium'>B. {data.choice[1]}</li>
+                                                        <li className='font-medium'>C. {data.choice[2]}</li>
+                                                        <li className='font-medium'>D. {data.choice[3]}</li>
                                                     </ul>
-                                                </div>
 
-                                                <div className='flex justify-between mt-2'>
-                                                    <div className="">
-                                                        {/* <button className="btn">Buy Now</button> */}
-                                                        <h1>Dijawab : <strong>{answer[i] != null ? answer[i] : <span className="text-red-700">
-                                                            Tidak Dijawab
-                                                        </span>}</strong></h1>
-                                                        <h1>Jawaban yang Benar : <strong className="text-green-800">{data.actual_answer}</strong></h1>
+                                                    <div className='flex justify-between'>
+                                                        <div className="">
+                                                            {/* <button className="btn">Buy Now</button> */}
+                                                            <h1>Dijawab : <strong >
+                                                                {answer[i] != null ? answer[i] : <span className="text-red-700">
+                                                                    Tidak Dijawab
+                                                                </span>}</strong></h1>
+                                                            <p>Jawaban yang benar : <strong className="text-green-800">
+                                                                {data.actual_answer}</strong></p>
+                                                        </div>
 
-                                                    </div>
-
-                                                    <div className="card-actions -mr-4 items-end  ">
-
-                                                        {!isCorrected[i] ?
-                                                            <>
-                                                                <PrimaryButton className='bg-red-600 text-base -mr-7'
-                                                                    onClick={() => {
-                                                                        handleIncorrect()
-                                                                        const newState = [...isCorrected]
-                                                                        newState[i] = !isCorrected[i]
-                                                                        setIsCorrected(newState)
-                                                                        // setIsTrue(false)
-                                                                    }}>Tandai Salah <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-7 h-7">
+                                                        <div className="card-actions justify-end -mr-4">
+                                                            {
+                                                                isTrue[i] ? <button className='button-correct'>Benar <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                                                                </svg>
+                                                                </button>
+                                                                    :
+                                                                    <button className='button-incorrect'>Salah <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-7 h-7">
                                                                         <path d="M5.28 4.22a.75.75 0 0 0-1.06 1.06L6.94 8l-2.72 2.72a.75.75 0 1 0 1.06 1.06L8 9.06l2.72 2.72a.75.75 0 1 0 1.06-1.06L9.06 8l2.72-2.72a.75.75 0 0 0-1.06-1.06L8 6.94 5.28 4.22Z" />
                                                                     </svg>
-                                                                </PrimaryButton>
+                                                                    </button>
+                                                            }
+                                                        </div>
+                                                    </div>
 
-                                                                <PrimaryButton className='bg-green-600' onClick={() => {
-                                                                    handleCorrect(pointChange, i)
 
-                                                                }}>Tandai Benar <svg className='w-7 h-7 stroke-2' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                                                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                                                                    </svg>
-                                                                </PrimaryButton>
-                                                            </>
-                                                            :
 
-                                                            (
-                                                                isTrue[i] == true ?
-                                                                    <PrimaryButton className='bg-green-600'>Benar <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                                                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                                                                    </svg>
-                                                                    </PrimaryButton>
+                                                </div>
+                                            </div>
+                                        )
+                                    } else {
+                                        const pointArray = []
+                                        for (let point = 0.5; point <= data.point; point += 0.5) {
+                                            pointArray.push(point);
+                                        }
+
+                                        const [pointChange, setPointChange] = useState(data.point)
+
+                                        useEffect(() => {
+                                            if (isCorrected[i]) {
+                                                setPointChange(allMark[i])
+                                            }
+                                        }, [])
+
+
+                                        return (
+                                            <div className="card w-full my-3 bg-secondary h-full max-h-max text-primary-content" key={i}>
+                                                <div className="card-body">
+                                                    {/* <h2 className="card-title">Soal nomor 1</h2> */}
+                                                    {data.image && <img src={'/storage/' + data.image} className='justify-start max-w-2xl'></img>}
+                                                    <div className='flex justify-between items-start'>
+                                                        <p className='w-3/4'>{i + 1}. {data.question} <span className='font-medium  text-green-900'> {'(' + data.point + ' points)'}</span></p>
+                                                        {
+                                                            !isCorrected[i] ?
+                                                                <>
+                                                                    <ul className=" menu-horizontal  z-[999] items-center  opacity-100 shrink-0 px-1  ">
+                                                                        <li tabIndex={0}>
+                                                                            <details>
+                                                                                <summary className='text-lg   text-primary'>{pointChange} Points</summary>
+                                                                                <ul className="p-2 text-base w-24 text-left bg-white ml-3">
+                                                                                    {pointArray.map(point =>
+                                                                                        <li className='hover:text-primary' default onClick={() => {
+                                                                                            setPointChange(point)
+                                                                                            const newStateMark = [...allMark]
+                                                                                            newStateMark[i] = point
+                                                                                            setAllMark(newStateMark)
+                                                                                        }
+
+                                                                                        }><a>{point} Point</a></li>
+                                                                                    )}
+                                                                                </ul>
+                                                                            </details>
+                                                                        </li>
+                                                                    </ul>
+                                                                </>
+                                                                :
+                                                                (isTrue[i] ?
+                                                                    <h1 className='text-emerald-500 text-lg'>+ {allMark[i] ? allMark[i] : pointChange} Point</h1>
                                                                     :
-                                                                    <PrimaryButton className='bg-red-500'>Salah <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-7 h-7">
-                                                                        <path d="M5.28 4.22a.75.75 0 0 0-1.06 1.06L6.94 8l-2.72 2.72a.75.75 0 1 0 1.06 1.06L8 9.06l2.72 2.72a.75.75 0 1 0 1.06-1.06L9.06 8l2.72-2.72a.75.75 0 0 0-1.06-1.06L8 6.94 5.28 4.22Z" /></svg>
-                                                                    </PrimaryButton>
-                                                            )
+                                                                    <h1 className='text-warning text-lg'> 0 Point</h1>
+                                                                )
 
                                                         }
+
                                                     </div>
+
+                                                    <div className='flex justify-between mt-2'>
+                                                        <div className="">
+                                                            {/* <button className="btn">Buy Now</button> */}
+                                                            <h1>Dijawab : <strong>{answer[i] != null ? answer[i] : <span className="text-red-700">
+                                                                Tidak Dijawab
+                                                            </span>}</strong></h1>
+                                                            <h1>Jawaban yang Benar : <strong className="text-green-800">{data.actual_answer}</strong></h1>
+
+                                                        </div>
+
+                                                        <div className="card-actions -mr-4 items-end  ">
+
+                                                            {!isCorrected[i] ?
+                                                                <>
+                                                                    <button className='button-incorrect text-base -mr-7'
+                                                                        onClick={() => {
+                                                                            handleIncorrect()
+                                                                            const newState = [...isCorrected]
+                                                                            newState[i] = !isCorrected[i]
+                                                                            setIsCorrected(newState)
+                                                                            // setIsTrue(false)
+                                                                        }}>Tandai Salah <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-7 h-7">
+                                                                            <path d="M5.28 4.22a.75.75 0 0 0-1.06 1.06L6.94 8l-2.72 2.72a.75.75 0 1 0 1.06 1.06L8 9.06l2.72 2.72a.75.75 0 1 0 1.06-1.06L9.06 8l2.72-2.72a.75.75 0 0 0-1.06-1.06L8 6.94 5.28 4.22Z" />
+                                                                        </svg>
+                                                                    </button>
+
+                                                                    <button className='button-correct' onClick={() => {
+                                                                        handleCorrect(pointChange, i)
+
+                                                                    }}>Tandai Benar <svg className='w-7 h-7 stroke-2' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                                                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                                                                        </svg>
+                                                                    </button>
+                                                                </>
+                                                                :
+
+                                                                (
+                                                                    isTrue[i] == true ?
+                                                                        <button className='button-correct'>Benar <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                                                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                                                                        </svg>
+                                                                        </button>
+                                                                        :
+                                                                        <button className='button-incorrect'>Salah <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-7 h-7">
+                                                                            <path d="M5.28 4.22a.75.75 0 0 0-1.06 1.06L6.94 8l-2.72 2.72a.75.75 0 1 0 1.06 1.06L8 9.06l2.72 2.72a.75.75 0 1 0 1.06-1.06L9.06 8l2.72-2.72a.75.75 0 0 0-1.06-1.06L8 6.94 5.28 4.22Z" /></svg>
+                                                                        </button>
+                                                                )
+
+                                                            }
+                                                        </div>
+                                                    </div>
+
+
                                                 </div>
-
-
                                             </div>
-                                        </div>
-                                    )
+                                        )
+                                    }
                                 }
-                            }
-                            )}
+                                )
 
+                            }
+
+                            {
+                                kategori == "Pilgan" ?
+                                    exams.map((data, i) => {
+                                        if (!data.is_essay) {
+                                            return (
+                                                <>
+                                                    <div className="card w-full my-3 h-max bg-secondary text-primary-content" key={i}>
+                                                        <div className="card-body">
+                                                            {/* <h2 className="card-title">Soal nomor 1</h2> */}
+                                                            {data.image && <img src={'/storage/' + data.image} className='justify-start max-w-2xl' />}
+                                                            <div className='flex justify-between'>
+                                                                <p className='w-3/4'>{i + 1}. {data.question} <span className='font-medium text-green-900'> {'(' + data.point + ' point)'}</span></p>
+                                                                {
+                                                                    isTrue[i] ?
+                                                                        <h1 className='text-emerald-500 text-lg'>+ {allMark[i]} Point</h1>
+                                                                        :
+                                                                        <h1 className='text-warning text-lg'> 0 Point</h1>
+                                                                }
+
+                                                            </div>
+                                                            <ul>
+                                                                <li className='font-medium'>A. {data.choice[0]}</li>
+                                                                <li className='font-medium'>B. {data.choice[1]}</li>
+                                                                <li className='font-medium'>C. {data.choice[2]}</li>
+                                                                <li className='font-medium'>D. {data.choice[3]}</li>
+                                                            </ul>
+
+                                                            <div className='flex justify-between'>
+                                                                <div className="">
+                                                                    {/* <button className="btn">Buy Now</button> */}
+                                                                    <h1>Dijawab : <strong >
+                                                                        {answer[i] != null ? answer[i] : <span className="text-red-700">
+                                                                            Tidak Dijawab
+                                                                        </span>}</strong></h1>
+                                                                    <p>Jawaban yang benar : <strong className="text-green-800">
+                                                                        {data.actual_answer}</strong></p>
+                                                                </div>
+
+                                                                <div className="card-actions justify-end -mr-4">
+                                                                    {
+                                                                        isTrue[i] ? <button className='button-correct'>Benar <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                                                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                                                                        </svg>
+                                                                        </button>
+                                                                            :
+                                                                            <button className='button-incorrect'>Salah <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-7 h-7">
+                                                                                <path d="M5.28 4.22a.75.75 0 0 0-1.06 1.06L6.94 8l-2.72 2.72a.75.75 0 1 0 1.06 1.06L8 9.06l2.72 2.72a.75.75 0 1 0 1.06-1.06L9.06 8l2.72-2.72a.75.75 0 0 0-1.06-1.06L8 6.94 5.28 4.22Z" />
+                                                                            </svg>
+                                                                            </button>
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </>
+
+                                            )
+                                        }
+                                    })
+                                    : ''
+                            }
                         </section>
 
                         {/* end of content               */}

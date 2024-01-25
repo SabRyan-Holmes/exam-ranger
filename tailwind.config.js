@@ -52,7 +52,7 @@ export default {
 
                     success: "#00ffff",
 
-                    warning: "#ffffff",
+                    warning: "#dc2626",
 
                     error: "#ffffff",
                 },
