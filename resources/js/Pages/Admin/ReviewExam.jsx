@@ -33,6 +33,13 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
     }, [])
 
 
+    let panjangIndexAnswer = answered.answer.length
+    var _exams;
+    if (panjangIndexAnswer != exams.length) {
+        _exams = exams.slice(0, panjangIndexAnswer)
+    } else {
+        _exams = exams
+    }
 
 
     const [allPointEssay, setAllPointEssay] = useState(Array);
@@ -214,8 +221,8 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                         <section className="mt-7">
                             {/* ALl Type */}
                             {
-                                exams.map((data, i) => {
-                                    if (kategori == "Semua Soal" && exams.length) {
+                                _exams.map((data, i) => {
+                                    if (kategori == "Semua Soal" && _exams.length) {
                                         if (!data.is_essay) {
                                             return (
                                                 <div className="card w-full my-3 h-max bg-secondary text-primary-content" key={i}>
@@ -230,7 +237,7 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                                     :
                                                                     <h1 className='text-warning text-lg'> 0 Point</h1>
                                                             }
-    
+
                                                         </div>
                                                         <ul>
                                                             <li className='font-medium'>A. {data.choice[0]}</li>
@@ -238,7 +245,7 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                             <li className='font-medium'>C. {data.choice[2]}</li>
                                                             <li className='font-medium'>D. {data.choice[3]}</li>
                                                         </ul>
-    
+
                                                         <div className='flex justify-between'>
                                                             <div className="">
                                                                 {/* <button className="btn">Buy Now</button> */}
@@ -249,7 +256,7 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                                 <p>Jawaban yang benar : <strong className="text-green-800">
                                                                     {data.actual_answer}</strong></p>
                                                             </div>
-    
+
                                                             <div className="card-actions justify-end -mr-4">
                                                                 {
                                                                     isTrue[i] ? <button className='button-correct'>Benar <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -264,9 +271,9 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                                 }
                                                             </div>
                                                         </div>
-    
-    
-    
+
+
+
                                                     </div>
                                                 </div>
                                             )
@@ -275,16 +282,16 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                             for (let point = 0.5; point <= data.point; point += 0.5) {
                                                 pointArray.push(point);
                                             }
-    
+
                                             const [pointChange, setPointChange] = useState(data.point)
-    
+
                                             useEffect(() => {
                                                 if (isCorrected[i]) {
                                                     setPointChange(allMark[i])
                                                 }
                                             }, [])
-    
-    
+
+
                                             return (
                                                 <div className="card w-full my-3 bg-secondary h-full max-h-max text-primary-content" key={i}>
                                                     <div className="card-body">
@@ -307,7 +314,7 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                                                                 newStateMark[i] = point
                                                                                                 setAllMark(newStateMark)
                                                                                             }
-    
+
                                                                                             }><a>{point} Point</a></li>
                                                                                         )}
                                                                                     </ul>
@@ -321,11 +328,11 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                                         :
                                                                         <h1 className='text-warning text-lg'> 0 Point</h1>
                                                                     )
-    
+
                                                             }
-    
+
                                                         </div>
-    
+
                                                         <div className='flex justify-between mt-2'>
                                                             <div className="">
                                                                 {/* <button className="btn">Buy Now</button> */}
@@ -333,11 +340,11 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                                     Tidak Dijawab
                                                                 </span>}</strong></h1>
                                                                 <h1>Jawaban yang Benar : <strong className="text-green-800">{data.actual_answer}</strong></h1>
-    
+
                                                             </div>
-    
+
                                                             <div className="card-actions -mr-4 items-end  ">
-    
+
                                                                 {!isCorrected[i] ?
                                                                     <>
                                                                         <button className='button-incorrect text-base -mr-7'
@@ -351,17 +358,17 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                                                 <path d="M5.28 4.22a.75.75 0 0 0-1.06 1.06L6.94 8l-2.72 2.72a.75.75 0 1 0 1.06 1.06L8 9.06l2.72 2.72a.75.75 0 1 0 1.06-1.06L9.06 8l2.72-2.72a.75.75 0 0 0-1.06-1.06L8 6.94 5.28 4.22Z" />
                                                                             </svg>
                                                                         </button>
-    
+
                                                                         <button className='button-correct' onClick={() => {
                                                                             handleCorrect(pointChange, i)
-    
+
                                                                         }}>Tandai Benar <svg className='w-7 h-7 stroke-2' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                                                                 <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                                                                             </svg>
                                                                         </button>
                                                                     </>
                                                                     :
-    
+
                                                                     (
                                                                         isTrue[i] == true ?
                                                                             <button className='button-correct'>Benar <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -373,18 +380,18 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                                                 <path d="M5.28 4.22a.75.75 0 0 0-1.06 1.06L6.94 8l-2.72 2.72a.75.75 0 1 0 1.06 1.06L8 9.06l2.72 2.72a.75.75 0 1 0 1.06-1.06L9.06 8l2.72-2.72a.75.75 0 0 0-1.06-1.06L8 6.94 5.28 4.22Z" /></svg>
                                                                             </button>
                                                                     )
-    
+
                                                                 }
                                                             </div>
                                                         </div>
-    
-    
+
+
                                                     </div>
                                                 </div>
                                             )
                                         }
 
-                                    } else if (kategori == "Essay" && exams.length) {
+                                    } else if (kategori == "Essay" && _exams.length) {
                                         if (!data.is_essay) {
                                             return (
                                                 <div className="hidden card w-full my-3 h-max bg-secondary text-primary-content" key={i}>
@@ -399,7 +406,7 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                                     :
                                                                     <h1 className='text-warning text-lg'> 0 Point</h1>
                                                             }
-    
+
                                                         </div>
                                                         <ul>
                                                             <li className='font-medium'>A. {data.choice[0]}</li>
@@ -407,7 +414,7 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                             <li className='font-medium'>C. {data.choice[2]}</li>
                                                             <li className='font-medium'>D. {data.choice[3]}</li>
                                                         </ul>
-    
+
                                                         <div className='flex justify-between'>
                                                             <div className="">
                                                                 {/* <button className="btn">Buy Now</button> */}
@@ -418,7 +425,7 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                                 <p>Jawaban yang benar : <strong className="text-green-800">
                                                                     {data.actual_answer}</strong></p>
                                                             </div>
-    
+
                                                             <div className="card-actions justify-end -mr-4">
                                                                 {
                                                                     isTrue[i] ? <button className='button-correct'>Benar <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -433,9 +440,9 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                                 }
                                                             </div>
                                                         </div>
-    
-    
-    
+
+
+
                                                     </div>
                                                 </div>
                                             )
@@ -444,16 +451,16 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                             for (let point = 0.5; point <= data.point; point += 0.5) {
                                                 pointArray.push(point);
                                             }
-    
+
                                             const [pointChange, setPointChange] = useState(data.point)
-    
+
                                             useEffect(() => {
                                                 if (isCorrected[i]) {
                                                     setPointChange(allMark[i])
                                                 }
                                             }, [])
-    
-    
+
+
                                             return (
                                                 <div className="card w-full my-3 bg-secondary h-full max-h-max text-primary-content" key={i}>
                                                     <div className="card-body">
@@ -476,7 +483,7 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                                                                 newStateMark[i] = point
                                                                                                 setAllMark(newStateMark)
                                                                                             }
-    
+
                                                                                             }><a>{point} Point</a></li>
                                                                                         )}
                                                                                     </ul>
@@ -490,11 +497,11 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                                         :
                                                                         <h1 className='text-warning text-lg'> 0 Point</h1>
                                                                     )
-    
+
                                                             }
-    
+
                                                         </div>
-    
+
                                                         <div className='flex justify-between mt-2'>
                                                             <div className="">
                                                                 {/* <button className="btn">Buy Now</button> */}
@@ -502,11 +509,11 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                                     Tidak Dijawab
                                                                 </span>}</strong></h1>
                                                                 <h1>Jawaban yang Benar : <strong className="text-green-800">{data.actual_answer}</strong></h1>
-    
+
                                                             </div>
-    
+
                                                             <div className="card-actions -mr-4 items-end  ">
-    
+
                                                                 {!isCorrected[i] ?
                                                                     <>
                                                                         <button className='button-incorrect text-base -mr-7'
@@ -520,17 +527,17 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                                                 <path d="M5.28 4.22a.75.75 0 0 0-1.06 1.06L6.94 8l-2.72 2.72a.75.75 0 1 0 1.06 1.06L8 9.06l2.72 2.72a.75.75 0 1 0 1.06-1.06L9.06 8l2.72-2.72a.75.75 0 0 0-1.06-1.06L8 6.94 5.28 4.22Z" />
                                                                             </svg>
                                                                         </button>
-    
+
                                                                         <button className='button-correct' onClick={() => {
                                                                             handleCorrect(pointChange, i)
-    
+
                                                                         }}>Tandai Benar <svg className='w-7 h-7 stroke-2' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                                                                 <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                                                                             </svg>
                                                                         </button>
                                                                     </>
                                                                     :
-    
+
                                                                     (
                                                                         isTrue[i] == true ?
                                                                             <button className='button-correct'>Benar <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -542,17 +549,17 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                                                 <path d="M5.28 4.22a.75.75 0 0 0-1.06 1.06L6.94 8l-2.72 2.72a.75.75 0 1 0 1.06 1.06L8 9.06l2.72 2.72a.75.75 0 1 0 1.06-1.06L9.06 8l2.72-2.72a.75.75 0 0 0-1.06-1.06L8 6.94 5.28 4.22Z" /></svg>
                                                                             </button>
                                                                     )
-    
+
                                                                 }
                                                             </div>
                                                         </div>
-    
-    
+
+
                                                     </div>
                                                 </div>
                                             )
                                         }
-                                    } else if (kategori == "Pilgan" && exams.length) {
+                                    } else if (kategori == "Pilgan" && _exams.length) {
                                         if (!data.is_essay) {
                                             return (
                                                 <div className="card w-full my-3 h-max bg-secondary text-primary-content" key={i}>
@@ -567,7 +574,7 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                                     :
                                                                     <h1 className='text-warning text-lg'> 0 Point</h1>
                                                             }
-    
+
                                                         </div>
                                                         <ul>
                                                             <li className='font-medium'>A. {data.choice[0]}</li>
@@ -575,7 +582,7 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                             <li className='font-medium'>C. {data.choice[2]}</li>
                                                             <li className='font-medium'>D. {data.choice[3]}</li>
                                                         </ul>
-    
+
                                                         <div className='flex justify-between'>
                                                             <div className="">
                                                                 {/* <button className="btn">Buy Now</button> */}
@@ -586,7 +593,7 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                                 <p>Jawaban yang benar : <strong className="text-green-800">
                                                                     {data.actual_answer}</strong></p>
                                                             </div>
-    
+
                                                             <div className="card-actions justify-end -mr-4">
                                                                 {
                                                                     isTrue[i] ? <button className='button-correct'>Benar <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -601,9 +608,9 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                                 }
                                                             </div>
                                                         </div>
-    
-    
-    
+
+
+
                                                     </div>
                                                 </div>
                                             )
@@ -612,16 +619,16 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                             for (let point = 0.5; point <= data.point; point += 0.5) {
                                                 pointArray.push(point);
                                             }
-    
+
                                             const [pointChange, setPointChange] = useState(data.point)
-    
+
                                             useEffect(() => {
                                                 if (isCorrected[i]) {
                                                     setPointChange(allMark[i])
                                                 }
                                             }, [])
-    
-    
+
+
                                             return (
                                                 <div className="hidden card w-full my-3 bg-secondary h-full max-h-max text-primary-content" key={i}>
                                                     <div className="card-body">
@@ -644,7 +651,7 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                                                                 newStateMark[i] = point
                                                                                                 setAllMark(newStateMark)
                                                                                             }
-    
+
                                                                                             }><a>{point} Point</a></li>
                                                                                         )}
                                                                                     </ul>
@@ -658,11 +665,11 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                                         :
                                                                         <h1 className='text-warning text-lg'> 0 Point</h1>
                                                                     )
-    
+
                                                             }
-    
+
                                                         </div>
-    
+
                                                         <div className='flex justify-between mt-2'>
                                                             <div className="">
                                                                 {/* <button className="btn">Buy Now</button> */}
@@ -670,11 +677,11 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                                     Tidak Dijawab
                                                                 </span>}</strong></h1>
                                                                 <h1>Jawaban yang Benar : <strong className="text-green-800">{data.actual_answer}</strong></h1>
-    
+
                                                             </div>
-    
+
                                                             <div className="card-actions -mr-4 items-end  ">
-    
+
                                                                 {!isCorrected[i] ?
                                                                     <>
                                                                         <button className='button-incorrect text-base -mr-7'
@@ -688,17 +695,17 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                                                 <path d="M5.28 4.22a.75.75 0 0 0-1.06 1.06L6.94 8l-2.72 2.72a.75.75 0 1 0 1.06 1.06L8 9.06l2.72 2.72a.75.75 0 1 0 1.06-1.06L9.06 8l2.72-2.72a.75.75 0 0 0-1.06-1.06L8 6.94 5.28 4.22Z" />
                                                                             </svg>
                                                                         </button>
-    
+
                                                                         <button className='button-correct' onClick={() => {
                                                                             handleCorrect(pointChange, i)
-    
+
                                                                         }}>Tandai Benar <svg className='w-7 h-7 stroke-2' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                                                                 <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                                                                             </svg>
                                                                         </button>
                                                                     </>
                                                                     :
-    
+
                                                                     (
                                                                         isTrue[i] == true ?
                                                                             <button className='button-correct'>Benar <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -710,12 +717,12 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                                                 <path d="M5.28 4.22a.75.75 0 0 0-1.06 1.06L6.94 8l-2.72 2.72a.75.75 0 1 0 1.06 1.06L8 9.06l2.72 2.72a.75.75 0 1 0 1.06-1.06L9.06 8l2.72-2.72a.75.75 0 0 0-1.06-1.06L8 6.94 5.28 4.22Z" /></svg>
                                                                             </button>
                                                                     )
-    
+
                                                                 }
                                                             </div>
                                                         </div>
-    
-    
+
+
                                                     </div>
                                                 </div>
                                             )
@@ -723,9 +730,9 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                     }
                                 }
                                 )
-                                
-                                
-                            } 
+
+
+                            }
                         </section>
 
                         {/* end of content               */}

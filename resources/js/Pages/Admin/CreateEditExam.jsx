@@ -446,11 +446,11 @@ export default function CreateEditExam({ auth, flash, title, exam, subject, subj
               {exam.map((data, i) => {
                 if (!data.is_essay) {
                   return (
-                    <div className="card w-4/4 my-3  bg-secondary text-primary-content" key={i}>
+                    <div className="card mx-5 my-3  bg-secondary text-primary-content" key={i}>
                       <div className="card-body">
                         {/* <h2 className="card-title">Soal nomor 1</h2> */}
-                        {data.image && <img src={'/storage/' + data.image} className='justify-start max-w-2xl'></img>}
-                        <p>{i + 1}. {data.question} {'(' + data.point + ' points)'}</p>
+                        {data.image && <img src={'/storage/' + data.image} className='justify-start max-w-lg max-h-lg  rounded-md' />}
+                        <p className="w-4/5">{i + 1}. {data.question} {'(' + data.point + ' points)'}</p>
                         <ul>
                           <li className='font-medium'>A. {data.choice[0]}</li>
                           <li className='font-medium'>B. {data.choice[1]}</li>
@@ -458,12 +458,10 @@ export default function CreateEditExam({ auth, flash, title, exam, subject, subj
                           <li className='font-medium'>D. {data.choice[3]}</li>
                         </ul>
                         <div className="card-actions justify-start">
-                          {/* <button className="btn">Buy Now</button> */}
                           <h1>Jawaban : <strong> {data.actual_answer}</strong></h1>
                         </div>
 
                         <div className="card-actions justify-end">
-                          {/* <button className="btn">Buy Now</button> */}
                           <PrimaryButton onClick={() => {
                             setEditPoint(data.point)
                             setImgDelete('');
@@ -505,7 +503,7 @@ export default function CreateEditExam({ auth, flash, title, exam, subject, subj
                                   </div>
                                   :
                                   <div className='flex justify-center'>
-                                    <img src={'/storage/exam-images' + data.image + imgDelete} className='max-h-60' />
+                                    <img src={'/storage/' + data.image + imgDelete} className='max-h-60' />
                                   </div>
                                 }
 
@@ -597,20 +595,20 @@ export default function CreateEditExam({ auth, flash, title, exam, subject, subj
 
 
 
-                              <div className='flex justify-between'>
-                                <button type="submit" className="btn btn-secondary mt-6">Save</button>
+                              {flash.message?.substr(0, data.id.toString().length) == data.id.toString() && showSuccess ?
+                                <div className="alert alert-success mx-4 mt-5">
+                                  <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                  <span>Soal berhasil diedit</span>
+                                </div> :
+                                ""
+                              }
+                              <div className='flex justify-evenly'>
+                                <button type="submit" className="btn text-white bg-primary mt-6">Simpan</button>
 
-                                {flash.message?.substr(0, data.id.toString().length) == data.id.toString() && showSuccess ?
-                                  <div className="alert alert-success mx-4 mt-5">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                    <span>Soal berhasil diedit</span>
-                                  </div> :
-                                  ""
-                                }
                                 <div className="modal-action">
                                   <form method="dialog">
                                     {/* if there is a button in form, it will close the modal */}
-                                    <button className="btn btn-primary" onClick={() => {
+                                    <button className="btn bg-secondary/70" onClick={() => {
                                       setEditPoint(data.point);
                                       setIsDeleteImg(false)
                                       setImgDelete('');
@@ -621,7 +619,7 @@ export default function CreateEditExam({ auth, flash, title, exam, subject, subj
                                       setEditActualAnswer(data.actual_answer);
                                       console.log(examState);
                                       console.log(flash.message)
-                                    }}>Cancel</button>
+                                    }}>Tutup</button>
                                   </form>
                                 </div>
                               </div>
@@ -635,11 +633,11 @@ export default function CreateEditExam({ auth, flash, title, exam, subject, subj
                   )
                 } else {
                   return (
-                    <div className="card w-4/4 my-3 bg-secondary text-primary-content" key={i}>
+                    <div className="card mx-5 my-3 bg-secondary text-primary-content" key={i}>
                       <div className="card-body">
                         {/* <h2 className="card-title">Soal nomor 1</h2> */}
-                        {data.image && <img src={'/storage/' + data.image} className='justify-start max-w-2xl'></img>}
-                        <p>{i + 1}. {data.question} {'(' + data.point + ' points)'}</p>
+                        {data.image && <img src={'/storage/' + data.image} className='justify-start max-w-lg max-h-lg  rounded-md ' />}
+                        <p className="w-4/5">{i + 1}. {data.question} {'(' + data.point + ' points)'}</p>
                         <div className="card-actions justify-start">
                           {/* <button className="btn">Buy Now</button> */}
                           <h1>Jawaban : <strong>{data.actual_answer}</strong></h1>
@@ -672,7 +670,7 @@ export default function CreateEditExam({ auth, flash, title, exam, subject, subj
                                   </div>
                                   :
                                   <div className='flex justify-center'>
-                                    <img src={'/storage/exam-images/' + data.image + imgDelete} className='max-h-60' />
+                                    <img src={'/storage/' + data.image + imgDelete} className='max-h-60' />
                                   </div>
                                 }
                                 <InputLabel htmlFor="imageEdit" value="Gambar Soal" className="my-2" />
@@ -708,26 +706,26 @@ export default function CreateEditExam({ auth, flash, title, exam, subject, subj
 
                               </div>
 
-                              <div className='flex justify-between'>
-                                <button type="submit" className="btn btn-secondary mt-6">Save</button>
+                              {flash.message?.substr(0, data.id.toString().length) == data.id.toString() && showSuccess ?
+                                <div className="alert alert-success mx-4 mt-5">
+                                  <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                  <span>Soal berhasil diedit</span>
+                                </div> :
+                                ""
+                              }
+                              <div className='flex justify-evenly'>
+                                <button type="submit" className="btn bg-primary glass text-secondary mt-6">Simpan</button>
 
-                                {flash.message?.substr(0, data.id.toString().length) == data.id.toString() && showSuccess ?
-                                  <div className="alert alert-success mx-4 mt-5">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                    <span>Soal berhasil diedit</span>
-                                  </div> :
-                                  ""
-                                }
                                 <div className="modal-action">
                                   <form method="dialog">
                                     {/* if there is a button in form, it will close the modal */}
-                                    <button className="btn btn-primary" onClick={() => {
+                                    <button className="btn bg-secondary/70 glass" onClick={() => {
                                       setEditPoint(data.point);
                                       setIsDeleteImg(false)
                                       setEditImage(null);
                                       setShowSuccess(false);
                                       setImgDelete('');
-                                    }}>Cancel</button>
+                                    }}>Tutup</button>
                                   </form>
                                 </div>
                               </div>
