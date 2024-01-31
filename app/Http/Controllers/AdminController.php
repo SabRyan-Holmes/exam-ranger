@@ -60,20 +60,20 @@ class AdminController extends Controller
             'exam_ended' => 'required|date',
             'image' => 'nullable|image|file|max:8000',
         ]);
-        
+
         // Logic Image Nanti
         if ($request->file('image')) {
             $imageName = $request->name . '.' . $request->file('image')->getClientOriginalExtension();
             $validated['image'] = $request->file('image')->storeAs('subject-img', $imageName);
         }
-        
+
         // Simpan jawaban
         $subject = Subject::create($validated);
         return back()->with('message', 'Berhasil Menambahkan Materi Ujian Baru');
-        
+
     }
 
-     // Update 
+     // Update
      public function update_subject(Request $request) {
         // dd($request->id);
         // Rules
@@ -85,21 +85,21 @@ class AdminController extends Controller
             'image' => 'nullable|image|file|max:8000',
             'is_available' => 'nullable',
         ]);
-        
+
         // Logic Image Nanti
         if ($request->file('image')) {
             $imageName = $request->name . '.' . $request->file('image')->getClientOriginalExtension();
             $validated['image'] = $request->file('image')->storeAs('subject-img', $imageName);
         }
-        
+
         // Simpan Update
         Subject::where('id', $request->id)
         ->update($validated);
         return back()->with('message', 'Berhasil Mengedit Materi Ujian');
-        
+
     }
 
- 
+
     public function destroy_subject(Request $request)
     {
         Subject::destroy($request->id);
@@ -175,8 +175,8 @@ class AdminController extends Controller
        return back()->with('message', strval($request->id).strval(rand()));
     }
 
-    
-   
+
+
 
     /**
      * Remove the specified resource from storage.
@@ -221,7 +221,7 @@ class AdminController extends Controller
     /**
      * Display the specified resource.
      */
-  
+
 
     public function update_peserta(Request $request): RedirectResponse
     {
@@ -252,7 +252,7 @@ class AdminController extends Controller
         return Redirect::route('admin.peserta')->with('message', 'Peserta Berhasil Dihapus');
     }
 
-   
+
     //    Overview
     public function overview()
     {
@@ -271,7 +271,7 @@ class AdminController extends Controller
     public function overview_subject(Request $request)
     {
         // ddd($request->user_id);
-        // Berdasarkan Subject dari Peserta dan overview nilai 
+        // Berdasarkan Subject dari Peserta dan overview nilai
         $overviews = Overview::where('participant_id', $request->user_id)->with('subject')->get();
         $participant = User::find($request->user_id);
         return Inertia::render('Admin/AnsweredSubject', [
@@ -282,10 +282,10 @@ class AdminController extends Controller
         ]);
     }
 
-   
+
     public function review_exam(Request $request) {
         // dd($request->name);
-        
+
         $exams = Exam::where('subject_id', $request->subject_id)->get();
         $essay_count = Exam::where('subject_id', $request->subject_id)
                         ->where('is_essay', true)->count();
@@ -312,6 +312,7 @@ class AdminController extends Controller
             'essay_correct' => "required|integer",
             'essay_mark' => "required",
             "final_mark" => "required",
+            "multiple_choice_correct" => "required|integer",
        ]);
 
 
