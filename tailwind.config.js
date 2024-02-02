@@ -50,7 +50,7 @@ export default {
 
                     info: "#ffffff",
 
-                    success: "#00ffff",
+                    success: "#50C878",
 
                     warning: "#dc2626",
 

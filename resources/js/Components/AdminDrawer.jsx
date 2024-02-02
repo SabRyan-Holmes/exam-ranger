@@ -38,7 +38,7 @@ const AdminDrawer = () => {
         </NavLinkDashboard>
 
         <NavLinkDashboard href={route('admin.overview')} active={route().current('admin.overview')}><GrOverview />
-          Overview
+          Nilai Peserta
         </NavLinkDashboard>
 
       </ul>
