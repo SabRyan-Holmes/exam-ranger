@@ -9,7 +9,7 @@ import 'react-calendar/dist/Calendar.css';
 import styled from 'styled-components';
 import moment from "moment/min/moment-with-locales";
 import no_data from "@/../assets/no_data.svg";
-import subject_image from "@/../assets/subject_image.jpg";
+import subject_image from "@/../assets/subject_image.png";
 
 
 export default function Home({ auth, subjectExam, submitted, flash }) {
@@ -44,7 +44,7 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
     background-color: #f97316;
     padding: 6px;
     border-radius: 15px;
-    
+
     /* ~~~ active day styles ~~~ */
     .react-calendar__tile--range {
         background-color: #f97316;
@@ -101,9 +101,13 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
                                                 <div className="mb-2 border-card  card w-fit shadow-md hover:bg-primary/30 ">
                                                     <div className="m-6 rounded-md text-xs">
                                                         <div className="card-actions  items-center ">
-                                                            <div>
+                                                            <div >
                                                                 {subject.image ?
-                                                                    <img src={"/storage/" + subject.image} alt="" className='max-h-10 mx-auto' />
+                                                                    <div className="">
+                                                                        <div className="avatar  mask mask-squircle w-10 h-10 mx-auto">
+                                                                            <img src={"/storage/" + subject.image} alt="" className='max-h-10 mx-auto' />
+                                                                        </div>
+                                                                    </div>
                                                                     :
                                                                     <img src={subject_image} alt="" className='max-h-10 mx-auto' />
                                                                 }
@@ -125,7 +129,7 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
 
                                                             <div className="">
                                                                 <p className="font-bold -mb-1">{subject.exam_duration} Menit </p>
-                                                                <p className="font-light text-slate-500">{moment(subject.exam_started).format('LT')} - {moment(subject.exam_ended).format('LT')} W.I.B</p>
+                                                                <p className="font-light text-slate-500">Pukul {moment(subject.exam_started).format('LT')} - {moment(subject.exam_ended).format('LT')} WIB</p>
                                                             </div>
                                                         </div>
                                                     </div>

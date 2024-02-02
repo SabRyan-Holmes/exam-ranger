@@ -35,20 +35,12 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
 
 
     let panjangIndexAnswer = answered.answer.length
-    var _exams;
-    if (panjangIndexAnswer != exams.length) {
-        _exams = exams.slice(0, panjangIndexAnswer)
-    } else {
-        _exams = exams
-    }
+
+    const _exams = exams.slice(0, panjangIndexAnswer)
+
 
 
     const [allPointEssay, setAllPointEssay] = useState(Array);
-    // const [allPointMC, setAllPointMC] = useState(Array);
-    // console.log("allPointEssay")
-    // console.log(allPointEssay)
-    // console.log("allPointMultiple Choice(MC)")
-    // console.log(allPointMC)
 
 
     // State For Corrected And True/False Answer
@@ -63,10 +55,16 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
         // Point 0 if incorrect
 
 
-        setAllPointEssay([...allPointEssay, 0])
+        // setAllPointEssay([...allPointEssay, 0])
         // Change State Corrected in Array
+
+        // Nilai
+        const newStateMark = [...allMark]
+        newStateMark[i] = 0
+        setAllMark(newStateMark)
+
         const newStateCorrected = [...isCorrected]
-        newStateCorrected[i] = !isCorrected[i]
+        newStateCorrected[i] = true
         setIsCorrected(newStateCorrected)
 
         // Change State isTrue in Array
@@ -77,25 +75,34 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
 
     function handleCorrect(pointChange, i) {
 
-        setAllPointEssay([...allPointEssay, pointChange])
+        // setAllPointEssay([...allPointEssay, pointChange])
+
+        // Ubah Nilai
+        const newStateMark = [...allMark]
+        newStateMark[i] = pointChange
+        setAllMark(newStateMark)
 
         // Change State Corrected in Array
         const newStateCorrected = [...isCorrected]
-        newStateCorrected[i] = !isCorrected[i]
+        newStateCorrected[i] = true
         setIsCorrected(newStateCorrected)
 
         // Change State isTrue in Array
         const newStateIsTrue = [...isTrue]
         newStateIsTrue[i] = true
         setIsTrue(newStateIsTrue)
-
     }
 
     function handleReloadMark(i) {
         // Change State Corrected in Array
         const newStateCorrected = [...isCorrected]
-        newStateCorrected[i] = !isCorrected[i]
+        newStateCorrected[i] = false
         setIsCorrected(newStateCorrected)
+
+        // Ubah Nilai
+        const newStateMark = [...allMark]
+        newStateMark[i] = null
+        setAllMark(newStateMark)
 
         // Jadiin null
         const newStateIsTrue = [...isTrue]
@@ -133,17 +140,22 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
         // Add All Point from ArrayPoint
         let essayMark = 0
         let essayCorrect = 0
-        allPointEssay.map((point) => {
-            essayMark += point
-            if (point != 0) {
-                essayCorrect++;
-            }
-        })
+        // allPointEssay.map((point) => {
+        //     essayMark += point
+        //     if (point != 0) {
+        //         essayCorrect++;
+        //     }
+        // })
 
         let MCCorrect = 0
         _exams.map((data, i) => {
+            // Kalo pilgan benar
             if (!data.is_essay && isTrue[i]) {
                 MCCorrect++
+
+                // Kalo Essay benar
+            } else if (data.is_essay && isTrue[i]) {
+                essayCorrect++
             }
         })
 
@@ -345,7 +357,7 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                                     <>
                                                                         <button className='button-incorrect text-base -mr-7'
                                                                             onClick={() => {
-                                                                                handleIncorrect(i, true)
+                                                                                handleIncorrect(i)
                                                                             }}>Tandai Salah <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-7 h-7">
                                                                                 <path d="M5.28 4.22a.75.75 0 0 0-1.06 1.06L6.94 8l-2.72 2.72a.75.75 0 1 0 1.06 1.06L8 9.06l2.72 2.72a.75.75 0 1 0 1.06-1.06L9.06 8l2.72-2.72a.75.75 0 0 0-1.06-1.06L8 6.94 5.28 4.22Z" />
                                                                             </svg>
@@ -437,7 +449,13 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                                             </button>
                                                                         </div>
                                                                         :
-                                                                        <h1 className='text-warning text-lg'> 0 Point</h1>
+                                                                        <div className='flex gap-4 items-center'>
+
+                                                                            <h1 className='text-warning text-lg'> 0 Point</h1>
+                                                                            <button className='hover:scale-110 transition-all'>
+                                                                                <IoReload onClick={() => handleReloadMark(i)} className='w-6 h-6 stroke-yellow-500 fill-yellow-500' />
+                                                                            </button>
+                                                                        </div>
                                                                     )
 
                                                             }
@@ -627,7 +645,12 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                                             </button>
                                                                         </div>
                                                                         :
-                                                                        <h1 className='text-warning text-lg'> 0 Point</h1>
+                                                                        <div className='flex gap-4 items-center'>
+                                                                            <h1 className='text-warning text-lg'> 0 Point</h1>
+                                                                            <button className='hover:scale-110 transition-all'>
+                                                                                <IoReload onClick={() => handleReloadMark(i)} className='w-6 h-6 stroke-yellow-500 fill-yellow-500' />
+                                                                            </button>
+                                                                        </div>
                                                                     )
 
                                                             }
