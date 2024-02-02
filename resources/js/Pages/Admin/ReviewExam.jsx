@@ -127,17 +127,6 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
         const newStateAllMark = [...allMark]
         data.mark = newStateAllMark
 
-
-
-
-        // setData({
-        //     id: overview.id,
-        //     subject_id: subjectId,
-        //     participant_id: participant.id,
-        //     essay_correct: essayCorrect,
-        //     essay_mark: essayMark,
-        //     final_mark: finalMark,
-        // })
         patch(route('admin.update-overview', data, {
             _method: 'PATCH',
         }));

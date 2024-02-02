@@ -175,7 +175,92 @@ class AdminController extends Controller
        return back()->with('message', strval($request->id).strval(rand()));
     }
 
-    
+    public function auto_correct_wo_redirect() {
+        //ambil data dari submit
+        $data = Session::get('data');
+        // ddd($data);
+
+        // Data peserta
+        // Ambil jawaban, correction status, dan nilai yang sesuai dengan urutan
+        $correction_status = $data->correction_status;
+        $AllstudentAnswers = $data->answer;
+        $all_mark = $data->mark;
+        $is_correct = $data->is_correct;
+        
+        // Ambil semua data exam berdasarkan subject_id
+        $exams = Exam::where('subject_id', $data->subject_id)->get();
+
+        // Loop melalui setiap exam
+        $actualAnswers = [];
+        $multiple_c_answers = [];
+        $points = [];
+        foreach ($exams as $key=>$exam) {
+            // Tambah ke array (ambil yg pilgan saja)
+            if($exam->is_essay == false) {
+                $actualAnswers[] = $exam->actual_answer;
+                $multiple_c_answers[] = $AllstudentAnswers[$key];
+                $points[] = $exam->point;
+                $correction_status[$key] = true;
+
+                  // Tambahkan logika untuk memperbarui is_correct jika jawaban benar
+                if ($AllstudentAnswers[$key] == $exam->actual_answer) {
+                    $is_correct[$key] = true;
+                    $all_mark[$key] = $exam->point;
+                }
+            }
+            // Kalo essay
+            else if($exam->is_essay == true) {
+                // status koreksi jadi false
+                $correction_status[$key] = false;
+            }          
+        }
+        
+        // Zip & Urutkan
+        $pairedData = collect($multiple_c_answers)
+            ->zip($actualAnswers, $points);
+        
+
+        // Hitung jawaban yang benar dan jumlahkan poinnya
+        $correctAnswers = $pairedData
+            ->filter(function ($pair) {
+                return $pair[0] == $pair[1];
+            });
+        
+        $totalPoints = $correctAnswers
+            ->sum(function ($pair) {
+                return $pair[2]; // Mengambil point dari pair
+            });
+            
+        $correctAnswered = collect($multiple_c_answers)
+            ->zip($actualAnswers)
+            ->filter(function ($pair) {
+                return ($pair[0] == $pair[1]);
+            })->count();
+        
+        // Masukkan ke tabel Overview Sementara
+        
+        // Simpan informasi di tabel Overview
+        Overview::updateOrcreate(
+            [
+                'participant_id' => $data->participant_id,
+                'subject_id' => $data->subject_id,      
+            ],
+            [
+                'answer_id' => $data->id,
+                // Nanti diubah jadi banyak yang total benar be
+                'multiple_choice_correct' => $correctAnswered,
+                'temporary_mark' => $totalPoints,
+            ]
+        );
+        
+        Answer::where('id', $data->id)->update([
+
+            'correction_status' => $correction_status,
+            'is_correct' => $is_correct,
+            'mark' => $all_mark,
+        ]);
+        
+    }
    
 
     /**

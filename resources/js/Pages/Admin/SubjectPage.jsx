@@ -349,7 +349,7 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
                                         {
                                           data.oldImage ?
                                             <img src={"/storage/" + data.oldImage} className=' w-72 h-72 img-preview' />
-                                            : <img className={subject.image ? 'img-preview w-72 h-72' : 'img-preview'} />
+                                            : ""
                                         }
 
                                         <input type="file" name='poster' id='poster'
