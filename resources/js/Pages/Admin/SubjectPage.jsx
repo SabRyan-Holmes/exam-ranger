@@ -11,7 +11,6 @@ import Swal from 'sweetalert2'
 import { usePage } from '@inertiajs/react'
 import { useEffect } from "react";
 import { router } from '@inertiajs/react';
-import subjectImage from '@/../assets/subject_image.jpg';
 import { FiEye } from "react-icons/fi";
 import moment from "moment/min/moment-with-locales";
 import { FaRegEdit } from "react-icons/fa";
@@ -110,6 +109,7 @@ export default function SubjectPage({ auth, flash, title, subjects }) {
         Reader.onload = function (e) {
             imgPreview.src = e.target.result;
         };
+        console.log(imgPreview)
     };
     const [isEdit, setIsEdit] = useState(false)
 
