@@ -6,6 +6,7 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
 import pp from "./../../assets/profile.png";
 import Footer from '@/Components/Footer';
+import ExamRanger from "./../../assets/ExamRanger.svg"
 
 export default function Authenticated({ user, header, children, data, isExam }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
@@ -22,12 +23,10 @@ export default function Authenticated({ user, header, children, data, isExam }) 
                                 </Link>
                             </div>
 
-
-
-                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink href={route('home')} active={route().current('home')}>
-                                    Home
-                                </NavLink>
+                            <div className="my-auto">
+                                <Link href={route('home')} >
+                                    <img src={ExamRanger} alt="" className="h-7 mx-5"/>
+                                </Link>
                             </div>
                         </div>
 
