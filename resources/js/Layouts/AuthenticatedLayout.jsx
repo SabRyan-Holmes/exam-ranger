@@ -25,7 +25,7 @@ export default function Authenticated({ user, header, children, data, isExam }) 
 
                             <div className="my-auto">
                                 <Link href={route('home')} >
-                                    <img src={ExamRanger} alt="" className="h-7 mx-5"/>
+                                    <img src={ExamRanger} alt="" className="h-6 mx-5"/>
                                 </Link>
                             </div>
                         </div>
