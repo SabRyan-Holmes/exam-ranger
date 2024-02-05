@@ -12,7 +12,8 @@ import subject_image from "@/../assets/subject_image.png";
 
 
 export default function Home({ auth, subjectExam, submitted, flash }) {
-    console.log(subjectExam)
+    const intoSoal = useRef(null)
+    const executeScroll = () => intoSoal.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
     const anchor = useRef('subject')
     const [date, setDate] = useState(new Date());
     console.log(subjectExam)
@@ -40,7 +41,7 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
     width: 20rem;
     margin: auto;
     margin-top: 20px;
-    background-color: #f97316;
+    // background-color: #f97316;
     padding: 6px;
     border-radius: 15px;
 
@@ -76,7 +77,7 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
                                     Cara Melaksanakan
 
                                 </PrimaryButton>
-                                <PrimaryButton>
+                                <PrimaryButton onClick={executeScroll}>
                                     Mulai Mengerjakan
                                 </PrimaryButton>
                                 {openModal && <PopUpRule openModal={openModal} setOpenModal={setOpenModal} anchor={anchor} />}
@@ -86,7 +87,7 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
 
                     <div id={anchor} className="flex justify-start gap-8 ">
                         {/* Soal Kompetisi */}
-                        <div className="flex flex-col ">
+                        <div className="flex flex-col " ref={intoSoal}>
                             <div className="flex justify-between">
                                 <h1 className="mb-6 font-bold">Soal Kompetisi</h1>
                                 {/* <h1 className="mb-6 font-bold text-primary">{subjectExam.length ? 'Lihat Semua' : ''}</h1> */}
@@ -200,13 +201,11 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
                 <div className="border-r mx-7" />
                 <div className=" my-7 mr-5">
                     <h1 className="mb-4 font-bold">Tanggal Ujian</h1>
-                    <CalendarContainer>
+                    <CalendarContainer className="drop-shadow-lg">
                         <Calendar onChange={onChange} value={date} />
                     </CalendarContainer>
                 </div>
 
-                {/* You can open the modal using document.getElementById('ID').showModal() method */}
-                {/* <button className="btn" onClick={()=>document.getElementById('modal_sudah_selesai').showModal()}>open modal</button> */}
                 <dialog id="modal_sudah_selesai" className="modal">
                     <div className="modal-box w-11/12 max-w-5xl">
                         <h3 className="font-bold text-lg">Akses ditolak!</h3>
