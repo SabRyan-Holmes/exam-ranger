@@ -78,7 +78,7 @@ export default function Modal({ openModal, setOpenModal, }) {
 
                             }}
                         >
-                            Mulai Mengerjakan
+                            Saya Mengerti
                         </button>
                         {/* </Link> */}
                     </div>
