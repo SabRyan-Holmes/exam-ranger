@@ -1,16 +1,22 @@
 import React from 'react'
 import ApplicationLogo from "./ApplicationLogo";
+import ExamRanger from "./../../assets/ExamRanger.svg"
+import { useRef } from 'react';
 
 const Footer = ({ subject }) => {
+
+
     return (
         <footer className='relative bg-gradient-to-b from-yellow-950 via-orange-950  to-slate-900 opacity-100 shadow-inner  pt-10  pb-12'>
 
             <div className=' justify-center '>
                 <div className="flex  flex-wrap justify-center items-center mx-auto  ">
                     <div className='w-full px-4 pl-9 mb-12  font-medium md:w-1/3'>
-                        <div className="flex">
+                        <div className="flex items-center m-3 ml-0 gap-4">
                             <ApplicationLogo />
-                            <h2 className='font-bold text-4xl bg-clip-text text-white/70 hover:text-primary dark-gradient2 mb-5'>ExamRanger</h2>
+                            {/* <h2 className='font-bold text-4xl bg-clip-text text-white/70 hover:text-primary dark-gradient2 mb-5'>ExamRanger</h2> */}
+                            <img src={ExamRanger} alt="" className="h-7 mt-1" />
+
 
                         </div>
                         <h3 className='font-bold text-2xl mb-2 text-white/70 hover:text-primary'>Hubungi Kami</h3>
@@ -45,11 +51,11 @@ const Footer = ({ subject }) => {
                                     <a href="#home" className='inline-block text-base hover:text-primary  '>Home</a>
                                 </li>
                                 <li>
-                                    <a href="#informasi" className='inline-block text-base hover:text-primary '>Exam</a>
+                                    <a href="#home" className='inline-block text-base hover:text-primary '>Exam</a>
                                 </li>
-                                <li>
+                                {/* <li>
                                     <a href="#about" className='inline-block text-base hover:text-primary '>About</a>
-                                </li>
+                                </li> */}
                             </ul>
                         </h3>
                     </div>
