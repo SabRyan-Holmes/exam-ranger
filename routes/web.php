@@ -38,7 +38,8 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::post('/exam', [AnswerController::class, 'store'])->name('exam.submit');
     Route::get('/exam', [ExamController::class, 'show'])->name('exam.show');
     Route::get('/exam-current', [ExamController::class, 'showCurrentWork'])->name('exam.show.current');
-    Route::get('/exam/done', [OverviewController::class, 'auto_correct'])->name('exam.done');
+    Route::get('/exam/autocorrect', [OverviewController::class, 'auto_correct'])->name('auto_correct');
+    Route::get('/exam/done', [OverviewController::class, 'show'])->name('exam.done');
 });
 
 
@@ -46,20 +47,20 @@ Route::middleware('auth', 'verified')->group(function () {
 Route::prefix('dashboard')->middleware(['auth', 'verified', 'isAdmin'])->name('admin.')->group(function () {
     // Dashboard
     Route::get('', [AdminController::class, 'index'])->name('dashboard');
-    
+
     // CRUD Subject
     Route::get('/materi-ujian', [AdminController::class, 'all_subject'])->name('subject');
     Route::post('/materi-ujian', [AdminController::class, 'store_subject'])->name('create-subject');
     Route::post('/materi-ujian-update', [AdminController::class, 'update_subject'])->name('update-subject');
     Route::delete('/materi-ujian', [AdminController::class, 'destroy_subject'])->name('delete-subject');
-    
-    
+
+
     // CRUD Exam
     Route::get('/soal', [AdminController::class, 'soal'])->name('soal-show');
     Route::post('/soal/add-soal', [AdminController::class, 'store_soal'])->name('create-soal');
     Route::post('/soal/update-soal', [AdminController::class, 'update_soal'])->name('update-soal');
     Route::post('/soal/delete-soal', [AdminController::class, 'destroy_soal'])->name('soal-delete');
-    
+
     // CRUD Peserta
     Route::get('/peserta', [AdminController::class, 'all_peserta'])->name('peserta');
     Route::post('/peserta', [AdminController::class, 'store_peserta'])->name('create-peserta');

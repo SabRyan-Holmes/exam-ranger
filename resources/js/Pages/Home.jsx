@@ -2,7 +2,6 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import PopUpRule from '@/Components/PopUpRule';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { data } from 'autoprefixer';
 import { useState, useRef, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
@@ -90,7 +89,7 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
                         <div className="flex flex-col ">
                             <div className="flex justify-between">
                                 <h1 className="mb-6 font-bold">Soal Kompetisi</h1>
-                                <h1 className="mb-6 font-bold text-primary">{subjectExam.length ? 'Lihat Semua' : ''}</h1>
+                                {/* <h1 className="mb-6 font-bold text-primary">{subjectExam.length ? 'Lihat Semua' : ''}</h1> */}
                             </div>
                             {
                                 subjectExam.length ?
@@ -98,7 +97,7 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
                                         let banyakSoal = subject.exam.length
                                         return (
                                             <Link href={route('exam.show')} data={{ id: subject.id, name: subject.name, exam_duration: subject.exam_duration }}>
-                                                <div className="mb-2 border-card  card w-fit shadow-md hover:bg-primary/30 ">
+                                                <card className="mb-2 border-card  card  shadow-md hover:bg-primary/30 ">
                                                     <div className="m-6 rounded-md text-xs">
                                                         <div className="card-actions  items-center ">
                                                             <div >
@@ -133,7 +132,7 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </card>
                                             </Link>
 
                                         )
@@ -149,7 +148,7 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
                         <div className='grow'>
                             <div className="flex justify-between  ">
                                 <h1 className="mb-6 font-bold">Riwayat Pengerjaan</h1>
-                                <h1 className="mb-6 font-bold text-primary">{submitted.length ? 'Lihat Semua' : ''}</h1>
+                                {/* <h1 className="mb-6 font-bold text-primary">{submitted.length ? 'Lihat Semua' : ''}</h1> */}
                             </div>
                             {submitted.length ? submitted.map((data, i) => {
                                 let answered = 0
@@ -165,20 +164,25 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
                                 console.log('value soal terjawab : ')
                                 console.log(value)
                                 return (
-                                    <div className="mb-2 card w-full shadow-md  hover:scale-110 border-card">
-                                        <div className="m-6 my-4 rounded-md text-xs">
-                                            <div className="card-actions justify-between items-center ">
-                                                <div className="radial-progress text-primary" style={{ "--value": value, "--size": "3rem", "--thickness": "2px" }} role="progressbar">{Math.round(value)} %</div>
-                                                <div className="mr-16 ">
-                                                    <strong >{data.subject.name}  </strong>
-                                                    <p className="">{answered} dari {jumlah_soal} Terjawab</p>
-                                                    <small className="block"> {moment(data.updated_at).fromNow()}</small>
-                                                </div>
-                                                <p>{moment(data.updated_at).format('L')}</p>
+                                    <Link href={route('exam.done')} data={{ answer_id: data.id, participant_id: auth.user.id, subject: data.subject.name }}>
+                                        <card className="mb-2 card w-full shadow-md  hover:scale-110 border-card">
+                                            <div className="m-6 my-4 rounded-md text-xs">
+                                                <div className="card-actions justify-between items-center ">
+                                                    <div className="radial-progress text-primary bg-secondary/60" style={{ "--value": value, "--size": "3rem", "--thickness": "2px" }} role="progressbar">{Math.round(value)} %</div>
+                                                    <div className="flex justify-between items-center gap-4  flex-none w-72 ">
+                                                        <div>
+                                                            <strong >{data.subject.name}  </strong>
+                                                            <p className="">{answered} dari {jumlah_soal} Terjawab</p>
+                                                        </div>
+                                                        <small className="block text-sm text-slate-500"> {moment(data.updated_at).fromNow()}</small>
+                                                    </div>
 
+                                                    <p>{moment(data.updated_at).format('L')}</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
+                                        </card>
+                                    </Link>
+
                                 )
                             })
                                 :

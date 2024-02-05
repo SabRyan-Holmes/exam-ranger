@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Overview;
 use App\Models\Answer;
 use App\Models\Exam;
+use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Session;
 use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
 
 class OverviewController extends Controller
 {
@@ -27,7 +29,7 @@ class OverviewController extends Controller
         $AllstudentAnswers = $data->answer;
         $all_mark = $data->mark;
         $is_correct = $data->is_correct;
-        
+
         // Ambil semua data exam berdasarkan subject_id
         $exams = Exam::where('subject_id', $data->subject_id)->get();
 
@@ -53,38 +55,38 @@ class OverviewController extends Controller
             else if($exam->is_essay == true) {
                 // status koreksi jadi false
                 $correction_status[$key] = false;
-            }          
+            }
         }
-        
+
         // Zip & Urutkan
         $pairedData = collect($multiple_c_answers)
             ->zip($actualAnswers, $points);
-        
+
 
         // Hitung jawaban yang benar dan jumlahkan poinnya
         $correctAnswers = $pairedData
             ->filter(function ($pair) {
                 return $pair[0] == $pair[1];
             });
-        
+
         $totalPoints = $correctAnswers
             ->sum(function ($pair) {
                 return $pair[2]; // Mengambil point dari pair
             });
-            
+
         $correctAnswered = collect($multiple_c_answers)
             ->zip($actualAnswers)
             ->filter(function ($pair) {
                 return ($pair[0] == $pair[1]);
             })->count();
-        
+
         // Masukkan ke tabel Overview Sementara
-        
+
         // Simpan informasi di tabel Overview
         Overview::updateOrcreate(
             [
                 'participant_id' => $data->participant_id,
-                'subject_id' => $data->subject_id,      
+                'subject_id' => $data->subject_id,
             ],
             [
                 'answer_id' => $data->id,
@@ -93,18 +95,24 @@ class OverviewController extends Controller
                 'temporary_mark' => $totalPoints,
             ]
         );
-        
+
         Answer::where('id', $data->id)->update([
 
             'correction_status' => $correction_status,
             'is_correct' => $is_correct,
             'mark' => $all_mark,
         ]);
-        
+
         return Redirect::route('home')->with('message', 'Ujian telah berhasil disubmit!');
+        // $subject = Subject::find($data->subject_id);
+        // return Inertia::render('Exam/ExamDone', [
+        //     'title' => "Riwayat Jawaban",
+        //     'subject' => $subject->name,
+        //     'data' =>  $data,
+        // ]);
     }
 
-    public function index()
+    public function auto_correct_from_exam()
     {
         //
     }
@@ -128,9 +136,19 @@ class OverviewController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Overview $overview)
+    public function show(Request $request)
     {
-        //
+        $data = Overview::where('answer_id', $request->answer_id)
+                ->where('participant_id', $request->participant_id)->first();
+
+        $data->makeHidden(['temporary_mark', 'final_mark', 'multiple_choice_correct', 'essay_correct', 'essay_mark', 'average_mark']);
+
+        return Inertia::render('Exam/ExamDone', [
+                'title' => "Riwayat Jawaban",
+                'subject' =>  $request->subject,
+                'data' =>  $data,
+            ]);
+
     }
 
     /**
