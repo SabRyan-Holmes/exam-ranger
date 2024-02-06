@@ -170,15 +170,15 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
                                             <div className="m-6 my-4 rounded-md text-xs">
                                                 <div className="card-actions justify-between items-center ">
                                                     <div className="radial-progress text-primary bg-secondary/60" style={{ "--value": value, "--size": "3rem", "--thickness": "2px" }} role="progressbar">{Math.round(value)} %</div>
-                                                    <div className="flex justify-between items-center gap-4  flex-none w-72 ">
+                                                    <div className="flex items-center gap-4 text-xs flex-none ">
                                                         <div>
                                                             <strong >{data.subject.name}  </strong>
                                                             <p className="">{answered} dari {jumlah_soal} Terjawab</p>
                                                         </div>
-                                                        <small className="block text-sm text-slate-500"> {moment(data.updated_at).fromNow()}</small>
+                                                        <small className="block text-xs text-slate-500"> {moment(data.updated_at).fromNow()}</small>
                                                     </div>
 
-                                                    <p>{moment(data.updated_at).format('L')}</p>
+                                                    <p className='text-xs'>{moment(data.updated_at).format('L')}</p>
                                                 </div>
                                             </div>
                                         </card>

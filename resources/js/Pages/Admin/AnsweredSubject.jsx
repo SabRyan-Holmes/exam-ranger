@@ -3,7 +3,7 @@ import Navbar from '@/Components/Navbar';
 import { Head, Link } from '@inertiajs/react';
 import AdminDrawer from '@/Components/AdminDrawer';
 import PrimaryButton from '@/Components/PrimaryButton';
-import subjectImage from '@/../assets/subject_image.jpg';
+import subjectImage from '@/../assets/subject_image.png';
 import moment from "moment/min/moment-with-locales";
 import no_data from "@/../assets/no_data.svg";
 
