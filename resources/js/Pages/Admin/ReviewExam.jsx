@@ -244,7 +244,7 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                     <p className='font-medium'>Jumlah Pilihan Ganda benar : <span className='font-normal'>{overview.multiple_choice_correct}</span></p>
                                     <p className='font-medium'>Jumlah Essay benar : <span className='font-normal'>{overview.essay_correct}</span></p>
                                     <p className='font-medium'>Nilai Sementara : <span className='font-normal'>{overview.temporary_mark?.toFixed(1)}</span></p>
-                                    <p className='font-medium'>Nilai Rata-rata dari Semua Ujian : <span className='font-normal'>{overview.average_mark ? overview.average_mark : '_'}</span></p>
+                                    {/* <p className='font-medium'>Nilai Rata-rata dari Semua Ujian : <span className='font-normal'>{overview.average_mark ? overview.average_mark : '_'}</span></p> */}
                                     <p className='font-medium'>Nilai Akhir : <span className='font-normal'>{overview.final_mark?.toFixed(1)}</span></p>
                                 </div>
 
@@ -295,14 +295,15 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
 
                                                                         isTrue[i] ?
                                                                             <div className='flex items-center gap-5'>
-                                                                                <h1 className='text-emerald-500 text-lg'>+ {allMark[i]} Point</h1>
+                                                                                <h1 className='text-emerald-500 text-base whitespace-nowrap'>+ {allMark[i]} Point</h1>
                                                                                 <button className='hover:scale-110 transition-all'>
                                                                                     <IoReload onClick={() => handleReloadMark(i)} className='w-6 h-6 stroke-yellow-500 fill-yellow-500' />
                                                                                 </button>
                                                                             </div>
                                                                             :
+                                                                            // Kalo salah
                                                                             <div className='flex items-center gap-5'>
-                                                                                <h1 className='text-warning text-lg'> 0 Point</h1>
+                                                                                <h1 className='text-warning text-base whitespace-nowrap'> 0 Point</h1>
                                                                                 <button className='hover:scale-110 transition-all'>
                                                                                     <IoReload onClick={() => handleReloadMark(i)} className='w-6 h-6 stroke-yellow-500 fill-yellow-500' />
                                                                                 </button>
@@ -443,7 +444,7 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                                     :
                                                                     (isTrue[i] ?
                                                                         <div className="flex gap-4 items-center">
-                                                                            <h1 className='text-emerald-500 text-lg'>+ {allMark[i] ? allMark[i] : pointChange} Point</h1>
+                                                                            <h1 className='text-emerald-500 text-base whitespace-nowrap'>+ {allMark[i] ? allMark[i] : pointChange} Point</h1>
                                                                             <button className='hover:scale-110 transition-all'>
                                                                                 <IoReload onClick={() => handleReloadMark(i)} className='w-6 h-6 stroke-yellow-500 fill-yellow-500' />
                                                                             </button>
@@ -451,7 +452,7 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                                         :
                                                                         <div className='flex gap-4 items-center'>
 
-                                                                            <h1 className='text-warning text-lg'> 0 Point</h1>
+                                                                            <h1 className='text-warning text-base whitespace-nowrap'> 0 Point</h1>
                                                                             <button className='hover:scale-110 transition-all'>
                                                                                 <IoReload onClick={() => handleReloadMark(i)} className='w-6 h-6 stroke-yellow-500 fill-yellow-500' />
                                                                             </button>
@@ -545,9 +546,9 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                                             <p className='w-3/4'>{i + 1}. {data.question} <span className='font-medium text-green-900'> {'(' + data.point + ' point)'}</span></p>
                                                             {
                                                                 isTrue[i] ?
-                                                                    <h1 className='text-emerald-500 text-lg'>+ {allMark[i]} Point</h1>
+                                                                    <h1 className='text-emerald-500 text-base whitespace-nowrap'>+ {allMark[i]} Point</h1>
                                                                     :
-                                                                    <h1 className='text-warning text-lg'> 0 Point</h1>
+                                                                    <h1 className='text-warning text-base whitespace-nowrap'> 0 Point</h1>
                                                             }
 
                                                         </div>
