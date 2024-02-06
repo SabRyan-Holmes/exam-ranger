@@ -119,7 +119,7 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
 
                                                             <div className="">
                                                                 <p className="font-bold -mb-1">{banyakSoal} Soal </p>
-                                                                <p className="font-light text-slate-500 text-xs">Essay & Pilihan Ganda </p>
+                                                                <p className="font-light text-slate-500 text-xs whitespace-nowrap">Essay & Pilgan</p>
                                                             </div>
 
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
@@ -129,7 +129,7 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
 
                                                             <div className="">
                                                                 <p className="font-bold -mb-1">{subject.exam_duration} Menit </p>
-                                                                <p className="font-light text-slate-500">Pukul {moment(subject.exam_started).format('LT')}-{moment(subject.exam_ended).format('LT')} WIB</p>
+                                                                <p className="font-light text-slate-500 whitespace-nowrap">{moment(subject.exam_started).format('LT')}-{moment(subject.exam_ended).format('LT')} WIB</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -146,7 +146,7 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
                             }
                         </div>
 
-                        <div className='w-max '>
+                        <div className='w-max'>
                             <div className="flex justify-between  ">
                                 <h1 className="mb-6 font-bold">Riwayat Pengerjaan</h1>
                                 {/* <h1 className="mb-6 font-bold text-primary">{submitted.length ? 'Lihat Semua' : ''}</h1> */}
