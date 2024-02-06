@@ -243,9 +243,9 @@ export default function ReviewExam({ auth, flash, title, exams, subject, answere
                                     <strong className="text-xl text-primary">Overview :</strong>
                                     <p className='font-medium'>Jumlah Pilihan Ganda benar : <span className='font-normal'>{overview.multiple_choice_correct}</span></p>
                                     <p className='font-medium'>Jumlah Essay benar : <span className='font-normal'>{overview.essay_correct}</span></p>
-                                    <p className='font-medium'>Nilai Sementara : <span className='font-normal'>{overview.temporary_mark.toFixed(1)}</span></p>
+                                    <p className='font-medium'>Nilai Sementara : <span className='font-normal'>{overview.temporary_mark?.toFixed(1)}</span></p>
                                     <p className='font-medium'>Nilai Rata-rata dari Semua Ujian : <span className='font-normal'>{overview.average_mark ? overview.average_mark : '_'}</span></p>
-                                    <p className='font-medium'>Nilai Akhir : <span className='font-normal'>{overview.final_mark.toFixed(1)}</span></p>
+                                    <p className='font-medium'>Nilai Akhir : <span className='font-normal'>{overview.final_mark?.toFixed(1)}</span></p>
                                 </div>
 
                             </div>
