@@ -26,46 +26,16 @@ export default function Modal({ openModal, setOpenModal, }) {
                                 <strong>Persiapan Peserta: </strong>
                                 <br />
                                 1. Pastikan perangkat dan koneksi internet stabil.
-                                Pilih lingkungan tenang dan bebas gangguan.
-                                Peralatan yang Diizinkan:
                                 <br />
                                 2. Gunakan hanya peralatan yang diizinkan.
-                                Waktu dan Pengumpulan:
+                                <br />
+                                3. Mulai dan selesaikan ujian sesuai waktu yang ditentukan. Submit jawaban sebelum batas waktu berakhir.
+                                <br />
+                                4. Hubungi panitia untuk pertanyaan atau bantuan.
+                                <br />
+                                Pelanggaran tata tertib dapat mengakibatkan anda didiskualifikasi.
 
                                 <br />
-                                3. Mulai dan selesaikan ujian sesuai waktu yang ditentukan.
-                                Submit jawaban sebelum batas waktu berakhir.
-                                Kerja Independen:
-
-                                <br />
-                                4. Kerjakan ujian secara independen, hindari plagiat.
-                                Konsultasi:
-
-                                <br />
-                                5. Hubungi pihak berwenang untuk pertanyaan atau bantuan.
-
-                                <br />
-
-                                <p className="mt-3 mb-2 font-bold"> Aturan Pelanggaran : </p>
-
-                                1. Teknis dan Etika:
-                                <span className="indent-3">
-                                    <li> Laporkan masalah teknis </li>
-                                    <li>Pelanggaran etika berakibat diskualifikasi.</li>
-                                </span>
-
-                                2. Pelanggaran Tata Tertib:
-                                <li className="indent-3">
-                                    Pelanggaran aturan dapat mengakibatkan pembatalan ujian.
-                                </li>
-                                3. Penipuan dan Gangguan:
-                                <li className="indent-3">
-                                    Tindakan penipuan atau gangguan berhadapan dengan sanksi serius.
-                                </li>
-                                4. Penggunaan Materi Tidak Diizinkan:
-
-                                <li>Gunakan hanya materi yang diizinkan untuk mengerjakan ujian.
-                                </li>
                             </div>
                         </div>
 
