@@ -85,7 +85,7 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
                         </div>
                     </div>
 
-                    <div id={anchor} className="flex justify-start gap-8 ">
+                    <div id={anchor} className="flex justify-between gap-6 ">
                         {/* Soal Kompetisi */}
                         <div className="flex flex-col " ref={intoSoal}>
                             <div className="flex justify-between">
@@ -98,9 +98,9 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
                                         let banyakSoal = subject.exam.length
                                         return (
                                             <Link href={route('exam.show')} data={{ id: subject.id, name: subject.name, exam_duration: subject.exam_duration }}>
-                                                <card className="mb-2 border-card  card  shadow-md hover:bg-primary/30 ">
+                                                <card className="mb-2 border-card  card w-full shadow-md hover:bg-primary/30 ">
                                                     <div className="m-6 rounded-md text-xs">
-                                                        <div className="card-actions  items-center ">
+                                                        <div className="card-actions gap-2 flex-nowrap items-center ">
                                                             <div >
                                                                 {subject.image ?
                                                                     <div className="">
@@ -119,7 +119,7 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
 
                                                             <div className="">
                                                                 <p className="font-bold -mb-1">{banyakSoal} Soal </p>
-                                                                <p className="font-light text-slate-500">Essay & Pilihan Ganda </p>
+                                                                <p className="font-light text-slate-500 text-xs">Essay & Pilihan Ganda </p>
                                                             </div>
 
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
@@ -129,7 +129,7 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
 
                                                             <div className="">
                                                                 <p className="font-bold -mb-1">{subject.exam_duration} Menit </p>
-                                                                <p className="font-light text-slate-500">Pukul {moment(subject.exam_started).format('LT')} - {moment(subject.exam_ended).format('LT')} WIB</p>
+                                                                <p className="font-light text-slate-500">Pukul {moment(subject.exam_started).format('LT')}-{moment(subject.exam_ended).format('LT')} WIB</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -143,10 +143,10 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
                                         <img className='w-40 h-32 mx-auto pt-7 mt-3' src={no_data} alt="no data" srcset="" />
                                         <p className='text-center mt-3 text-sm text-slate-600'>Belum ada Materi Ujian </p>
                                     </div>
-                            };
+                            }
                         </div>
 
-                        <div className='grow'>
+                        <div className='w-max '>
                             <div className="flex justify-between  ">
                                 <h1 className="mb-6 font-bold">Riwayat Pengerjaan</h1>
                                 {/* <h1 className="mb-6 font-bold text-primary">{submitted.length ? 'Lihat Semua' : ''}</h1> */}
@@ -166,19 +166,18 @@ export default function Home({ auth, subjectExam, submitted, flash }) {
                                 console.log(value)
                                 return (
                                     <Link href={route('exam.done')} data={{ answer_id: data.id, participant_id: auth.user.id, subject: data.subject.name }}>
-                                        <card className="mb-2 card w-full shadow-md  hover:scale-110 border-card">
-                                            <div className="m-6 my-4 rounded-md text-xs">
-                                                <div className="card-actions justify-between items-center ">
+                                        <card className=" mb-2 card shadow-md hover:scale-105 transition-all border-card">
+                                            <div className="m-6  my-4 rounded-md text-xs">
+                                                <div className="flex w-max justify-start gap-3 items-center ">
                                                     <div className="radial-progress text-primary bg-secondary/60" style={{ "--value": value, "--size": "3rem", "--thickness": "2px" }} role="progressbar">{Math.round(value)} %</div>
-                                                    <div className="flex justify-between items-center gap-4  flex-none w-72 ">
+                                                    <div className="flex flex-nowrap justify-start items-center gap-4 w-full  ">
                                                         <div>
                                                             <strong >{data.subject.name}  </strong>
                                                             <p className="">{answered} dari {jumlah_soal} Terjawab</p>
                                                         </div>
                                                         <small className="block text-sm text-slate-500"> {moment(data.updated_at).fromNow()}</small>
+                                                        <p>{moment(data.updated_at).format('L')}</p>
                                                     </div>
-
-                                                    <p>{moment(data.updated_at).format('L')}</p>
                                                 </div>
                                             </div>
                                         </card>
